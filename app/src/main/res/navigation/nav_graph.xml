@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.auth.LoginFragment"
+        android:label="Login" />
+
+    <fragment
+        android:id="@+id/citizenHomeFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.CitizenHomeFragment"
+        android:label="Citizen Home" />
+
+    <fragment
+        android:id="@+id/technicianHomeFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.tecnico.TecnicoHomeFragment"
+        android:label="Technician Home" />
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.auth.RegisterFragment"
+        android:label="Register" />
+
+</navigation>
