@@ -15,18 +15,16 @@ class FakeRepository : Repository {
     // =========================
 
     private val users = mutableListOf(
-
         User(
-            id = "1",
+            id = "firebase_uid_1",
             username = "mario",
             email = "mario@soscity.it",
             nome = "Mario Rossi",
             ruolo = "CITTADINO",
             telefono = "3331234567"
         ),
-
         User(
-            id = "2",
+            id = "firebase_uid_2",
             username = "tecnico1",
             email = "tecnico@soscity.it",
             nome = "Luigi Verdi",
@@ -34,15 +32,24 @@ class FakeRepository : Repository {
             idTeam = 1,
             competenze = listOf("ILLUMINAZIONE"),
             disponibile = true
+        ),
+        User(
+            id = "firebase_uid_3",
+            username = "operatore1",
+            email = "operatore@soscity.it",
+            nome = "Anna Neri",
+            ruolo = "OPERATORE",
+            telefono = "3339876543"
         )
     )
+
+    private val userSessions = mutableMapOf<String, String>() // uid -> firebaseToken
 
     // =========================
     // MOCK TICKETS
     // =========================
 
     private val tickets = mutableListOf(
-
         Ticket(
             id = "T1",
             titolo = "Lampione rotto",
@@ -56,7 +63,22 @@ class FakeRepository : Repository {
             ),
             fotoAllegata = null,
             dataCreazione = "2026-05-26T10:00:00",
-            idCittadino = "1"
+            idCittadino = "firebase_uid_1"
+        ),
+        Ticket(
+            id = "T2",
+            titolo = "Buca in strada",
+            descrizione = "Buca pericolosa in via Garibaldi",
+            categoria = "STRADE",
+            priorita = "ALTA",
+            stato = "IN_VALUTAZIONE",
+            coordinate = Coordinate(
+                latitudine = 41.124,
+                longitudine = 14.457
+            ),
+            fotoAllegata = null,
+            dataCreazione = "2026-05-27T14:30:00",
+            idCittadino = "firebase_uid_1"
         )
     )
 
@@ -65,14 +87,21 @@ class FakeRepository : Repository {
     // =========================
 
     private val notifications = mutableListOf(
-
         Notification(
             id = "N1",
             tipo = "INFO",
-            destinatario = "1",
+            destinatario = "firebase_uid_1",
             messaggio = "La tua segnalazione è stata presa in carico",
             ticketId = "T1",
             timestamp = "2026-05-26T11:00:00"
+        ),
+        Notification(
+            id = "N2",
+            tipo = "PUSH",
+            destinatario = "firebase_uid_2",
+            messaggio = "Nuovo intervento assegnato",
+            ticketId = "T1",
+            timestamp = "2026-05-26T12:00:00"
         )
     )
 
@@ -81,17 +110,27 @@ class FakeRepository : Repository {
     // =========================
 
     private val interventions = mutableListOf(
-
         Intervention(
             id = "I1",
             ticketId = "T1",
             teamId = "TEAM_A",
-            tecnicoId = "2",
-            statoLavoro = "ASSEGNATO",
+            tecnicoId = "firebase_uid_2",
+            statoLavoro = "PIANIFICATO",
             noteIntervento = "Verifica impianto",
             dataInizio = "2026-05-26T12:00:00",
             dataFine = null,
             dataCreazione = "2026-05-26T12:00:00"
+        ),
+        Intervention(
+            id = "I2",
+            ticketId = "T2",
+            teamId = "TEAM_B",
+            tecnicoId = "firebase_uid_3",
+            statoLavoro = "IN_CORSO",
+            noteIntervento = "Riparazione buca",
+            dataInizio = "2026-05-27T15:00:00",
+            dataFine = null,
+            dataCreazione = "2026-05-27T15:00:00"
         )
     )
 
@@ -100,142 +139,137 @@ class FakeRepository : Repository {
     // =========================
 
     override suspend fun login(
-        username: String,
-        password: String
+        firebaseToken: String,
+        uid: String
     ): Result<User> {
+        delay(800)
 
-        delay(1000)
-
-        val user = users.find {
-            it.username == username
-        }
-
-        return if (user != null && password == "1234") {
-
+        val user = users.find { it.id == uid }
+        return if (user != null) {
+            userSessions[uid] = firebaseToken
             Result.success(user)
-
         } else {
-
-            Result.failure(
-                Exception("Credenziali non valide")
-            )
+            Result.failure(Exception("Utente non trovato nel backend"))
         }
     }
 
     override suspend fun register(
-        request: RegisterRequest
+        request: RegisterRequest,
+        firebaseToken: String
     ): Result<User> {
+        delay(800)
 
         val user = User(
-
-            id = System.currentTimeMillis().toString(),
-
+            id = request.uid ?: "firebase_uid_${System.currentTimeMillis()}",
             username = request.username,
-
             email = request.email,
-
             nome = request.nome,
-
-            ruolo = "CITTADINO",
-
+            ruolo = request.ruolo ?: "CITTADINO",
             telefono = request.telefono
         )
 
+        users.add(user)
+        userSessions[user.id] = firebaseToken
         return Result.success(user)
+    }
+
+    override suspend fun verifySession(uid: String): Result<Boolean> {
+        delay(500)
+        val user = users.find { it.id == uid }
+        return if (user != null) {
+            Result.success(true)
+        } else {
+            Result.success(false)
+        }
     }
 
     // =========================
     // TICKETS
     // =========================
 
-    override suspend fun createTicket(
-        ticket: Ticket
-    ): Result<Ticket> {
-
-        delay(1000)
-
-        tickets.add(ticket)
-
-        return Result.success(ticket)
+    override suspend fun createTicket(ticket: Ticket): Result<Ticket> {
+        delay(800)
+        val newTicket = ticket.copy(
+            id = "T${System.currentTimeMillis()}",
+            dataCreazione = java.time.Instant.now().toString(),
+            stato = "APERTO"
+        )
+        tickets.add(newTicket)
+        return Result.success(newTicket)
     }
 
-    override suspend fun getCitizenTickets(
-        citizenId: String
-    ): Result<List<Ticket>> {
+    override suspend fun getMyTickets(): Result<List<Ticket>> {
+        delay(800)
+        // In un'implementazione reale, prenderebbe l'utente da SessionManager
+        // Per il mock, restituiamo tutti i ticket
+        return Result.success(tickets.toList())
+    }
 
-        delay(1000)
-
-        return Result.success(
-            tickets.filter {
-                it.idCittadino == citizenId
-            }
-        )
+    override suspend fun getTicketById(ticketId: String): Result<Ticket> {
+        delay(500)
+        val ticket = tickets.find { it.id == ticketId }
+        return if (ticket != null) {
+            Result.success(ticket)
+        } else {
+            Result.failure(Exception("Ticket non trovato"))
+        }
     }
 
     // =========================
     // NOTIFICATIONS
     // =========================
 
-    override suspend fun getNotifications(
-        userId: String
-    ): Result<List<Notification>> {
-
-        delay(1000)
-
-        return Result.success(
-            notifications.filter {
-                it.destinatario == userId
-            }
-        )
+    override suspend fun getNotifications(): Result<List<Notification>> {
+        delay(800)
+        // In un'implementazione reale, filtra per l'utente corrente
+        return Result.success(notifications.toList())
     }
 
     // =========================
     // INTERVENTIONS
     // =========================
 
-    override suspend fun getTechnicianInterventions(
-        technicianId: String
-    ): Result<List<Intervention>> {
+    override suspend fun getMyInterventions(): Result<List<Intervention>> {
+        delay(800)
+        // In un'implementazione reale, filtra per il tecnico corrente
+        return Result.success(interventions.toList())
+    }
 
-        delay(1000)
-
-        return Result.success(
-            interventions.filter {
-                it.tecnicoId == technicianId
-            }
-        )
+    override suspend fun getInterventionById(interventionId: String): Result<Intervention> {
+        delay(500)
+        val intervention = interventions.find { it.id == interventionId }
+        return if (intervention != null) {
+            Result.success(intervention)
+        } else {
+            Result.failure(Exception("Intervento non trovato"))
+        }
     }
 
     override suspend fun updateInterventionStatus(
         interventionId: String,
         status: String
     ): Result<Unit> {
+        delay(800)
 
-        delay(1000)
-
-        val intervention = interventions.find {
-            it.id == interventionId
-        }
-
+        val intervention = interventions.find { it.id == interventionId }
         return if (intervention != null) {
-
-            val updated = intervention.copy(
-                statoLavoro = status
-            )
-
-            interventions.removeIf {
-                it.id == interventionId
-            }
-
+            val updated = intervention.copy(statoLavoro = status)
+            interventions.removeIf { it.id == interventionId }
             interventions.add(updated)
 
+            // Se l'intervento è COMPLETATO, aggiorna anche il ticket a RISOLTO
+            if (status == "COMPLETATO") {
+                val ticket = tickets.find { it.id == intervention.ticketId }
+                ticket?.let {
+                    val updatedTicket = it.copy(stato = "RISOLTO")
+                    tickets.removeIf { t -> t.id == it.id }
+                    tickets.add(updatedTicket)
+                }
+            }
+
             Result.success(Unit)
-
         } else {
-
-            Result.failure(
-                Exception("Intervento non trovato")
-            )
+            Result.failure(Exception("Intervento non trovato"))
         }
     }
 }

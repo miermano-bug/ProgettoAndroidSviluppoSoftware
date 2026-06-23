@@ -9,50 +9,37 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import it.unisannio.soscity.soscity_app.R
-import it.unisannio.soscity.soscity_app.data.model.RegisterRequest
 import it.unisannio.soscity.soscity_app.databinding.FragmentRegisterBinding
 import it.unisannio.soscity.soscity_app.ui.common.UiState
+import it.unisannio.soscity.soscity_app.util.RepositoryProvider
 import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
 
-    private var _binding:
-            FragmentRegisterBinding? = null
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
 
-    private val binding
-        get() = _binding!!
-
-    private val viewModel =
-        RegisterViewModel()
+    private val viewModel: RegisterViewModel by lazy {
+        RegisterViewModel(RepositoryProvider.provideRepository())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        _binding =
-            FragmentRegisterBinding.inflate(
-                inflater,
-                container,
-                false
-            )
-
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Avvia l'animazione obliqua dello sfondo
         setupMapAnimation(view)
-
-        // I tuoi metodi esistenti
         setupListeners()
         observeViewModel()
     }
 
-    // 2. Incolla questa funzione subito sotto, prima della chiusura della classe
     private fun setupMapAnimation(view: View) {
         val mapBackground = view.findViewById<android.widget.ImageView>(R.id.imageMapBackground)
 
@@ -94,71 +81,82 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupListeners() {
-
         binding.buttonRegister.setOnClickListener {
+            val email = binding.editEmail.text.toString().trim()
+            val password = binding.editPassword.text.toString()
+            val username = binding.editUsername.text.toString().trim()
+            val nome = binding.editNome.text.toString().trim()
+            val telefono = binding.editTelefono.text.toString().trim()
 
-            val request = RegisterRequest(
-
-                username =
-                    binding.editUsername.text
-                        .toString(),
-
-                password =
-                    binding.editPassword.text
-                        .toString(),
-
-                email =
-                    binding.editEmail.text
-                        .toString(),
-
-                nome =
-                    binding.editNome.text
-                        .toString(),
-
-                telefono =
-                    binding.editTelefono.text
-                        .toString()
-            )
-
-            viewModel.register(request)
+            if (validateInput(email, password, username, nome)) {
+                viewModel.registerUser(email, password, username, nome, telefono)
+            }
         }
     }
 
+    private fun validateInput(
+        email: String,
+        password: String,
+        username: String,
+        nome: String
+    ): Boolean {
+        if (email.isEmpty()) {
+            Toast.makeText(requireContext(), "Inserisci l'email", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (password.isEmpty() || password.length < 6) {
+            Toast.makeText(requireContext(), "La password deve contenere almeno 6 caratteri", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (username.isEmpty()) {
+            Toast.makeText(requireContext(), "Inserisci lo username", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (nome.isEmpty()) {
+            Toast.makeText(requireContext(), "Inserisci il nome completo", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
     private fun observeViewModel() {
-
         viewLifecycleOwner.lifecycleScope.launch {
-
             viewModel.uiState.collect { state ->
-
                 when (state) {
-
                     is UiState.Idle -> {}
 
                     is UiState.Loading -> {
-
-                        binding.progressBar.visibility =
-                            View.VISIBLE
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.buttonRegister.isEnabled = false
                     }
 
                     is UiState.Success -> {
-
-                        binding.progressBar.visibility =
-                            View.GONE
+                        binding.progressBar.visibility = View.GONE
+                        binding.buttonRegister.isEnabled = true
 
                         Toast.makeText(
                             requireContext(),
-                            "Registrazione completata",
+                            "Registrazione completata! Benvenuto ${state.data.nome}",
                             Toast.LENGTH_LONG
                         ).show()
 
-                        findNavController()
-                            .navigateUp()
+                        // Naviga in base al ruolo
+                        when (state.data.ruolo) {
+                            "CITTADINO" -> {
+                                findNavController().navigate(R.id.citizenHomeFragment)
+                            }
+                            "TECNICO" -> {
+                                findNavController().navigate(R.id.technicianHomeFragment)
+                            }
+                            else -> {
+                                findNavController().navigateUp()
+                            }
+                        }
                     }
 
                     is UiState.Error -> {
-
-                        binding.progressBar.visibility =
-                            View.GONE
+                        binding.progressBar.visibility = View.GONE
+                        binding.buttonRegister.isEnabled = true
 
                         Toast.makeText(
                             requireContext(),
@@ -172,9 +170,7 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-
         super.onDestroyView()
-
         _binding = null
     }
 }
