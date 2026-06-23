@@ -17,19 +17,40 @@ interface ApiService {
     /**
      * Registra un nuovo utente nel backend dopo la creazione dell'account Firebase.
      * POST /users
+     *
+     * Il filtro FirebaseAuthFilter lato server richiede Authorization: Bearer <idToken>
+     * su QUALSIASI path diverso da q/health e q/metrics (vedi FirebaseAuthFilter.java,
+     * punto 3 "Verifica token Firebase Bearer") — non ci sono eccezioni per /users
+     * a livello di filtro: il fatto che la registrazione CITTADINO sia "pubblica" è
+     * una logica di autorizzazione applicata dentro UserResource (più a valle), che
+     * però viene raggiunta solo se il filtro a monte ha già verificato un token Bearer
+     * valido. Va quindi sempre passato il token Firebase ottenuto subito dopo
+     * createUserWithEmailAndPassword(), anche per la registrazione CITTADINO.
      */
     @POST("users")
     suspend fun register(
-        @Body request: RegisterRequest
+        @Body request: RegisterRequest,
+        @Header("Authorization") authHeader: String
     ): User
 
     /**
      * Verifica se l'utente esiste nel backend.
      * GET /users/verify-session/{uid}
+     *
+     * Il backend richiede l'header Authorization (Bearer <idToken>) anche su questo
+     * endpoint: serve al filtro lato server per derivare X-Firebase-UID. Durante il
+     * LOGIN, SessionManager non ha ancora una sessione attiva, quindi AuthInterceptor
+     * non aggiungerebbe l'header in automatico — per questo lo passiamo qui in modo
+     * esplicito. Nota: Retrofit non legge i valori di default Kotlin sui metodi di
+     * interfaccia (il proxy dinamico richiede sempre l'argomento), quindi il
+     * parametro è nullable ma OBBLIGATORIO da passare ad ogni chiamata (usare null
+     * se non serve un override esplicito, es. quando si chiama a sessione già attiva
+     * e si vuole lasciare fare tutto ad AuthInterceptor).
      */
     @GET("users/verify-session/{uid}")
     suspend fun verifySession(
-        @Path("uid") uid: String
+        @Path("uid") uid: String,
+        @Header("Authorization") authHeader: String?
     ): VerifySessionResponse
 
     // =========================
@@ -94,11 +115,17 @@ interface ApiService {
 
     /**
      * Aggiorna lo stato di un intervento.
-     * PUT /interventions/{id}/stato
+     * PUT /interventions/{id}/stato?stato=<valore>
+     *
+     * Il backend legge "stato" come QUERY PARAMETER, non come body JSON
+     * (vedi contratto §9.6: "PUT /interventions/{id}/stato?stato=<valore>").
+     * La versione precedente mandava un body {"stato": "..."}, che il backend
+     * avrebbe semplicemente ignorato (nessun parametro stato sulla query string
+     * → 400 "Parametro stato mancante").
      */
     @PUT("interventions/{id}/stato")
     suspend fun updateInterventionStatus(
         @Path("id") interventionId: String,
-        @Body statusRequest: Map<String, String>  // { "stato": "COMPLETATO" }
+        @Query("stato") stato: String
     ): Unit
 }

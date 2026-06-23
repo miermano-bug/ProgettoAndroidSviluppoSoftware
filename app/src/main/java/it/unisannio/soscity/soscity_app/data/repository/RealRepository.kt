@@ -27,8 +27,12 @@ class RealRepository : Repository {
     ): Result<User> {
         return try {
             // Il login consiste nel verificare che l'utente esista nel backend
-            // e salvare il token in SessionManager (gestito dal chiamante)
-            val response = apiService.verifySession(uid)
+            // e salvare il token in SessionManager (gestito dal chiamante).
+            // Header Authorization passato esplicitamente: a questo punto
+            // SessionManager non ha ancora una sessione attiva, quindi
+            // AuthInterceptor non aggiungerebbe l'header in automatico, e il
+            // backend richiede comunque un Bearer token valido su questo endpoint.
+            val response = apiService.verifySession(uid, "Bearer $firebaseToken")
             if (response.valida && response.userId != null) {
                 // Restituiamo un User minimale (il backend non restituisce tutti i dettagli qui)
                 // Il chiamante (ViewModel) ha già i dati dal token Firebase
@@ -62,7 +66,13 @@ class RealRepository : Repository {
         firebaseToken: String
     ): Result<User> {
         return try {
-            val user = apiService.register(request)
+            // Il filtro lato server richiede Authorization: Bearer <idToken> su
+            // QUALSIASI path autenticato, incluso /users — anche per la
+            // registrazione CITTADINO "pubblica" (pubblica nel senso che non
+            // serve essere OPERATORE, non nel senso che non serve un token).
+            // firebaseToken arriva già come parametro da RegisterViewModel: prima
+            // veniva ignorato qui, causando 401 "Token mancante".
+            val user = apiService.register(request, "Bearer $firebaseToken")
             Result.success(user)
         } catch (e: HttpException) {
             when (e.code()) {
@@ -80,7 +90,10 @@ class RealRepository : Repository {
 
     override suspend fun verifySession(uid: String): Result<Boolean> {
         return try {
-            val response = apiService.verifySession(uid)
+            // Qui, a differenza di login(), la sessione è già attiva e
+            // AuthInterceptor aggiunge già l'header Authorization in automatico:
+            // passiamo null per non sovrascriverlo.
+            val response = apiService.verifySession(uid, null)
             Result.success(response.valida)
         } catch (e: HttpException) {
             when (e.code()) {
@@ -216,8 +229,9 @@ class RealRepository : Repository {
         status: String
     ): Result<Unit> {
         return try {
-            val request = mapOf("stato" to status)
-            apiService.updateInterventionStatus(interventionId, request)
+            // "stato" va passato come query parameter, non come body JSON
+            // (vedi nota in ApiService.kt)
+            apiService.updateInterventionStatus(interventionId, status)
             Result.success(Unit)
         } catch (e: HttpException) {
             when (e.code()) {

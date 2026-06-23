@@ -1,5 +1,7 @@
 package it.unisannio.soscity.soscity_app.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Ticket(
     val id: String = "",
     val titolo: String = "",
@@ -10,6 +12,10 @@ data class Ticket(
     val coordinate: Coordinate = Coordinate(),
     val fotoAllegata: String? = null,
     val dataCreazione: String = "",
+    val dataAggiornamento: String = "",
+    // Il backend usa "id_cittadino" (snake_case) nella risposta JSON, non "idCittadino".
+    // Senza @SerializedName questo campo sarebbe sempre rimasto vuoto in lettura.
+    @SerializedName("id_cittadino")
     val idCittadino: String = ""
 )
 
