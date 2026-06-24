@@ -6,6 +6,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import it.unisannio.soscity.soscity_app.data.model.RegisterRequest
 import it.unisannio.soscity.soscity_app.data.model.User
+import it.unisannio.soscity.soscity_app.data.remote.AppError
 import it.unisannio.soscity.soscity_app.data.repository.FakeRepository
 import it.unisannio.soscity.soscity_app.data.repository.Repository
 import it.unisannio.soscity.soscity_app.ui.common.BaseViewModel
@@ -63,8 +64,19 @@ class RegisterViewModel(
                     SessionManager.setSession(firebaseToken, user)
                     _uiState.value = UiState.Success(user)
                 }.onFailure { exception ->
-                    // Rollback: elimina account Firebase se la registrazione nel backend fallisce
+                    // Rollback: elimina account Firebase se la registrazione nel backend fallisce.
+                    // Va eseguito a prescindere dal tipo di errore: anche se il backend ha
+                    // rifiutato per sessione/token scaduto, l'account Firebase appena creato
+                    // resterebbe comunque "orfano" (Firebase OK, backend KO) se non lo rimuoviamo.
                     firebaseUser.delete().await()
+
+                    // SessionExpired qui significa che il token Firebase appena ottenuto
+                    // non è stato accettato dal backend: puliamo eventuali residui di
+                    // sessione prima di mostrare l'errore, così l'utente riparte da uno
+                    // stato pulito al prossimo tentativo.
+                    if (exception is AppError.SessionExpired) {
+                        SessionManager.clearSession()
+                    }
                     _uiState.value = UiState.Error(
                         exception.message ?: "Errore durante la registrazione"
                     )

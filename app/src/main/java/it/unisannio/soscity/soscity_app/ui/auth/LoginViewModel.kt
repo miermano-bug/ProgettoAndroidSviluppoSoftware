@@ -6,6 +6,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import it.unisannio.soscity.soscity_app.data.model.RegisterRequest
 import it.unisannio.soscity.soscity_app.data.model.User
+import it.unisannio.soscity.soscity_app.data.remote.AppError
 import it.unisannio.soscity.soscity_app.data.repository.FakeRepository
 import it.unisannio.soscity.soscity_app.data.repository.Repository
 import it.unisannio.soscity.soscity_app.ui.common.BaseViewModel
@@ -48,6 +49,15 @@ class LoginViewModel(
                     SessionManager.setSession(firebaseToken, user)
                     _uiState.value = UiState.Success(user)
                 }.onFailure { exception ->
+                    // SessionExpired qui è un caso limite (siamo nel flusso di login,
+                    // quindi non c'era ancora una sessione "vera" da invalidare), ma
+                    // chiamiamo comunque clearSession() per sicurezza: se per qualche
+                    // motivo SessionManager avesse residui di una sessione precedente
+                    // (es. utente loggato, poi logout incompleto, poi nuovo tentativo
+                    // di login con token scaduto), li puliamo prima di mostrare l'errore.
+                    if (exception is AppError.SessionExpired) {
+                        SessionManager.clearSession()
+                    }
                     _uiState.value = UiState.Error(
                         exception.message ?: "Errore durante il login"
                     )
