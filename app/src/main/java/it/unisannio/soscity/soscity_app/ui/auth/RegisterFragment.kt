@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import it.unisannio.soscity.soscity_app.R
 import it.unisannio.soscity.soscity_app.databinding.FragmentRegisterBinding
 import it.unisannio.soscity.soscity_app.ui.common.UiState
 import it.unisannio.soscity.soscity_app.util.RepositoryProvider
+import it.unisannio.soscity.soscity_app.util.roleHomeDestination
+import it.unisannio.soscity.soscity_app.util.startMapBackgroundPan
 import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
@@ -35,49 +36,9 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupMapAnimation(view)
+        startMapBackgroundPan(view, binding.imageMapBackground)
         setupListeners()
         observeViewModel()
-    }
-
-    private fun setupMapAnimation(view: View) {
-        val mapBackground = view.findViewById<android.widget.ImageView>(R.id.imageMapBackground)
-
-        mapBackground?.post {
-            val deltaX = (mapBackground.width - view.width).toFloat()
-            val deltaY = (mapBackground.height - view.height).toFloat()
-
-            if (deltaX > 0 && deltaY > 0) {
-                val animX = android.animation.ObjectAnimator.ofFloat(
-                    mapBackground,
-                    "translationX",
-                    0f,
-                    -deltaX
-                ).apply {
-                    duration = 45000
-                    repeatMode = android.animation.ValueAnimator.REVERSE
-                    repeatCount = android.animation.ValueAnimator.INFINITE
-                    interpolator = android.view.animation.LinearInterpolator()
-                }
-
-                val animY = android.animation.ObjectAnimator.ofFloat(
-                    mapBackground,
-                    "translationY",
-                    0f,
-                    -deltaY
-                ).apply {
-                    duration = 45000
-                    repeatMode = android.animation.ValueAnimator.REVERSE
-                    repeatCount = android.animation.ValueAnimator.INFINITE
-                    interpolator = android.view.animation.LinearInterpolator()
-                }
-
-                android.animation.AnimatorSet().apply {
-                    playTogether(animX, animY)
-                    start()
-                }
-            }
-        }
     }
 
     private fun setupListeners() {
@@ -141,16 +102,11 @@ class RegisterFragment : Fragment() {
                         ).show()
 
                         // Naviga in base al ruolo
-                        when (state.data.ruolo) {
-                            "CITTADINO" -> {
-                                findNavController().navigate(R.id.citizenHomeFragment)
-                            }
-                            "TECNICO" -> {
-                                findNavController().navigate(R.id.technicianHomeFragment)
-                            }
-                            else -> {
-                                findNavController().navigateUp()
-                            }
+                        val destination = roleHomeDestination(state.data.ruolo)
+                        if (destination != null) {
+                            findNavController().navigate(destination)
+                        } else {
+                            findNavController().navigateUp()
                         }
                     }
 
