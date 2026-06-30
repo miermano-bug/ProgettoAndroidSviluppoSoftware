@@ -1,50 +1,26 @@
 package it.unisannio.soscity.soscity_app.util
 
-import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * Interceptor che aggiunge il Firebase ID Token a tutte le richieste.
+ */
 class AuthInterceptor : Interceptor {
 
-    override fun intercept(
-        chain: Interceptor.Chain
-    ): Response {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val originalRequest = chain.request()
+        val builder = originalRequest.newBuilder()
 
-        val request =
-            chain.request()
-                .newBuilder()
-
-        val username =
-            SessionManager.username
-
-        val password =
-            SessionManager.password
-
-        if (
-            SessionManager.isLoggedIn &&
-            username != null &&
-            password != null
-        ) {
-
-            val credential =
-                Credentials.basic(
-                    username,
-                    password
-                )
-
-            request.header(
-                "Authorization",
-                credential
-            )
+        // Aggiunge il Firebase ID Token se l'utente è loggato
+        val token = SessionManager.getToken()
+        if (SessionManager.isLoggedIn && token != null) {
+            builder.header("Authorization", "Bearer $token")
         }
 
-        request.header(
-            "Content-Type",
-            "application/json"
-        )
+        // Aggiunge Content-Type per tutte le richieste
+        builder.header("Content-Type", "application/json")
 
-        return chain.proceed(
-            request.build()
-        )
+        return chain.proceed(builder.build())
     }
 }

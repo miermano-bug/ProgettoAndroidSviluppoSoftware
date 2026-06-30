@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "184551199491",
+    "project_id": "soscity-577d2",
+    "storage_bucket": "soscity-577d2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184551199491:android:b30f708803ad5ca84d8f36",
+        "android_client_info": {
+          "package_name": "it.unisannio.soscity.soscity_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeLukf2GhgQEQg5Csd_wgrzmo4xiJF-AM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

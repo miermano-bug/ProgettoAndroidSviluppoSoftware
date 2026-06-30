@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Animazione di "pan" continuo dello sfondo mappa (imageMapBackground),
+    condivisa tra LoginFragment e RegisterFragment (in precedenza duplicata
+    identica in entrambi, vedi punto #2 del documento di refactoring).
+
+    I valori valueFrom/valueTo qui sono placeholder (0): lo spostamento reale
+    (deltaX/deltaY) dipende dalle dimensioni a runtime della view e dello
+    schermo, quindi viene calcolato e iniettato via codice con
+    setFloatValues() prima di avviare l'animazione (vedi
+    MapBackgroundAnimator.kt). Solo i parametri "costanti" — durata, modalità
+    di repeat, interpolatore — vivono qui, in un unico posto.
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:propertyName="translationX"
+        android:valueType="floatType"
+        android:valueFrom="0"
+        android:valueTo="0"
+        android:duration="45000"
+        android:repeatCount="infinite"
+        android:repeatMode="reverse"
+        android:interpolator="@android:anim/linear_interpolator" />
+
+    <objectAnimator
+        android:propertyName="translationY"
+        android:valueType="floatType"
+        android:valueFrom="0"
+        android:valueTo="0"
+        android:duration="45000"
+        android:repeatCount="infinite"
+        android:repeatMode="reverse"
+        android:interpolator="@android:anim/linear_interpolator" />
+
+</set>
