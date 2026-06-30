@@ -135,11 +135,12 @@ class RealRepository : Repository {
 
     override suspend fun updateInterventionStatus(
         interventionId: String,
-        status: String
+        status: String,
+        note: String?
     ): Result<Unit> =
-    // "stato" va passato come query parameter, non come body JSON
+    // "stato" e "note" vanno passati come query parameter, non come body JSON
         // (vedi nota in ApiService.kt)
         safeApiCall(
             notFoundError = { AppError.InterventionNotFound(interventionId) }
-        ) { apiService.updateInterventionStatus(interventionId, status) }
+        ) { apiService.updateInterventionStatus(interventionId, status, note) }
 }

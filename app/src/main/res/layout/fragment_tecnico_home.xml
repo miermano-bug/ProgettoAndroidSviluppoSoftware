@@ -1,68 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F7FA">
 
+    <!-- Header -->
     <LinearLayout
+        android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TEST ENDPOINT — TECNICO"
-            android:textSize="18sp"
+            android:text="I tuoi interventi"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnGetMyInterventions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. GET /interventions/my"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnGetInterventionById"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2. GET /interventions/{id} (usa id dal punto 1)"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnSetStatoInCorso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3. PUT .../stato?stato=IN_CORSO"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnSetStatoCompletato"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4. PUT .../stato?stato=COMPLETATO"
-            android:layout_marginBottom="16dp" />
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#212121" />
 
         <TextView
+            android:id="@+id/textSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RISULTATO ULTIMA CHIAMATA:"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
-
-        <TextView
-            android:id="@+id/textRisultatoTecnico"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:padding="12dp"
-            android:fontFamily="monospace"
-            android:textSize="12sp"
-            android:text="(nessuna chiamata ancora)" />
+            android:layout_marginTop="2dp"
+            android:text="Caricamento in corso…"
+            android:textSize="13sp"
+            android:textColor="#757575" />
 
     </LinearLayout>
-</ScrollView>
+
+    <!-- Banner promozione coda (Modifica 4): mostrato dopo un COMPLETATO
+         se è partito un nuovo intervento sullo stesso team -->
+    <LinearLayout
+        android:id="@+id/bannerPromozione"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_status_in_corso"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+
+        <TextView
+            android:id="@+id/textBannerPromozione"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nuovo intervento avviato per il tuo team"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#1F6B33" />
+
+    </LinearLayout>
+
+    <!-- Lista interventi -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerInterventi"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/bannerPromozione"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Stato vuoto -->
+    <LinearLayout
+        android:id="@+id/layoutVuoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bannerPromozione"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nessun intervento assegnato"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#424242" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Quando ti verrà assegnato un intervento, lo vedrai apparire qui."
+            android:textSize="13sp"
+            android:textColor="#9E9E9E" />
+
+    </LinearLayout>
+
+    <!-- Stato errore -->
+    <LinearLayout
+        android:id="@+id/layoutErrore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/bannerPromozione"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/textErrore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Non riusciamo a caricare i tuoi interventi"
+            android:textSize="14sp"
+            android:textColor="#C62828" />
+
+        <Button
+            android:id="@+id/btnRiprova"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_button_outline"
+            android:text="Riprova"
+            android:textColor="#1E88E5"
+            android:textAllCaps="false"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:elevation="0dp"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

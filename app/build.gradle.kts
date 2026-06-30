@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")

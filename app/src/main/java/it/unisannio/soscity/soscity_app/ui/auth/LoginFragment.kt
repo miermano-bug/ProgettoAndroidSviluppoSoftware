@@ -44,12 +44,10 @@ class LoginFragment : Fragment() {
 
     private fun setupListeners() {
         binding.buttonLogin.setOnClickListener {
-            // CAMBIO QUI: ora è email, non username
-            val email = binding.editUsername.text.toString().trim()
+            val email = binding.editEmail.text.toString().trim()
             val password = binding.editPassword.text.toString()
 
             if (validateInput(email, password)) {
-                // CAMBIO QUI: uso loginWithEmail
                 viewModel.loginWithEmail(email, password)
             }
         }
@@ -59,7 +57,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    // AGGIUNTO: validazione per email e password
     private fun validateInput(email: String, password: String): Boolean {
         if (email.isEmpty()) {
             Toast.makeText(requireContext(), "Inserisci l'email", Toast.LENGTH_SHORT).show()

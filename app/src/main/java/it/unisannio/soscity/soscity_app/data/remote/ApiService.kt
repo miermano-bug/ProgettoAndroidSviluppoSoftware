@@ -114,18 +114,27 @@ interface ApiService {
     ): Intervention
 
     /**
-     * Aggiorna lo stato di un intervento.
-     * PUT /interventions/{id}/stato?stato=<valore>
+     * Aggiorna lo stato di un intervento, opzionalmente con una nota di chiusura.
+     * PUT /interventions/{id}/stato?stato=<valore>&note=<testo>
      *
      * Il backend legge "stato" come QUERY PARAMETER, non come body JSON
      * (vedi contratto §9.6: "PUT /interventions/{id}/stato?stato=<valore>").
      * La versione precedente mandava un body {"stato": "..."}, che il backend
      * avrebbe semplicemente ignorato (nessun parametro stato sulla query string
      * → 400 "Parametro stato mancante").
+     *
+     * "note" (Modifica 5 backend) è stato implementato anch'esso come query
+     * param, per coerenza con "stato" — DA VERIFICARE col backend reale: se
+     * il backend si aspetta invece un body JSON {"note": "..."}, questa firma
+     * va cambiata in @Body. Retrofit non applica i default Kotlin sui metodi
+     * di interfaccia: ogni chiamata deve passare "note" esplicitamente
+     * (anche solo null), esattamente come già avviene per authHeader in
+     * verifySession.
      */
     @PUT("interventions/{id}/stato")
     suspend fun updateInterventionStatus(
         @Path("id") interventionId: String,
-        @Query("stato") stato: String
+        @Query("stato") stato: String,
+        @Query("note") note: String?
     ): Unit
 }

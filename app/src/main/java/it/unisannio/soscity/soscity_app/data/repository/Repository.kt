@@ -80,6 +80,7 @@ interface Repository {
 
     suspend fun updateInterventionStatus(
         interventionId: String,
-        status: String
+        status: String,
+        note: String? = null
     ): Result<Unit>
 }

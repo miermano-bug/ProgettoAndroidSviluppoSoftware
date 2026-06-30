@@ -3,130 +3,179 @@ package it.unisannio.soscity.soscity_app.ui.tecnico
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.unisannio.soscity.soscity_app.R
+import it.unisannio.soscity.soscity_app.data.model.Intervention
+import it.unisannio.soscity.soscity_app.data.repository.Repository
 import it.unisannio.soscity.soscity_app.util.RepositoryProvider
 import kotlinx.coroutines.launch
 
 /**
- * SCHERMATA DI TEST GREZZA — non è UI definitiva.
- * Serve solo a verificare manualmente che gli endpoint interventions
- * comunichino correttamente col backend.
+ * Home del TECNICO: mostra tutti gli interventi assegnati (Modifica 3 —
+ * coda multipla sul team: il tecnico ora può avere più di un intervento
+ * relativo allo stesso team, non solo quello "attivo").
  *
- * NOTA: non esiste nell'app un modo per CREARE un Intervention di test
- * (POST /interventions non è esposto in ApiService). Se il bottone 1
- * restituisce una lista vuota, non significa necessariamente un errore:
- * potrebbe semplicemente non esistere ancora nessun intervento assegnato
- * a questo tecnico nel database. Per creare un intervento di test, usa
- * una chiamata diretta (curl/Postman) con POST :8085/interventions,
- * passando il technicianId = uid Firebase di questo account TECNICO.
+ * Per ogni intervento azionabile (PIANIFICATO o IN_CORSO) sono disponibili
+ * i bottoni Avvia/Completa con un campo nota opzionale (Modifica 5).
+ *
+ * Dopo un COMPLETATO riuscito, ricarica la lista e confronta lo snapshot
+ * precedente con quello nuovo per segnalare se un intervento PIANIFICATO
+ * è stato promosso automaticamente a IN_CORSO sullo stesso team
+ * (Modifica 4 — promozione automatica della coda).
  */
 class TecnicoHomeFragment : Fragment(
     R.layout.fragment_tecnico_home
 ) {
 
-    private val repository = RepositoryProvider.provideRepository()
+    private val repository: Repository = RepositoryProvider.provideRepository()
+    private lateinit var adapter: InterventionAdapter
 
-    // Conserva l'id dell'ultimo intervento letto, per testare subito
-    // GET /interventions/{id} e l'update di stato senza copiarlo a mano.
-    private var ultimoInterventionId: String? = null
+    // Ultimo snapshot caricato, usato per rilevare la promozione automatica
+    // dopo un COMPLETATO (Modifica 4).
+    private var ultimoSnapshot: List<Intervention> = emptyList()
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textRisultato = view.findViewById<TextView>(R.id.textRisultatoTecnico)
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerInterventi)
+        adapter = InterventionAdapter(
+            onAvvia = { intervention, nota -> aggiornaStato(intervention, "IN_CORSO", nota) },
+            onCompleta = { intervention, nota -> aggiornaStato(intervention, "COMPLETATO", nota) }
+        )
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.adapter = adapter
 
-        view.findViewById<Button>(R.id.btnGetMyInterventions).setOnClickListener {
-            mostraCaricamento(textRisultato, "GET /interventions/my")
-            lifecycleScope.launch {
-                val result = repository.getMyInterventions()
-                result.onSuccess { interventi ->
-                    if (interventi.isNotEmpty()) {
-                        ultimoInterventionId = interventi.first().id
-                    }
-                    textRisultato.text = buildString {
-                        append("✅ GET /interventions/my OK — ${interventi.size} interventi\n\n")
-                        interventi.forEach { i ->
-                            append("• [${i.statoLavoro}] id=${i.id}\n")
-                            append("  ticketId=${i.ticketId} tecnicoId=${i.tecnicoId}\n")
-                            append("  note=${i.noteIntervento}\n\n")
-                        }
-                        if (interventi.isEmpty()) {
-                            append("(lista vuota — non è necessariamente un errore: ")
-                            append("potrebbe non esistere ancora nessun intervento assegnato ")
-                            append("a questo tecnico. Vedi nota nel codice del Fragment.)")
-                        }
-                    }
-                }.onFailure { e ->
-                    textRisultato.text = "❌ GET /interventions/my FALLITO\n\n${e.message}"
-                }
-            }
+        view.findViewById<Button>(R.id.btnRiprova).setOnClickListener {
+            caricaInterventi(view)
         }
 
-        view.findViewById<Button>(R.id.btnGetInterventionById).setOnClickListener {
-            val id = ultimoInterventionId
-            if (id == null) {
-                textRisultato.text = "⚠️ Premi prima il bottone 1 per ottenere un id da usare qui."
-                return@setOnClickListener
-            }
-            mostraCaricamento(textRisultato, "GET /interventions/$id")
-            lifecycleScope.launch {
-                val result = repository.getInterventionById(id)
-                result.onSuccess { i ->
-                    textRisultato.text = """
-                        ✅ GET /interventions/{id} OK
-
-                        id: ${i.id}
-                        ticketId: ${i.ticketId}
-                        teamId: ${i.teamId}
-                        tecnicoId: ${i.tecnicoId}
-                        statoLavoro: ${i.statoLavoro}
-                        noteIntervento: ${i.noteIntervento}
-                        dataInizio: ${i.dataInizio}
-                        dataFine: ${i.dataFine ?: "(non ancora conclusa)"}
-                        dataCreazione: ${i.dataCreazione}
-                    """.trimIndent()
-                }.onFailure { e ->
-                    textRisultato.text = "❌ GET /interventions/{id} FALLITO\n\n${e.message}"
-                }
-            }
-        }
-
-        view.findViewById<Button>(R.id.btnSetStatoInCorso).setOnClickListener {
-            aggiornaStato(textRisultato, "IN_CORSO")
-        }
-
-        view.findViewById<Button>(R.id.btnSetStatoCompletato).setOnClickListener {
-            aggiornaStato(textRisultato, "COMPLETATO")
-        }
+        caricaInterventi(view)
     }
 
-    private fun aggiornaStato(textView: TextView, nuovoStato: String) {
-        val id = ultimoInterventionId
-        if (id == null) {
-            textView.text = "⚠️ Premi prima il bottone 1 per ottenere un id da usare qui."
-            return
-        }
-        mostraCaricamento(textView, "PUT /interventions/$id/stato?stato=$nuovoStato")
+    private fun caricaInterventi(view: View) {
+        mostraStato(view, Stato.CARICAMENTO)
         lifecycleScope.launch {
-            val result = repository.updateInterventionStatus(id, nuovoStato)
-            result.onSuccess {
-                textView.text = "✅ PUT /interventions/$id/stato?stato=$nuovoStato OK\n\n" +
-                        "Premi di nuovo il bottone 1 o 2 per verificare che lo stato sia cambiato " +
-                        "(se nuovoStato == COMPLETATO, controlla anche che il Ticket collegato " +
-                        "sia passato a RISOLTO, secondo §13 UC4 del contratto)."
+            val result = repository.getMyInterventions()
+            result.onSuccess { interventi ->
+                ultimoSnapshot = interventi
+                if (interventi.isEmpty()) {
+                    mostraStato(view, Stato.VUOTO)
+                } else {
+                    mostraStato(view, Stato.CONTENUTO)
+                    adapter.submitList(ordinaPerRilevanza(interventi))
+                    aggiornaSottotitolo(view, interventi)
+                }
             }.onFailure { e ->
-                textView.text = "❌ PUT .../stato FALLITO\n\n${e.message}"
+                mostraStato(view, Stato.ERRORE)
+                view.findViewById<TextView>(R.id.textErrore).text =
+                    e.message ?: "Errore nel recupero degli interventi"
             }
         }
     }
 
-    private fun mostraCaricamento(textView: TextView, endpoint: String) {
-        textView.text = "⏳ Chiamata in corso: $endpoint ..."
+    private fun aggiornaStato(intervention: Intervention, nuovoStato: String, nota: String?) {
+        val view = view ?: return
+        lifecycleScope.launch {
+            val result = repository.updateInterventionStatus(intervention.id, nuovoStato, nota)
+            result.onSuccess {
+                adapter.mostraEsito(intervention.id, "✅ Stato aggiornato a $nuovoStato")
+                if (nuovoStato == "COMPLETATO") {
+                    ricaricaERilevaPromozione(view, teamId = intervention.teamId)
+                } else {
+                    ricaricaSilenziosamente(view)
+                }
+            }.onFailure { e ->
+                adapter.mostraEsito(intervention.id, "❌ ${e.message ?: "Aggiornamento non riuscito"}")
+            }
+        }
+    }
+
+    /**
+     * Dopo un COMPLETATO, ricarica la lista e confronta lo snapshot precedente
+     * con quello nuovo: se un intervento dello stesso teamId che era
+     * PIANIFICATO è ora IN_CORSO, significa che il backend l'ha promosso
+     * automaticamente (Modifica 4) — mostriamo il banner.
+     * Se invece nessun intervento dello stesso team risulta più
+     * PIANIFICATO né IN_CORSO, il team è stato liberato.
+     */
+    private fun ricaricaERilevaPromozione(view: View, teamId: String) {
+        val snapshotPrecedente = ultimoSnapshot
+        lifecycleScope.launch {
+            val result = repository.getMyInterventions()
+            result.onSuccess { interventiAggiornati ->
+                ultimoSnapshot = interventiAggiornati
+                adapter.submitList(ordinaPerRilevanza(interventiAggiornati))
+                aggiornaSottotitolo(view, interventiAggiornati)
+
+                val promosso = interventiAggiornati.firstOrNull { nuovo ->
+                    nuovo.teamId == teamId &&
+                            nuovo.statoLavoro == "IN_CORSO" &&
+                            snapshotPrecedente.any { it.id == nuovo.id && it.statoLavoro == "PIANIFICATO" }
+                }
+
+                val bannerView = view.findViewById<LinearLayout>(R.id.bannerPromozione)
+                val bannerText = view.findViewById<TextView>(R.id.textBannerPromozione)
+
+                when {
+                    promosso != null -> {
+                        bannerText.text = "Nuovo intervento avviato per il team $teamId (ticket #${promosso.ticketId})"
+                        bannerView.visibility = View.VISIBLE
+                    }
+                    interventiAggiornati.none { it.teamId == teamId && it.statoLavoro != "COMPLETATO" } -> {
+                        bannerText.text = "Nessun altro intervento in coda: il team $teamId è stato liberato"
+                        bannerView.visibility = View.VISIBLE
+                    }
+                    else -> bannerView.visibility = View.GONE
+                }
+            }.onFailure {
+                // La lista locale resta quella precedente all'update: non blocchiamo
+                // l'utente con un errore, dato che l'update di stato è già riuscito.
+            }
+        }
+    }
+
+    private fun ricaricaSilenziosamente(view: View) {
+        lifecycleScope.launch {
+            repository.getMyInterventions().onSuccess { interventi ->
+                ultimoSnapshot = interventi
+                adapter.submitList(ordinaPerRilevanza(interventi))
+                aggiornaSottotitolo(view, interventi)
+            }
+        }
+    }
+
+    /** IN_CORSO e PIANIFICATO in alto (sono quelli su cui agire), COMPLETATO in fondo. */
+    private fun ordinaPerRilevanza(interventi: List<Intervention>): List<Intervention> {
+        val peso = mapOf("IN_CORSO" to 0, "PIANIFICATO" to 1, "COMPLETATO" to 2)
+        return interventi.sortedBy { peso[it.statoLavoro] ?: 1 }
+    }
+
+    private fun aggiornaSottotitolo(view: View, interventi: List<Intervention>) {
+        val attivi = interventi.count { it.statoLavoro == "IN_CORSO" || it.statoLavoro == "PIANIFICATO" }
+        view.findViewById<TextView>(R.id.textSubtitle).text =
+            if (attivi > 0) "$attivi da gestire · ${interventi.size} totali"
+            else "Tutto completato · ${interventi.size} totali"
+    }
+
+    private enum class Stato { CARICAMENTO, CONTENUTO, VUOTO, ERRORE }
+
+    private fun mostraStato(view: View, stato: Stato) {
+        view.findViewById<ProgressBar>(R.id.progressBar).visibility =
+            if (stato == Stato.CARICAMENTO) View.VISIBLE else View.GONE
+        view.findViewById<RecyclerView>(R.id.recyclerInterventi).visibility =
+            if (stato == Stato.CONTENUTO) View.VISIBLE else View.GONE
+        view.findViewById<LinearLayout>(R.id.layoutVuoto).visibility =
+            if (stato == Stato.VUOTO) View.VISIBLE else View.GONE
+        view.findViewById<LinearLayout>(R.id.layoutErrore).visibility =
+            if (stato == Stato.ERRORE) View.VISIBLE else View.GONE
+        if (stato != Stato.CONTENUTO) {
+            view.findViewById<LinearLayout>(R.id.bannerPromozione).visibility = View.GONE
+        }
     }
 }

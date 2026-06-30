@@ -69,7 +69,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username o Email"
+                android:hint="Email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -82,7 +82,7 @@
                 app:startIconTint="#424242">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editUsername"
+                    android:id="@+id/editEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="56dp"

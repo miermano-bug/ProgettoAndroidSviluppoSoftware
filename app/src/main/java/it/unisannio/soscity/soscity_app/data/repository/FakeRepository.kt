@@ -29,7 +29,7 @@ class FakeRepository : Repository {
             email = "tecnico@soscity.it",
             nome = "Luigi Verdi",
             ruolo = "TECNICO",
-            idTeam = 1,
+            idTeam = "64f1a2b3c4d5e6f7a8b9c0d1",
             competenze = listOf("ILLUMINAZIONE"),
             disponibile = true
         ),
@@ -115,11 +115,22 @@ class FakeRepository : Repository {
             ticketId = "T1",
             teamId = "TEAM_A",
             tecnicoId = "firebase_uid_2",
-            statoLavoro = "PIANIFICATO",
+            statoLavoro = "IN_CORSO",
             noteIntervento = "Verifica impianto",
             dataInizio = "2026-05-26T12:00:00",
             dataFine = null,
             dataCreazione = "2026-05-26T12:00:00"
+        ),
+        Intervention(
+            id = "I1B",
+            ticketId = "T1B",
+            teamId = "TEAM_A",
+            tecnicoId = "firebase_uid_2",
+            statoLavoro = "PIANIFICATO",
+            noteIntervento = "",
+            dataInizio = "2026-05-26T12:05:00",
+            dataFine = null,
+            dataCreazione = "2026-05-26T12:05:00"
         ),
         Intervention(
             id = "I2",
@@ -247,13 +258,18 @@ class FakeRepository : Repository {
 
     override suspend fun updateInterventionStatus(
         interventionId: String,
-        status: String
+        status: String,
+        note: String?
     ): Result<Unit> {
         delay(800)
 
         val intervention = interventions.find { it.id == interventionId }
         return if (intervention != null) {
-            val updated = intervention.copy(statoLavoro = status)
+            val updated = intervention.copy(
+                statoLavoro = status,
+                noteIntervento = note ?: intervention.noteIntervento,
+                dataFine = if (status == "COMPLETATO") java.time.Instant.now().toString() else intervention.dataFine
+            )
             interventions.removeIf { it.id == interventionId }
             interventions.add(updated)
 
@@ -265,6 +281,21 @@ class FakeRepository : Repository {
                     tickets.removeIf { t -> t.id == it.id }
                     tickets.add(updatedTicket)
                 }
+
+                // Simula la promozione automatica (Modifica 4): se esiste un altro
+                // intervento PIANIFICATO sullo stesso team, lo promuove a IN_CORSO.
+                val prossimo = interventions
+                    .filter { it.teamId == intervention.teamId && it.statoLavoro == "PIANIFICATO" }
+                    .minByOrNull { it.dataCreazione }
+
+                if (prossimo != null) {
+                    val promosso = prossimo.copy(statoLavoro = "IN_CORSO")
+                    interventions.removeIf { it.id == prossimo.id }
+                    interventions.add(promosso)
+                }
+                // Se non c'è nessun prossimo in coda, nel backend reale qui verrebbe
+                // liberato il team (disponibile = true) — il mock non modella i team,
+                // quindi questo passaggio non ha un equivalente diretto qui.
             }
 
             Result.success(Unit)

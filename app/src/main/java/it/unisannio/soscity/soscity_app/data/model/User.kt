@@ -7,7 +7,7 @@ data class User(
     val nome: String = "",
     val ruolo: String = "",
     val telefono: String? = null,
-    val idTeam: Int? = null,
+    val idTeam: String? = null,
     val competenze: List<String>? = null,
     val disponibile: Boolean? = null
 )
