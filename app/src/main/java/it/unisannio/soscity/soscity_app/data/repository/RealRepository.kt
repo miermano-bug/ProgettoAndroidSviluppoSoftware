@@ -34,25 +34,20 @@ class RealRepository : Repository {
         firebaseToken: String,
         uid: String
     ): Result<User> {
-        // Il login consiste nel verificare che l'utente esista nel backend.
-        // Header Authorization passato esplicitamente: a questo punto
-        // SessionManager non ha ancora una sessione attiva, quindi
-        // AuthInterceptor non aggiungerebbe l'header in automatico, e il
-        // backend richiede comunque un Bearer token valido su questo endpoint.
         return try {
-            val response = apiService.verifySession(uid, "Bearer $firebaseToken")
-            if (response.valida && response.userId != null) {
-                // Restituiamo un User minimale (il backend non restituisce tutti i dettagli qui).
-                // Il chiamante (ViewModel) ha già i dati dal token Firebase.
-                val user = User(
-                    id = response.userId,
-                    username = "",  // Non disponibile da verify-session
-                    email = "",     // Non disponibile da verify-session
-                    nome = "",      // Non disponibile da verify-session
-                    ruolo = response.ruolo ?: "CITTADINO",
-                    telefono = null
-                )
-                Result.success(user)
+            // 1. Verifica che l'utente esista nel backend
+            val verifyResponse = apiService.verifySession(uid, "Bearer $firebaseToken")
+
+            if (verifyResponse.valida && verifyResponse.userId != null) {
+                // 2. Scarica i dati completi dell'utente da MongoDB
+                val userCompleto = apiService.getMyDetails("Bearer $firebaseToken")
+
+                // 3. Controllo di sicurezza sui dati
+                if (userCompleto.nome.isBlank() || userCompleto.email.isBlank()) {
+                    Result.failure(AppError.ValidationError("Dati profilo incompleti, contatta l'assistenza"))
+                } else {
+                    Result.success(userCompleto)
+                }
             } else {
                 Result.failure(AppError.ValidationError("Utente non trovato nel backend"))
             }
@@ -60,6 +55,7 @@ class RealRepository : Repository {
             when (e.code()) {
                 404 -> Result.failure(AppError.ValidationError("Utente non trovato nel backend"))
                 401 -> Result.failure(AppError.SessionExpired())
+                500, 502, 503 -> Result.failure(AppError.ServerError(e.code(), "Impossibile recuperare i dati del profilo. Riprova tra poco."))
                 else -> Result.failure(AppError.ServerError(e.code(), e.message() ?: "Errore di rete"))
             }
         } catch (e: Exception) {

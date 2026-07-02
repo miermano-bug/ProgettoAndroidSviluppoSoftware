@@ -3,42 +3,27 @@ package it.unisannio.soscity.soscity_app.ui.tecnico
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.button.MaterialButton
 import it.unisannio.soscity.soscity_app.R
 import it.unisannio.soscity.soscity_app.data.model.Intervention
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-/**
- * Stato testuale puro dei possibili valori di "statoLavoro".
- * Se il backend introduce nuovi stati, qui vanno aggiunti i relativi
- * colori/badge — altrimenti finiscono nel ramo "else" (badge neutro).
- */
-private const val STATO_PIANIFICATO = "PIANIFICATO"
-private const val STATO_IN_CORSO = "IN_CORSO"
-private const val STATO_COMPLETATO = "COMPLETATO"
-
 class InterventionAdapter(
-    private val onAvvia: (Intervention, note: String?) -> Unit,
+    private val onCardClick: (Intervention) -> Unit,
+    private val onAvvia:    (Intervention, note: String?) -> Unit,
     private val onCompleta: (Intervention, note: String?) -> Unit
-) : RecyclerView.Adapter<InterventionAdapter.InterventionViewHolder>() {
+) : RecyclerView.Adapter<InterventionAdapter.ViewHolder>() {
 
     private val items = mutableListOf<Intervention>()
-
-    // Messaggi di esito temporanei per-card (es. "✅ Stato aggiornato"),
-    // mantenuti qui (non nel ViewHolder) perché la view viene riciclata.
     private val esitoPerCardId = mutableMapOf<String, String>()
 
     fun submitList(nuovaLista: List<Intervention>) {
-        val diff = DiffUtil.calculateDiff(
-            InterventionDiffCallback(items, nuovaLista)
-        )
+        val diff = DiffUtil.calculateDiff(DiffCallback(items, nuovaLista))
         items.clear()
         items.addAll(nuovaLista)
         diff.dispatchUpdatesTo(this)
@@ -46,138 +31,93 @@ class InterventionAdapter(
 
     fun mostraEsito(interventionId: String, messaggio: String) {
         esitoPerCardId[interventionId] = messaggio
-        val index = items.indexOfFirst { it.id == interventionId }
-        if (index >= 0) notifyItemChanged(index)
+        val idx = items.indexOfFirst { it.id == interventionId }
+        if (idx >= 0) notifyItemChanged(idx)
     }
 
-    fun impostaCaricamento(interventionId: String, inCorso: Boolean) {
-        val index = items.indexOfFirst { it.id == interventionId }
-        if (index >= 0) notifyItemChanged(index)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_intervention, parent, false))
 
-    override fun onCreateViewHolder(parent: ViewGroup, position: Int): InterventionViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_intervention, parent, false)
-        return InterventionViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: InterventionViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(items[position], esitoPerCardId[items[position].id])
-    }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount() = items.size
 
-    inner class InterventionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val textTicketRef: TextView = itemView.findViewById(R.id.textTicketRef)
-        private val textStatoBadge: TextView = itemView.findViewById(R.id.textStatoBadge)
-        private val textTeamInfo: TextView = itemView.findViewById(R.id.textTeamInfo)
-        private val textNoteIntervento: TextView = itemView.findViewById(R.id.textNoteIntervento)
-        private val layoutNota: View = itemView.findViewById(R.id.layoutNota)
-        private val editNota: TextInputEditText = itemView.findViewById(R.id.editNota)
-        private val layoutAzioni: LinearLayout = itemView.findViewById(R.id.layoutAzioni)
-        private val btnAvvia: Button = itemView.findViewById(R.id.btnAvvia)
-        private val btnCompleta: Button = itemView.findViewById(R.id.btnCompleta)
-        private val textEsitoAzione: TextView = itemView.findViewById(R.id.textEsitoAzione)
+        private val cardView:        View       = itemView.findViewById(R.id.cardIntervento)
+        private val viewStatusStrip: View       = itemView.findViewById(R.id.viewStatusStrip)
+        private val textTicketRef:   TextView   = itemView.findViewById(R.id.textTicketRef)
+        private val textStatoBadge:  TextView   = itemView.findViewById(R.id.textStatoBadge)
+        private val textTeamInfo:    TextView   = itemView.findViewById(R.id.textTeamInfo)
+        private val layoutAzioni:    View       = itemView.findViewById(R.id.layoutAzioni)
+        private val btnAvvia:        MaterialButton = itemView.findViewById(R.id.btnAvvia)
+        private val btnCompleta:     MaterialButton = itemView.findViewById(R.id.btnCompleta)
+        private val textEsitoAzione: TextView   = itemView.findViewById(R.id.textEsitoAzione)
+        private val separatore:      View       = itemView.findViewById(R.id.separatoreAzioni)
 
         fun bind(intervention: Intervention, esito: String?) {
-            textTicketRef.text = "Ticket #${intervention.ticketId.ifBlank { intervention.id }}"
-            textTeamInfo.text = "Team ${intervention.teamId} · avviato il ${formattaData(intervention.dataInizio)}"
+            // Ticket ref abbreviata
+            val ref = intervention.ticketId.takeLast(8).uppercase().ifBlank { intervention.id.takeLast(8).uppercase() }
+            textTicketRef.text = "Ticket #$ref"
 
-            if (intervention.noteIntervento.isNotBlank()) {
-                textNoteIntervento.visibility = View.VISIBLE
-                textNoteIntervento.text = intervention.noteIntervento
-            } else {
-                textNoteIntervento.visibility = View.GONE
-            }
+            // Team + data
+            val dataFormattata = formattaData(intervention.dataInizio)
+            textTeamInfo.text = "Team ${intervention.teamId.takeLast(6)} · dal $dataFormattata"
 
-            applicaBadgeStato(intervention.statoLavoro)
+            // Stile badge + striscia
+            applicaStile(intervention.statoLavoro)
 
-            // Le azioni (e il campo nota) sono disponibili solo per gli stati
-            // su cui il tecnico può ancora intervenire. Un intervento COMPLETATO
-            // resta visibile in lista ma è di sola consultazione.
-            val azionabile = intervention.statoLavoro == STATO_PIANIFICATO ||
-                    intervention.statoLavoro == STATO_IN_CORSO
+            // Bottoni azione rapida (senza campo nota — quello è nel bottom sheet)
+            val azionabile = intervention.statoLavoro == "PIANIFICATO" || intervention.statoLavoro == "IN_CORSO"
+            layoutAzioni.visibility  = if (azionabile) View.VISIBLE else View.GONE
+            separatore.visibility    = if (azionabile) View.VISIBLE else View.GONE
+            btnAvvia.visibility      = if (intervention.statoLavoro == "PIANIFICATO") View.VISIBLE else View.GONE
 
-            layoutAzioni.visibility = if (azionabile) View.VISIBLE else View.GONE
-            layoutNota.visibility = if (azionabile) View.VISIBLE else View.GONE
+            btnAvvia.setOnClickListener    { onAvvia(intervention, null) }
+            btnCompleta.setOnClickListener { onCompleta(intervention, null) }
 
-            // "Avvia" ha senso solo da PIANIFICATO; da IN_CORSO è già avviato.
-            btnAvvia.visibility =
-                if (intervention.statoLavoro == STATO_PIANIFICATO) View.VISIBLE else View.GONE
-            btnAvvia.setOnClickListener {
-                val nota = editNota.text?.toString()?.trim()?.ifEmpty { null }
-                onAvvia(intervention, nota)
-            }
-            btnCompleta.setOnClickListener {
-                val nota = editNota.text?.toString()?.trim()?.ifEmpty { null }
-                onCompleta(intervention, nota)
-            }
+            // Tutta la card apre il dettaglio
+            cardView.setOnClickListener { onCardClick(intervention) }
 
+            // Esito
             if (esito != null) {
                 textEsitoAzione.visibility = View.VISIBLE
                 textEsitoAzione.text = esito
                 textEsitoAzione.setTextColor(
-                    if (esito.startsWith("❌")) 0xFFC62828.toInt() else 0xFF1F6B33.toInt()
+                    if (esito.startsWith("❌")) 0xFFC62828.toInt() else 0xFF1B5E20.toInt()
                 )
             } else {
                 textEsitoAzione.visibility = View.GONE
             }
         }
 
-        private fun applicaBadgeStato(stato: String) {
+        private fun applicaStile(stato: String) {
             textStatoBadge.text = stato.ifBlank { "—" }
             when (stato) {
-                STATO_IN_CORSO -> {
-                    textStatoBadge.setBackgroundResource(R.drawable.bg_status_in_corso)
-                    textStatoBadge.setTextColor(0xFF1F6B33.toInt())
-                }
-                STATO_PIANIFICATO -> {
-                    textStatoBadge.setBackgroundResource(R.drawable.bg_status_pianificato)
-                    textStatoBadge.setTextColor(0xFF8A6D1D.toInt())
-                }
-                STATO_COMPLETATO -> {
-                    textStatoBadge.setBackgroundResource(R.drawable.bg_status_completato)
-                    textStatoBadge.setTextColor(0xFF3949AB.toInt())
-                }
-                else -> {
-                    textStatoBadge.setBackgroundResource(R.drawable.bg_status_completato)
-                    textStatoBadge.setTextColor(0xFF424242.toInt())
-                }
+                "IN_CORSO"    -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_in_corso);    textStatoBadge.setTextColor(0xFF1B5E20.toInt()); viewStatusStrip.setBackgroundColor(0xFF2E7D32.toInt()) }
+                "PIANIFICATO" -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_pianificato); textStatoBadge.setTextColor(0xFFE65100.toInt()); viewStatusStrip.setBackgroundColor(0xFFE65100.toInt()) }
+                "COMPLETATO"  -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_completato);  textStatoBadge.setTextColor(0xFF1565C0.toInt()); viewStatusStrip.setBackgroundColor(0xFF1565C0.toInt()) }
+                "SOSPESO"     -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_sospeso);     textStatoBadge.setTextColor(0xFFBF360C.toInt()); viewStatusStrip.setBackgroundColor(0xFFBF360C.toInt()) }
+                else          -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_completato);  textStatoBadge.setTextColor(0xFF757575.toInt()); viewStatusStrip.setBackgroundColor(0xFF9E9E9E.toInt()) }
             }
         }
 
-        /**
-         * Le date arrivano come stringa ISO-8601 (es. "2026-05-26T12:00:00").
-         * Se il formato non fosse parsabile (es. il backend lo cambia), si
-         * mostra la stringa originale invece di far crashare la UI.
-         */
         private fun formattaData(isoDate: String): String {
-            if (isoDate.isBlank()) return "data non disponibile"
+            if (isoDate.isBlank()) return "n.d."
             return try {
-                val instant = Instant.parse(
-                    if (isoDate.endsWith("Z")) isoDate else "${isoDate}Z"
-                )
-                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                val src = if (isoDate.endsWith("Z")) isoDate else "${isoDate}Z"
+                DateTimeFormatter.ofPattern("dd/MM/yy HH:mm")
                     .withZone(ZoneId.systemDefault())
-                formatter.format(instant)
-            } catch (e: Exception) {
-                isoDate
-            }
+                    .format(Instant.parse(src))
+            } catch (e: Exception) { isoDate }
         }
     }
 
-    private class InterventionDiffCallback(
-        private val old: List<Intervention>,
-        private val new: List<Intervention>
-    ) : DiffUtil.Callback() {
+    private class DiffCallback(private val old: List<Intervention>, private val new: List<Intervention>) : DiffUtil.Callback() {
         override fun getOldListSize() = old.size
         override fun getNewListSize() = new.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            old[oldItemPosition].id == new[newItemPosition].id
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            old[oldItemPosition] == new[newItemPosition]
+        override fun areItemsTheSame(o: Int, n: Int) = old[o].id == new[n].id
+        override fun areContentsTheSame(o: Int, n: Int) = old[o] == new[n]
     }
 }

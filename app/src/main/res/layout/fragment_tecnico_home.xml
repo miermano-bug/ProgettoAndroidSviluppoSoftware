@@ -4,39 +4,212 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="#F1F8F1">
 
-    <!-- Header -->
+    <!-- ══════════ HEADER VERDE ══════════ -->
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:background="@drawable/bg_header_card"
+        android:elevation="8dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="I tuoi interventi"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="#212121" />
+        <View android:layout_width="match_parent" android:layout_height="28dp" />
 
-        <TextView
-            android:id="@+id/textSubtitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="Caricamento in corso…"
-            android:textSize="13sp"
-            android:textColor="#757575" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
 
+            <!-- Avatar cliccabile → profilo -->
+            <FrameLayout
+                android:id="@+id/btnProfilo"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_avatar_circle"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+                <TextView
+                    android:id="@+id/textInitials"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="T"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="14dp">
+
+                <TextView
+                    android:id="@+id/textNomeTecnico"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tecnico"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Tocca il profilo per i dettagli"
+                    android:textSize="12sp"
+                    android:textColor="#A5D6A7" />
+            </LinearLayout>
+
+            <!-- Logout -->
+            <LinearLayout
+                android:id="@+id/btnLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_logout_button"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_logout"
+                    app:tint="#C62828" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="Esci"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#C62828"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Cards contatori — dentro l'header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="20dp"
+            android:layout_marginTop="-8dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_stat_card"
+                android:padding="14dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="4dp">
+                <TextView
+                    android:id="@+id/textContatoreAttivi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="#2E7D32"
+                    android:fontFamily="sans-serif-black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Da gestire"
+                    android:textSize="12sp"
+                    android:textColor="#4E6B4E" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_stat_card"
+                android:padding="14dp"
+                android:layout_marginStart="8dp"
+                android:elevation="4dp">
+                <TextView
+                    android:id="@+id/textContatoreCompletati"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="#1565C0"
+                    android:fontFamily="sans-serif-black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Completati"
+                    android:textSize="12sp"
+                    android:textColor="#4E6B4E" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Banner promozione coda (Modifica 4): mostrato dopo un COMPLETATO
-         se è partito un nuovo intervento sullo stesso team -->
+    <!-- ══════════ TITOLO SEZIONE ══════════ -->
+    <LinearLayout
+        android:id="@+id/layoutTitoloLista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I tuoi interventi"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#1A2E1A"
+                android:fontFamily="sans-serif-medium" />
+            <TextView
+                android:id="@+id/textSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Caricamento in corso…"
+                android:textSize="13sp"
+                android:textColor="#4E6B4E" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Banner promozione -->
     <LinearLayout
         android:id="@+id/bannerPromozione"
         android:layout_width="match_parent"
@@ -48,110 +221,121 @@
         android:paddingEnd="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
-
+        android:elevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutTitoloLista">
         <TextView
             android:id="@+id/textBannerPromozione"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Nuovo intervento avviato per il tuo team"
+            android:text="Nuovo intervento avviato"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:textColor="#1F6B33" />
-
+            android:textColor="#1B5E20" />
     </LinearLayout>
 
-    <!-- Lista interventi -->
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerInterventi"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="20dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="24dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/bannerPromozione"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- Stato vuoto -->
+    <!-- Stato VUOTO -->
     <LinearLayout
         android:id="@+id/layoutVuoto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="32dp"
+        android:padding="40dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/bannerPromozione"
         app:layout_constraintBottom_toBottomOf="parent">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="✅"
+            android:textSize="52sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Nessun intervento assegnato"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:textStyle="bold"
-            android:textColor="#424242" />
-
+            android:textColor="#1A2E1A"
+            android:gravity="center" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Quando ti verrà assegnato un intervento, lo vedrai apparire qui."
-            android:textSize="13sp"
-            android:textColor="#9E9E9E" />
-
+            android:text="Quando ti verrà assegnato un intervento,\napparirà qui."
+            android:textSize="14sp"
+            android:textColor="#4E6B4E" />
     </LinearLayout>
 
-    <!-- Stato errore -->
+    <!-- Stato ERRORE -->
     <LinearLayout
         android:id="@+id/layoutErrore"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="32dp"
+        android:padding="40dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/bannerPromozione"
         app:layout_constraintBottom_toBottomOf="parent">
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚠️"
+            android:textSize="48sp" />
         <TextView
             android:id="@+id/textErrore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Non riusciamo a caricare i tuoi interventi"
-            android:textSize="14sp"
+            android:text="Impossibile caricare gli interventi"
+            android:textSize="15sp"
             android:textColor="#C62828" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRiprova"
             android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/bg_button_outline"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
             android:text="Riprova"
-            android:textColor="#1E88E5"
+            android:textColor="#2E7D32"
             android:textAllCaps="false"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:elevation="0dp"
-            android:stateListAnimator="@null" />
-
+            android:textSize="15sp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            app:backgroundTint="#E8F5E9"
+            app:cornerRadius="24dp"
+            app:elevation="0dp" />
     </LinearLayout>
 
+    <!-- LOADING -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        android:indeterminateTint="#2E7D32"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/layoutTitoloLista"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

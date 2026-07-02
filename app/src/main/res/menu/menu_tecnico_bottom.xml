@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tabHome"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/tabInterventi"
+        android:icon="@drawable/ic_interventi"
+        android:title="Interventi" />
+    <item
+        android:id="@+id/tabProfilo"
+        android:icon="@drawable/ic_profilo_tab"
+        android:title="Profilo" />
+</menu>

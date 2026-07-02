@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet">
+
+    <!-- Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_handle" />
+
+    <!-- Avatar grande + nome -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/bg_header_card"
+        android:paddingTop="24dp"
+        android:paddingBottom="28dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/bg_avatar_circle">
+            <TextView
+                android:id="@+id/profiloInitials"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="T"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/profiloNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Nome Cognome"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/profiloUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@username"
+            android:textSize="13sp"
+            android:textColor="#A5D6A7" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#1B5E20"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="🔧 TECNICO"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#A5D6A7"
+            android:letterSpacing="0.08" />
+    </LinearLayout>
+
+    <!-- Dettagli -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DATI PERSONALI"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_chip_info"
+            android:padding="14dp"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✉️"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textSize="11sp"
+                    android:textColor="#4E6B4E" />
+                <TextView
+                    android:id="@+id/profiloEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="—"
+                    android:textSize="13sp"
+                    android:textColor="#1A2E1A" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Disponibilità -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_chip_info"
+            android:padding="14dp"
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟢"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Disponibilità"
+                    android:textSize="11sp"
+                    android:textColor="#4E6B4E" />
+                <TextView
+                    android:id="@+id/profiloDisponibilita"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="—"
+                    android:textSize="13sp"
+                    android:textColor="#1A2E1A" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Squadra -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SQUADRA"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_chip_info"
+            android:padding="14dp"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏠"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Team assegnato"
+                    android:textSize="11sp"
+                    android:textColor="#4E6B4E" />
+                <TextView
+                    android:id="@+id/profiloTeam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="—"
+                    android:textSize="13sp"
+                    android:textColor="#1A2E1A" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Competenze -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_chip_info"
+            android:padding="14dp"
+            android:layout_marginBottom="28dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔧"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Competenze"
+                    android:textSize="11sp"
+                    android:textColor="#4E6B4E" />
+                <TextView
+                    android:id="@+id/profiloCompetenze"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="—"
+                    android:textSize="13sp"
+                    android:textColor="#1A2E1A" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Pulsante logout -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogoutProfilo"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Esci dall'app"
+            android:textColor="#C62828"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:backgroundTint="#FDECEA"
+            app:cornerRadius="14dp"
+            app:elevation="0dp" />
+
+    </LinearLayout>
+</LinearLayout>

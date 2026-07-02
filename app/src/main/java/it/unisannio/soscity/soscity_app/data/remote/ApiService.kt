@@ -53,6 +53,18 @@ interface ApiService {
         @Header("Authorization") authHeader: String?
     ): VerifySessionResponse
 
+
+
+    /**
+     * Recupera i dettagli dell'utente attualmente autenticato.
+     * GET /users/me
+     * Non serve passare l'uid nel path, il backend lo estrae dal token.
+     */
+    @GET("users/me")
+    suspend fun getMyDetails(
+        @Header("Authorization") authHeader: String?
+    ): User
+
     // =========================
     // TICKET ENDPOINTS
     // =========================
