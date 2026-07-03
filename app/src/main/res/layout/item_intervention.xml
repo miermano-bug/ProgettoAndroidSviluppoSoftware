@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardIntervento"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-<<<<<<< Updated upstream
-    android:orientation="vertical"
-    android:background="@drawable/bg_intervention_card"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp">
-=======
     android:layout_marginTop="8dp"
     android:layout_marginBottom="4dp"
     android:clickable="true"
@@ -18,105 +13,32 @@
     app:cardElevation="3dp"
     app:cardBackgroundColor="@color/surface"
     app:strokeWidth="0dp">
->>>>>>> Stashed changes
 
-    <!-- Riga superiore: titolo (id ticket) + badge stato -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:orientation="horizontal">
 
-<<<<<<< Updated upstream
-        <TextView
-            android:id="@+id/textTicketRef"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Ticket #T1"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="#212121" />
-=======
         <!-- Striscia stato sinistra -->
         <View
             android:id="@+id/viewStatusStrip"
             android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="@color/primary" />
->>>>>>> Stashed changes
 
-        <TextView
-            android:id="@+id/textStatoBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_status_pianificato"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:text="PIANIFICATO"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:textColor="#8A6D1D" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textTeamInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Team TEAM_A · avviato il 26/05"
-        android:textSize="12sp"
-        android:textColor="#757575" />
-
-    <TextView
-        android:id="@+id/textNoteIntervento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Verifica impianto"
-        android:textSize="13sp"
-        android:textColor="#424242"
-        android:visibility="visible" />
-
-    <!-- Campo nota di chiusura: visibile solo quando l'intervento è azionabile -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutNota"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Nota (opzionale)"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxStrokeColor="#1E88E5"
-        android:textColorHint="#9E9E9E"
-        app:hintTextColor="#1E88E5">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editNota"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine|textCapSentences"
-            android:minLines="1"
-            android:maxLines="3"
-            android:textSize="13sp" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Riga: ticket ref + badge stato -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-<<<<<<< Updated upstream
-    <!-- Riga azioni -->
-    <LinearLayout
-        android:id="@+id/layoutAzioni"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
-=======
                 <TextView
                     android:id="@+id/textTicketRef"
                     android:layout_width="0dp"
@@ -127,37 +49,22 @@
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"
                     android:fontFamily="sans-serif-medium" />
->>>>>>> Stashed changes
 
-        <Button
-            android:id="@+id/btnAvvia"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_button_outline"
-            android:text="Avvia"
-            android:textColor="#1E88E5"
-            android:textAllCaps="false"
-            android:textSize="13sp"
-            android:elevation="0dp"
-            android:stateListAnimator="@null" />
+                <TextView
+                    android:id="@+id/textStatoBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_status_pianificato"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="PIANIFICATO"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04" />
+            </LinearLayout>
 
-<<<<<<< Updated upstream
-        <Button
-            android:id="@+id/btnCompleta"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_button_filled"
-            android:text="Completa"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-            android:textSize="13sp"
-            android:elevation="0dp"
-            android:stateListAnimator="@null" />
-
-=======
             <!-- Team + data -->
             <TextView
                 android:id="@+id/textTeamInfo"
@@ -238,16 +145,5 @@
                 android:textStyle="bold"
                 android:visibility="gone" />
         </LinearLayout>
->>>>>>> Stashed changes
     </LinearLayout>
-
-    <!-- Messaggio inline di esito ultima azione su questa card -->
-    <TextView
-        android:id="@+id/textEsitoAzione"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="12sp"
-        android:visibility="gone" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

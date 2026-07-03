@@ -2,8 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-<<<<<<< Updated upstream
-=======
 
     <!-- Palette SOS City - Blu e Bianco -->
     <color name="primary">#1976D2</color>
@@ -33,5 +31,4 @@
     <color name="success_bg">#E8F5E9</color>
     <color name="error">#D32F2F</color>
     <color name="error_bg">#FFEBEE</color>
->>>>>>> Stashed changes
 </resources>
