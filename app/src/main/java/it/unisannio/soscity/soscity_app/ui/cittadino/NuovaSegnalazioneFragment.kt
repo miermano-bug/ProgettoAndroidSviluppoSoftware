@@ -26,244 +26,154 @@ import it.unisannio.soscity.soscity_app.util.RepositoryProvider
 import kotlinx.coroutines.launch
 import java.io.File
 
-class NuovaSegnalazioneFragment :
-    Fragment(R.layout.fragment_nuova_segnalazione) {
+class NuovaSegnalazioneFragment : Fragment(R.layout.fragment_nuova_segnalazione) {
 
     private val repository = RepositoryProvider.provideRepository()
 
     private var latitudine: Double? = null
     private var longitudine: Double? = null
-
     private var fotoUri: Uri? = null
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-
             if (success) {
-                Toast.makeText(
-                    requireContext(),
-                    "Foto salvata correttamente",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Foto salvata correttamente", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Scatto annullato",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Scatto annullato", Toast.LENGTH_SHORT).show()
             }
         }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val titolo = view.findViewById<EditText>(R.id.editTitolo)
         val descrizione = view.findViewById<EditText>(R.id.editDescrizione)
-
         val categoria = view.findViewById<Spinner>(R.id.spinnerCategoria)
         val priorita = view.findViewById<Spinner>(R.id.spinnerPriorita)
-
         val btnFoto = view.findViewById<Button>(R.id.btnFoto)
         val btnInvia = view.findViewById<Button>(R.id.btnInvia)
         val btnPosizione = view.findViewById<Button>(R.id.btnPosizione)
-
         val textPosizione = view.findViewById<TextView>(R.id.textPosizione)
 
         // =========================
         // SPINNER CATEGORIA
         // =========================
-
         categoria.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
-            listOf(
-                "ILLUMINAZIONE",
-                "STRADA",
-                "RIFIUTI",
-                "VANDALISMO",
-                "ALTRO"
-            )
+            listOf("ILLUMINAZIONE", "STRADA", "RIFIUTI", "VANDALISMO", "ALTRO")
         )
 
         // =========================
         // SPINNER PRIORITA'
         // =========================
-
         priorita.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
-            listOf(
-                "BASSA",
-                "MEDIA",
-                "ALTA"
-            )
+            listOf("BASSA", "MEDIA", "ALTA")
         )
 
         // =========================
         // GPS
         // =========================
-
         btnPosizione.setOnClickListener {
-
             ottieniPosizione()
-
             if (latitudine != null && longitudine != null) {
-
-                textPosizione.text =
-                    "Lat: $latitudine\nLng: $longitudine"
-
+                textPosizione.text = "Posizione acquisita:\nLat: $latitudine\nLng: $longitudine"
             } else {
-
-                textPosizione.text =
-                    "Posizione non disponibile"
-
+                textPosizione.text = "Posizione non disponibile (Verrà usato il default)"
             }
-
         }
 
         // =========================
         // FOTO
         // =========================
-
         btnFoto.setOnClickListener {
-
             fotoUri = creaFileImmagine()
-
             cameraLauncher.launch(fotoUri)
-
         }
 
         // =========================
         // INVIO TICKET
         // =========================
-
         btnInvia.setOnClickListener {
-
             val titoloStr = titolo.text.toString().trim()
             val descrizioneStr = descrizione.text.toString().trim()
 
             if (titoloStr.isEmpty() || descrizioneStr.isEmpty()) {
-
-                Toast.makeText(
-                    requireContext(),
-                    "Compila tutti i campi",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                Toast.makeText(requireContext(), "Compila tutti i campi", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Disabilita il bottone per evitare invii multipli accidentali
+            btnInvia.isEnabled = false
+            btnInvia.text = "Invio in corso..."
+
             val ticket = Ticket(
-
                 titolo = titoloStr,
-
                 descrizione = descrizioneStr,
-
                 categoria = categoria.selectedItem.toString(),
-
                 priorita = priorita.selectedItem.toString(),
-
                 fotoAllegata = fotoUri?.path,
-
                 coordinate = Coordinate(
-
                     latitudine = latitudine ?: 41.1279,
-
                     longitudine = longitudine ?: 14.7811
-
                 )
-
             )
 
             lifecycleScope.launch {
-
                 val result = repository.createTicket(ticket)
 
                 result.onSuccess {
-
-                    Toast.makeText(
-                        requireContext(),
-                        "Segnalazione inviata con successo!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                    Toast.makeText(requireContext(), "Segnalazione inviata con successo!", Toast.LENGTH_SHORT).show()
+                    // Torna indietro alla CitizenHomeFragment rimuovendo questa schermata dal backstack
+                    parentFragmentManager.popBackStack()
                 }
 
                 result.onFailure {
-
-                    Toast.makeText(
-                        requireContext(),
-                        "Errore: ${it.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-
+                    Toast.makeText(requireContext(), "Errore: ${it.message}", Toast.LENGTH_LONG).show()
+                    // Riabilita il bottone in caso di fallimento per permettere di riprovare
+                    btnInvia.isEnabled = true
+                    btnInvia.text = "Invia Segnalazione"
                 }
-
             }
-
         }
-
     }
 
-    // =========================
-    // GPS
-    // =========================
-
     private fun ottieniPosizione() {
+        val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        val locationManager =
-            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (
-            ActivityCompat.checkSelfPermission(
+        if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1001
             )
-
             return
-
         }
 
-        val location =
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
         if (location != null) {
-
             latitudine = location.latitude
             longitudine = location.longitude
-
         }
-
     }
 
-    // =========================
-    // CREA FILE FOTO
-    // =========================
-
     private fun creaFileImmagine(): Uri {
-
         val file = File(
             requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
             "IMG_${System.currentTimeMillis()}.jpg"
         )
-
         return FileProvider.getUriForFile(
             requireContext(),
             "${requireContext().packageName}.provider",
             file
         )
-
     }
-
 }
