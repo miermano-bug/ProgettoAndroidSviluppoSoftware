@@ -82,6 +82,7 @@ class TecnicoHomeFragment : Fragment(
     private fun aggiornaStato(intervention: Intervention, nuovoStato: String, nota: String?) {
         val view = view ?: return
         lifecycleScope.launch {
+<<<<<<< Updated upstream
             val result = repository.updateInterventionStatus(intervention.id, nuovoStato, nota)
             result.onSuccess {
                 adapter.mostraEsito(intervention.id, "✅ Stato aggiornato a $nuovoStato")
@@ -89,6 +90,19 @@ class TecnicoHomeFragment : Fragment(
                     ricaricaERilevaPromozione(view, teamId = intervention.teamId)
                 } else {
                     ricaricaSilenziosamente(view)
+=======
+            repository.updateInterventionStatus(intervention.id, nuovoStato, nota)
+                .onSuccess {
+                    adapter.mostraEsito(intervention.id, "Stato aggiornato a $nuovoStato")
+                    if (nuovoStato == "COMPLETATO") {
+                        ricaricaERilevaPromozione(v, intervention.teamId)
+                    } else {
+                        ricaricaSilenziosamente(v)
+                    }
+                }
+                .onFailure { e ->
+                    adapter.mostraEsito(intervention.id, "❌ ${e.message ?: "Aggiornamento non riuscito"}")
+>>>>>>> Stashed changes
                 }
             }.onFailure { e ->
                 adapter.mostraEsito(intervention.id, "❌ ${e.message ?: "Aggiornamento non riuscito"}")
@@ -124,12 +138,21 @@ class TecnicoHomeFragment : Fragment(
 
                 when {
                     promosso != null -> {
+<<<<<<< Updated upstream
                         bannerText.text = "Nuovo intervento avviato per il team $teamId (ticket #${promosso.ticketId})"
                         bannerView.visibility = View.VISIBLE
                     }
                     interventiAggiornati.none { it.teamId == teamId && it.statoLavoro != "COMPLETATO" } -> {
                         bannerText.text = "Nessun altro intervento in coda: il team $teamId è stato liberato"
                         bannerView.visibility = View.VISIBLE
+=======
+                        bannerText.text = "Nuovo intervento avviato per il team"
+                        banner.visibility = View.VISIBLE
+                    }
+                    aggiornati.none { it.teamId == teamId && it.statoLavoro != "COMPLETATO" } -> {
+                        bannerText.text = "Nessun altro intervento in coda — team libero"
+                        banner.visibility = View.VISIBLE
+>>>>>>> Stashed changes
                     }
                     else -> bannerView.visibility = View.GONE
                 }

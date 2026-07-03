@@ -4,10 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+<<<<<<< Updated upstream
     android:orientation="vertical"
     android:background="@drawable/bg_intervention_card"
     android:padding="16dp"
     android:layout_marginBottom="12dp">
+=======
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="@color/surface"
+    app:strokeWidth="0dp">
+>>>>>>> Stashed changes
 
     <!-- Riga superiore: titolo (id ticket) + badge stato -->
     <LinearLayout
@@ -16,6 +27,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
+<<<<<<< Updated upstream
         <TextView
             android:id="@+id/textTicketRef"
             android:layout_width="0dp"
@@ -26,6 +38,14 @@
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
             android:textColor="#212121" />
+=======
+        <!-- Striscia stato sinistra -->
+        <View
+            android:id="@+id/viewStatusStrip"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/primary" />
+>>>>>>> Stashed changes
 
         <TextView
             android:id="@+id/textStatoBadge"
@@ -88,6 +108,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+<<<<<<< Updated upstream
     <!-- Riga azioni -->
     <LinearLayout
         android:id="@+id/layoutAzioni"
@@ -95,6 +116,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:orientation="horizontal">
+=======
+                <TextView
+                    android:id="@+id/textTicketRef"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ticket #..."
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="sans-serif-medium" />
+>>>>>>> Stashed changes
 
         <Button
             android:id="@+id/btnAvvia"
@@ -110,6 +143,7 @@
             android:elevation="0dp"
             android:stateListAnimator="@null" />
 
+<<<<<<< Updated upstream
         <Button
             android:id="@+id/btnCompleta"
             android:layout_width="0dp"
@@ -123,6 +157,88 @@
             android:elevation="0dp"
             android:stateListAnimator="@null" />
 
+=======
+            <!-- Team + data -->
+            <TextView
+                android:id="@+id/textTeamInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Team · dal 01/01/2026"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+
+            <!-- Hint tocca per dettagli -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Tocca per vedere tutti i dettagli →"
+                android:textSize="11sp"
+                android:textColor="#81C784"
+                android:fontFamily="sans-serif" />
+
+            <!-- Separatore -->
+            <View
+                android:id="@+id/separatoreAzioni"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="#E8F5E9"
+                android:visibility="gone" />
+
+            <!-- Bottoni azione rapida — visibili solo se azionabile -->
+            <LinearLayout
+                android:id="@+id/layoutAzioni"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAvvia"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="▶  Avvia"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/primary_light"
+                    app:cornerRadius="10dp"
+                    app:elevation="0dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCompleta"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:text="✓  Completa"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/primary"
+                    app:cornerRadius="10dp"
+                    app:elevation="0dp" />
+            </LinearLayout>
+
+            <!-- Esito azione -->
+            <TextView
+                android:id="@+id/textEsitoAzione"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
+>>>>>>> Stashed changes
     </LinearLayout>
 
     <!-- Messaggio inline di esito ultima azione su questa card -->

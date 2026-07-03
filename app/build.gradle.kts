@@ -3,6 +3,12 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("androidx.graphics:graphics-shapes:1.0.1")
+    }
+}
+
 android {
     namespace = "it.unisannio.soscity.soscity_app"
     compileSdk = 36

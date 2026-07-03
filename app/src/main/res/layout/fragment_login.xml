@@ -51,11 +51,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SOS City"
-                    android:textSize="36sp"
                     android:fontFamily="sans-serif-black"
-                    android:textColor="#1E88E5"
-                    android:letterSpacing="-0.02" />
+                    android:letterSpacing="-0.02"
+                    android:text="SOS City"
+                    android:textColor="@color/primary"
+                    android:textSize="36sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                     android:text="Rendi la tua città un posto migliore"
                     android:textSize="15sp"
                     android:fontFamily="sans-serif-medium"
-                    android:textColor="#424242"/> </LinearLayout>
+                    android:textColor="@color/text_secondary"/> </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -75,11 +75,11 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeColor="#1E88E5"
-                android:textColorHint="#424242"
-                app:hintTextColor="#1E88E5"
+                app:boxStrokeColor="@color/primary"
+                android:textColorHint="@color/text_secondary"
+                app:hintTextColor="@color/primary"
                 app:startIconDrawable="@drawable/ic_user"
-                app:startIconTint="#424242">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editEmail"
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="56dp"
                     android:fontFamily="sans-serif"
-                    android:textColor="#212121"
+                    android:textColor="@color/text_primary"
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,13 +101,13 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeColor="#1E88E5"
-                android:textColorHint="#424242"
-                app:hintTextColor="#1E88E5"
+                app:boxStrokeColor="@color/primary"
+                android:textColorHint="@color/text_secondary"
+                app:hintTextColor="@color/primary"
                 app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="#424242"
+                app:startIconTint="@color/text_secondary"
                 app:endIconMode="password_toggle"
-                app:endIconTint="#424242">
+                app:endIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editPassword"
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="56dp"
                     android:fontFamily="sans-serif"
-                    android:textColor="#212121"
+                    android:textColor="@color/text_primary"
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,7 +130,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.05"
                 android:textColor="@color/white"
-                app:backgroundTint="#E53935"
+                app:backgroundTint="@color/primary"
                 app:cornerRadius="24dp"
                 app:elevation="4dp"/>
 
@@ -139,18 +139,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-bold"
                 android:padding="8dp"
                 android:text="Non hai un account? Registrati"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-bold"
-                android:textColor="#1E88E5"/>
+                android:textColor="@color/primary"
+                android:textSize="14sp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:indeterminateTint="#E53935"
+                android:indeterminateTint="@color/primary"
                 android:visibility="gone"/>
 
             <View

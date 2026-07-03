@@ -2,4 +2,36 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+<<<<<<< Updated upstream
+=======
+
+    <!-- Palette SOS City - Blu e Bianco -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="primary_light">#E3F2FD</color>
+    <color name="primary_medium">#2196F3</color>
+    <color name="background">#F5F5F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="border">#BBDEFB</color>
+
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="primary_light_text">#64B5F6</color>
+
+    <!-- Semantici - usati per i badge di stato -->
+    <color name="stato_in_corso">#1565C0</color>
+    <color name="stato_in_corso_bg">#E3F2FD</color>
+    <color name="stato_pianificato">#F57C00</color>
+    <color name="stato_pianificato_bg">#FFF3E0</color>
+    <color name="stato_completato">#388E3C</color>
+    <color name="stato_completato_bg">#E8F5E9</color>
+    <color name="stato_sospeso">#D32F2F</color>
+    <color name="stato_sospeso_bg">#FFEBEE</color>
+
+    <color name="success">#388E3C</color>
+    <color name="success_bg">#E8F5E9</color>
+    <color name="error">#D32F2F</color>
+    <color name="error_bg">#FFEBEE</color>
+>>>>>>> Stashed changes
 </resources>
