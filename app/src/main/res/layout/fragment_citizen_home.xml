@@ -1,68 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TEST ENDPOINT — CITTADINO"
-            android:textSize="18sp"
+            android:text="Benvenuto"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnCreateTicket"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. POST /tickets (crea ticket test)"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnGetMyTickets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2. GET /tickets/my"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnGetTicketById"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3. GET /tickets/{id} (usa id dell'ultimo creato)"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnGetNotifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4. GET /notifications"
-            android:layout_marginBottom="16dp" />
+            android:textSize="28sp"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RISULTATO ULTIMA CHIAMATA:"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
+            android:text="Seleziona un'operazione"
+            android:textSize="16sp"
+            android:layout_marginBottom="32dp"/>
 
-        <TextView
-            android:id="@+id/textRisultato"
+        <Button
+            android:id="@+id/btnNuovaSegnalazione"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/surface"
-            android:padding="12dp"
-            android:fontFamily="monospace"
-            android:textSize="12sp"
-            android:text="(nessuna chiamata ancora)" />
+            android:layout_height="56dp"
+            android:text="Nuova segnalazione"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnMieSegnalazioni"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Le mie segnalazioni"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnNotifiche"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Le mie notifiche"/>
 
     </LinearLayout>
+
 </ScrollView>
