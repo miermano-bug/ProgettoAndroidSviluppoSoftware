@@ -49,7 +49,7 @@
                         android:text="Intervento"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="#1A2E1A"
+                        android:textColor="@color/text_primary"
                         android:fontFamily="sans-serif-medium" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                         android:layout_marginTop="2dp"
                         android:text="Dettaglio intervento"
                         android:textSize="13sp"
-                        android:textColor="#4E6B4E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
                 <TextView
@@ -82,7 +82,7 @@
                 android:text="INFORMAZIONI"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:textColor="@color/primary"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="10dp" />
 
@@ -94,12 +94,13 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:layout_marginBottom="8dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🎫  Ticket ID"
-                    android:textSize="11sp"
-                    android:textColor="#4E6B4E" />
+                    android:text="Ticket ID"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
                 <TextView
                     android:id="@+id/detailTicketId"
                     android:layout_width="match_parent"
@@ -107,7 +108,7 @@
                     android:layout_marginTop="4dp"
                     android:text="—"
                     android:textSize="13sp"
-                    android:textColor="#1A2E1A"
+                    android:textColor="@color/text_primary"
                     android:fontFamily="monospace" />
             </LinearLayout>
 
@@ -119,12 +120,13 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:layout_marginBottom="8dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="👥  Team"
-                    android:textSize="11sp"
-                    android:textColor="#4E6B4E" />
+                    android:text="Team"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
                 <TextView
                     android:id="@+id/detailTeamId"
                     android:layout_width="match_parent"
@@ -132,7 +134,7 @@
                     android:layout_marginTop="4dp"
                     android:text="—"
                     android:textSize="13sp"
-                    android:textColor="#1A2E1A" />
+                    android:textColor="@color/text_primary" />
             </LinearLayout>
 
             <!-- Date riga -->
@@ -150,12 +152,13 @@
                     android:background="@drawable/bg_chip_info"
                     android:padding="14dp"
                     android:layout_marginEnd="6dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📅  Inizio"
-                        android:textSize="11sp"
-                        android:textColor="#4E6B4E" />
+                        android:text="Inizio"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp" />
                     <TextView
                         android:id="@+id/detailDataInizio"
                         android:layout_width="match_parent"
@@ -163,7 +166,7 @@
                         android:layout_marginTop="4dp"
                         android:text="—"
                         android:textSize="12sp"
-                        android:textColor="#1A2E1A" />
+                        android:textColor="@color/text_primary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -174,12 +177,13 @@
                     android:background="@drawable/bg_chip_info"
                     android:padding="14dp"
                     android:layout_marginStart="6dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🏁  Fine"
-                        android:textSize="11sp"
-                        android:textColor="#4E6B4E" />
+                        android:text="Fine"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp" />
                     <TextView
                         android:id="@+id/detailDataFine"
                         android:layout_width="match_parent"
@@ -187,7 +191,7 @@
                         android:layout_marginTop="4dp"
                         android:text="In corso"
                         android:textSize="12sp"
-                        android:textColor="#1A2E1A" />
+                        android:textColor="@color/text_primary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -199,12 +203,13 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:layout_marginBottom="16dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🕐  Creato il"
-                    android:textSize="11sp"
-                    android:textColor="#4E6B4E" />
+                    android:text="Creato il"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
                 <TextView
                     android:id="@+id/detailDataCreazione"
                     android:layout_width="match_parent"
@@ -212,7 +217,7 @@
                     android:layout_marginTop="4dp"
                     android:text="—"
                     android:textSize="12sp"
-                    android:textColor="#1A2E1A" />
+                    android:textColor="@color/text_primary" />
             </LinearLayout>
 
             <!-- Note operatore -->
@@ -222,7 +227,7 @@
                 android:text="NOTE OPERATIVE"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:textColor="@color/primary"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="10dp" />
 
@@ -234,7 +239,7 @@
                 android:padding="14dp"
                 android:text="Nessuna nota"
                 android:textSize="13sp"
-                android:textColor="#1A2E1A"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="20dp" />
 
             <!-- Separatore azioni -->
@@ -250,7 +255,7 @@
                 android:text="AZIONI RAPIDE"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:textColor="@color/primary"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="12dp" />
 
@@ -266,8 +271,8 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="#2E7D32"
-                app:hintTextColor="#2E7D32"
+                app:boxStrokeColor="@color/primary"
+                app:hintTextColor="@color/primary"
                 android:textColorHint="#9E9E9E"
                 android:visibility="gone">
                 <com.google.android.material.textfield.TextInputEditText
@@ -292,17 +297,17 @@
                     android:id="@+id/btnAvviaDetail"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
                     android:text="▶  Avvia"
-                    android:textColor="#2E7D32"
                     android:textAllCaps="false"
+                    android:textColor="@color/primary"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:backgroundTint="#E8F5E9"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/primary_light"
                     app:cornerRadius="12dp"
-                    app:elevation="0dp"
-                    android:visibility="gone" />
+                    app:elevation="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCompletaDetail"
@@ -310,11 +315,11 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:text="✓  Completa"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:backgroundTint="#2E7D32"
+                    app:backgroundTint="@color/primary"
                     app:cornerRadius="12dp"
                     app:elevation="0dp" />
             </LinearLayout>
@@ -324,13 +329,13 @@
                 android:id="@+id/detailCompletato"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_status_in_corso"
                 android:gravity="center"
-                android:text="✅ Intervento completato"
+                android:padding="12dp"
+                android:text="Intervento completato"
+                android:textColor="#1B5E20"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#1B5E20"
-                android:padding="12dp"
-                android:background="@drawable/bg_status_in_corso"
                 android:visibility="gone" />
 
         </LinearLayout>

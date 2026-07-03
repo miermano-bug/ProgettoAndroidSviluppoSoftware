@@ -3,31 +3,32 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Palette SOS City — Verde e Bianco -->
-    <color name="primary">#2E7D32</color>
-    <color name="primary_dark">#1B5E20</color>
-    <color name="primary_light">#E8F5E9</color>
-    <color name="primary_medium">#43A047</color>
-    <color name="background">#F1F8F1</color>
+    <!-- Palette SOS City - Blu e Bianco -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="primary_light">#E3F2FD</color>
+    <color name="primary_medium">#2196F3</color>
+    <color name="background">#F5F5F5</color>
     <color name="surface">#FFFFFF</color>
-    <color name="border">#C8E6C9</color>
+    <color name="border">#BBDEFB</color>
 
-    <color name="text_primary">#1A2E1A</color>
-    <color name="text_secondary">#4E6B4E</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
     <color name="text_hint">#9E9E9E</color>
+    <color name="primary_light_text">#64B5F6</color>
 
-    <!-- Semantici — usati per i badge di stato -->
-    <color name="stato_in_corso">#1B5E20</color>
-    <color name="stato_in_corso_bg">#E8F5E9</color>
-    <color name="stato_pianificato">#E65100</color>
+    <!-- Semantici - usati per i badge di stato -->
+    <color name="stato_in_corso">#1565C0</color>
+    <color name="stato_in_corso_bg">#E3F2FD</color>
+    <color name="stato_pianificato">#F57C00</color>
     <color name="stato_pianificato_bg">#FFF3E0</color>
-    <color name="stato_completato">#1565C0</color>
-    <color name="stato_completato_bg">#E3F2FD</color>
-    <color name="stato_sospeso">#BF360C</color>
-    <color name="stato_sospeso_bg">#FBE9E7</color>
+    <color name="stato_completato">#388E3C</color>
+    <color name="stato_completato_bg">#E8F5E9</color>
+    <color name="stato_sospeso">#D32F2F</color>
+    <color name="stato_sospeso_bg">#FFEBEE</color>
 
-    <color name="success">#1B5E20</color>
+    <color name="success">#388E3C</color>
     <color name="success_bg">#E8F5E9</color>
-    <color name="error">#C62828</color>
-    <color name="error_bg">#FDECEA</color>
+    <color name="error">#D32F2F</color>
+    <color name="error_bg">#FFEBEE</color>
 </resources>

@@ -58,7 +58,7 @@
             android:id="@+id/textRisultato"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@color/surface"
             android:padding="12dp"
             android:fontFamily="monospace"
             android:textSize="12sp"

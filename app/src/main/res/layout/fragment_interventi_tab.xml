@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F8F1">
+    android:background="@color/background">
 
     <!-- Header -->
     <LinearLayout
@@ -38,7 +38,7 @@
                     android:text="Interventi"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:fontFamily="sans-serif-medium" />
                 <TextView
                     android:id="@+id/textSubtitle"
@@ -47,7 +47,7 @@
                     android:layout_marginTop="4dp"
                     android:text="Caricamento…"
                     android:textSize="13sp"
-                    android:textColor="#A5D6A7" />
+                    android:textColor="@color/primary_light_text" />
             </LinearLayout>
 
             <!-- Contatori inline -->
@@ -75,13 +75,13 @@
                         android:text="—"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="#2E7D32" />
+                        android:textColor="@color/primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Attivi"
                         android:textSize="10sp"
-                        android:textColor="#4E6B4E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -101,13 +101,13 @@
                         android:text="—"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="#1565C0" />
+                        android:textColor="@color/stato_completato" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fatti"
                         android:textSize="10sp"
-                        android:textColor="#4E6B4E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -172,7 +172,7 @@
             android:text="Nessun intervento assegnato"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:textColor="#1A2E1A"
+            android:textColor="@color/text_primary"
             android:gravity="center" />
     </LinearLayout>
 
@@ -195,14 +195,14 @@
             android:gravity="center"
             android:text="Impossibile caricare gli interventi"
             android:textSize="15sp"
-            android:textColor="#C62828" />
+            android:textColor="@color/error" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRiprova"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:text="Riprova"
-            android:textColor="#2E7D32"
+            android:textColor="@color/primary"
             android:textAllCaps="false"
             android:textSize="15sp"
             android:paddingStart="32dp"
@@ -217,7 +217,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="#2E7D32"
+        android:indeterminateTint="@color/primary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/headerInterventi"
         app:layout_constraintBottom_toBottomOf="parent"

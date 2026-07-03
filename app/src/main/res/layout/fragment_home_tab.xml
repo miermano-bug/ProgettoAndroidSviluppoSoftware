@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F8F1">
+    android:background="@color/background">
 
     <!-- ══════════ HEADER VERDE con saluto ══════════ -->
     <LinearLayout
@@ -41,7 +41,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_settings"
-                    app:tint="#2E7D32" />
+                    app:tint="@color/primary" />
             </FrameLayout>
 
             <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
@@ -64,7 +64,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_logout"
-                    app:tint="#C62828" />
+                    app:tint="@color/error" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                     android:text="Esci"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="#C62828" />
+                    android:textColor="@color/error" />
             </LinearLayout>
         </LinearLayout>
 
@@ -90,11 +90,11 @@
                 android:id="@+id/textSaluto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Buongiorno, Marco! 👋"
+                android:fontFamily="sans-serif-medium"
+                android:text="Buongiorno, Marco!"
+                android:textColor="@color/white"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:fontFamily="sans-serif-medium" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textDescrizioneGiornata"
@@ -103,7 +103,7 @@
                 android:layout_marginTop="6dp"
                 android:text="Oggi hai 4 interventi in programma"
                 android:textSize="14sp"
-                android:textColor="#A5D6A7" />
+                android:textColor="@color/primary_light_text" />
         </LinearLayout>
     </LinearLayout>
 
@@ -128,12 +128,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📍  PROSSIMO INTERVENTO"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:layout_marginBottom="10dp"
                 android:letterSpacing="0.1"
-                android:layout_marginBottom="10dp" />
+                android:text="PROSSIMO INTERVENTO"
+                android:textColor="@color/primary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <!-- Card prossimo intervento -->
             <androidx.cardview.widget.CardView
@@ -143,7 +143,7 @@
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/surface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -177,7 +177,7 @@
                             android:layout_height="wrap_content"
                             android:text="10/06 09:00"
                             android:textSize="12sp"
-                            android:textColor="#4E6B4E" />
+                            android:textColor="@color/text_secondary" />
                     </LinearLayout>
 
                     <!-- Ticket ref -->
@@ -188,7 +188,7 @@
                         android:text="Ticket #AB1234CD"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#1A2E1A"
+                        android:textColor="@color/text_primary"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="4dp" />
 
@@ -197,10 +197,11 @@
                         android:id="@+id/cardCategoria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📂 Categoria: —"
+                        android:layout_marginBottom="4dp"
+                        android:text="Categoria: —"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp"
-                        android:textColor="#4E6B4E"
-                        android:layout_marginBottom="4dp" />
+                        android:visibility="gone" />
 
                     <!-- Urgenza / priorità -->
                     <LinearLayout
@@ -209,20 +210,24 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:layout_marginBottom="4dp">
+
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔴 Urgenza: "
+                            android:layout_width="54dp"
+                            android:layout_height="match_parent"
+                            android:text="Urgenza: "
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp"
-                            android:textColor="#4E6B4E" />
+                            android:visibility="gone" />
+
                         <TextView
                             android:id="@+id/cardPriorita"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
+                            android:textColor="@color/text_primary"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="#1A2E1A" />
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <!-- Note -->
@@ -235,7 +240,7 @@
                         android:layout_marginTop="12dp"
                         android:text="Nessuna nota operative"
                         android:textSize="13sp"
-                        android:textColor="#4E6B4E"
+                        android:textColor="@color/text_secondary"
                         android:visibility="gone" />
 
                     <!-- Bottone apri dettaglio -->
@@ -245,11 +250,11 @@
                         android:layout_height="48dp"
                         android:layout_marginTop="16dp"
                         android:text="Vedi dettaglio completo →"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/white"
                         android:textAllCaps="false"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        app:backgroundTint="#2E7D32"
+                        app:backgroundTint="@color/primary"
                         app:cornerRadius="12dp"
                         app:elevation="0dp" />
                 </LinearLayout>
@@ -266,7 +271,7 @@
                 android:padding="32dp"
                 android:layout_marginBottom="24dp"
                 android:visibility="gone">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✅" android:textSize="40sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -275,19 +280,19 @@
                     android:text="Nessun intervento in programma"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="#1A2E1A" />
+                    android:textColor="@color/text_primary" />
             </LinearLayout>
 
             <!-- ── RIEPILOGO RAPIDO ── -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📊  RIEPILOGO RAPIDO"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:layout_marginBottom="10dp"
                 android:letterSpacing="0.1"
-                android:layout_marginBottom="10dp" />
+                android:text="RIEPILOGO RAPIDO"
+                android:textColor="@color/primary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -312,7 +317,7 @@
                         android:text="—"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        android:textColor="#1565C0"
+                        android:textColor="@color/stato_completato"
                         android:fontFamily="sans-serif-black" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -320,7 +325,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Completati"
                         android:textSize="11sp"
-                        android:textColor="#4E6B4E"
+                        android:textColor="@color/text_secondary"
                         android:gravity="center" />
                 </LinearLayout>
 
@@ -343,7 +348,7 @@
                         android:text="—"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        android:textColor="#E65100"
+                        android:textColor="@color/stato_pianificato"
                         android:fontFamily="sans-serif-black" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -351,7 +356,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Da fare"
                         android:textSize="11sp"
-                        android:textColor="#4E6B4E"
+                        android:textColor="@color/text_secondary"
                         android:gravity="center" />
                 </LinearLayout>
 
@@ -373,7 +378,7 @@
                         android:text="—"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        android:textColor="#BF360C"
+                        android:textColor="@color/stato_sospeso"
                         android:fontFamily="sans-serif-black" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -381,7 +386,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Sospesi"
                         android:textSize="11sp"
-                        android:textColor="#4E6B4E"
+                        android:textColor="@color/text_secondary"
                         android:gravity="center" />
                 </LinearLayout>
             </LinearLayout>
@@ -393,7 +398,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="32dp"
-                android:indeterminateTint="#2E7D32"
+                android:indeterminateTint="@color/primary"
                 android:visibility="gone" />
 
         </LinearLayout>

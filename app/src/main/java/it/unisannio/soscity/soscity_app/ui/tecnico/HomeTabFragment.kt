@@ -58,7 +58,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
             in 18..21 -> "Buona sera"
             else      -> "Buona notte"
         }
-        view.findViewById<TextView>(R.id.textSaluto).text = "$saluto, $nome! 👋"
+        view.findViewById<TextView>(R.id.textSaluto).text = "$saluto, $nome!"
     }
 
     private fun caricaDashboard(view: View) {
@@ -74,7 +74,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
                 .onFailure {
                     view.findViewById<ProgressBar>(R.id.progressHome).visibility = View.GONE
                     view.findViewById<TextView>(R.id.textDescrizioneGiornata).text =
-                        "⚠️ Impossibile caricare i dati"
+                        "Impossibile caricare i dati"
                 }
         }
     }
@@ -88,7 +88,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
         view.findViewById<TextView>(R.id.textDescrizioneGiornata).text =
             when {
                 totale == 0 -> "Nessun intervento assegnato oggi"
-                mancanti == 0 -> "🎉 Tutti gli interventi completati!"
+                mancanti == 0 -> "Tutti gli interventi completati!"
                 else -> "Oggi hai $mancanti interventi in programma"
             }
 
@@ -131,7 +131,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
         val noteView = view.findViewById<TextView>(R.id.cardNote)
         if (prossimo.noteIntervento.isNotBlank()) {
             noteView.visibility = View.VISIBLE
-            noteView.text = "📋 ${prossimo.noteIntervento}"
+            noteView.text = "${prossimo.noteIntervento}"
         }
 
         // Bottone dettaglio → apre InterventiTab già filtrato (per ora apre bottom sheet)
@@ -159,7 +159,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
                     popolaCampiTicket(view, ticket)
                 }
                 .onFailure {
-                    view.findViewById<TextView>(R.id.cardCategoria).text = "📂 Categoria: n.d."
+                    view.findViewById<TextView>(R.id.cardCategoria).text = "Categoria: n.d."
                     view.findViewById<TextView>(R.id.cardPriorita).text = "—"
                 }
         }
@@ -167,14 +167,14 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
 
     private fun popolaCampiTicket(view: View, ticket: Ticket) {
         view.findViewById<TextView>(R.id.cardCategoria).text =
-            "📂 Categoria: ${ticket.categoria.ifBlank { "n.d." }}"
+            "Categoria: ${ticket.categoria.ifBlank { "n.d." }}"
 
         val priorita = ticket.priorita
         val (label, color) = when (priorita) {
-            "URGENTE" -> "🔴 URGENTE" to 0xFFC62828.toInt()
-            "ALTA"    -> "🟠 ALTA"    to 0xFFE65100.toInt()
-            "MEDIA"   -> "🟡 MEDIA"   to 0xFF8A6D1D.toInt()
-            "BASSA"   -> "🟢 BASSA"   to 0xFF2E7D32.toInt()
+            "URGENTE" -> "URGENTE" to 0xFFC62828.toInt()
+            "ALTA"    -> "ALTA"    to 0xFFE65100.toInt()
+            "MEDIA"   -> "MEDIA"   to 0xFF8A6D1D.toInt()
+            "BASSA"   -> "BASSA"   to 0xFF2E7D32.toInt()
             else      -> "— n.d."     to 0xFF757575.toInt()
         }
         val priView = view.findViewById<TextView>(R.id.cardPriorita)

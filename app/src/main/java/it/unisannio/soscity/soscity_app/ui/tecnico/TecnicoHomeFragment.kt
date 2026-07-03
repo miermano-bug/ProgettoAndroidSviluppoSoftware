@@ -121,7 +121,7 @@ class TecnicoHomeFragment : Fragment(R.layout.fragment_tecnico_home) {
         lifecycleScope.launch {
             repository.updateInterventionStatus(intervention.id, nuovoStato, nota)
                 .onSuccess {
-                    adapter.mostraEsito(intervention.id, "✅ Stato aggiornato a $nuovoStato")
+                    adapter.mostraEsito(intervention.id, "Stato aggiornato a $nuovoStato")
                     if (nuovoStato == "COMPLETATO") {
                         ricaricaERilevaPromozione(v, intervention.teamId)
                     } else {
@@ -153,11 +153,11 @@ class TecnicoHomeFragment : Fragment(R.layout.fragment_tecnico_home) {
 
                 when {
                     promosso != null -> {
-                        bannerText.text = "🔔 Nuovo intervento avviato per il team"
+                        bannerText.text = "Nuovo intervento avviato per il team"
                         banner.visibility = View.VISIBLE
                     }
                     aggiornati.none { it.teamId == teamId && it.statoLavoro != "COMPLETATO" } -> {
-                        bannerText.text = "✅ Nessun altro intervento in coda — team libero"
+                        bannerText.text = "Nessun altro intervento in coda — team libero"
                         banner.visibility = View.VISIBLE
                     }
                     else -> banner.visibility = View.GONE

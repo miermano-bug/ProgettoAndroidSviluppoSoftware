@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F8F1">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:text="T"
                     android:textSize="32sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="@color/white" />
             </FrameLayout>
 
             <TextView
@@ -46,7 +46,7 @@
                 android:text="Nome Cognome"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
@@ -56,22 +56,22 @@
                 android:layout_marginTop="4dp"
                 android:text="@username"
                 android:textSize="14sp"
-                android:textColor="#A5D6A7" />
+                android:textColor="@color/primary_light_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="#1B5E20"
+                android:background="@color/white"
+                android:letterSpacing="0.08"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="6dp"
+                android:paddingEnd="16dp"
                 android:paddingBottom="6dp"
-                android:text="🔧  TECNICO"
+                android:text="TECNICO"
+                android:textColor="@color/primary_light_text"
                 android:textSize="11sp"
-                android:textStyle="bold"
-                android:textColor="#A5D6A7"
-                android:letterSpacing="0.08" />
+                android:textStyle="bold" />
 
             <View android:layout_width="match_parent" android:layout_height="8dp" />
         </LinearLayout>
@@ -92,7 +92,7 @@
                 android:text="DATI PERSONALI"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:textColor="@color/primary"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="10dp" />
 
@@ -105,15 +105,19 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✉️" android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="12dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Email" android:textSize="11sp" android:textColor="#4E6B4E" />
-                    <TextView android:id="@+id/profiloEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="#1A2E1A" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Email" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    <TextView android:id="@+id/profiloEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="@color/text_primary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -126,15 +130,19 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🟢" android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="12dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Disponibilità" android:textSize="11sp" android:textColor="#4E6B4E" />
-                    <TextView android:id="@+id/profiloDisponibilita" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="#1A2E1A" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Disponibilità" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    <TextView android:id="@+id/profiloDisponibilita" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="@color/text_primary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -144,7 +152,7 @@
                 android:text="SQUADRA"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"
+                android:textColor="@color/primary"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="10dp" />
 
@@ -157,15 +165,19 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏠" android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="12dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Team assegnato" android:textSize="11sp" android:textColor="#4E6B4E" />
-                    <TextView android:id="@+id/profiloTeam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="#1A2E1A" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Team assegnato" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    <TextView android:id="@+id/profiloTeam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="@color/text_primary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -178,15 +190,19 @@
                 android:background="@drawable/bg_chip_info"
                 android:padding="16dp"
                 android:layout_marginBottom="32dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔧" android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="12dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Competenze" android:textSize="11sp" android:textColor="#4E6B4E" />
-                    <TextView android:id="@+id/profiloCompetenze" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="#1A2E1A" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Competenze" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    <TextView android:id="@+id/profiloCompetenze" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="—" android:textSize="14sp" android:textColor="@color/text_primary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -196,7 +212,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:text="Esci dall'app"
-                android:textColor="#C62828"
+                android:textColor="@color/error"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"

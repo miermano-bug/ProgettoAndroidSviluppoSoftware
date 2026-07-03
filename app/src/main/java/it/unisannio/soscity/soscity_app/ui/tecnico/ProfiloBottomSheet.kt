@@ -35,8 +35,8 @@ class ProfiloBottomSheet : BottomSheetDialogFragment() {
             user?.email ?: "—"
         view.findViewById<TextView>(R.id.profiloDisponibilita).text =
             when (user?.disponibile) {
-                true  -> "✅ Disponibile"
-                false -> "🔴 Non disponibile"
+                true  -> "Disponibile"
+                false -> "Non disponibile"
                 null  -> "—"
             }
         view.findViewById<TextView>(R.id.profiloTeam).text =

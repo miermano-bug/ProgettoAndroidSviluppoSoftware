@@ -103,9 +103,9 @@ class InterventiTabFragment : Fragment(R.layout.fragment_interventi_tab) {
                 val banner = view.findViewById<LinearLayout>(R.id.bannerPromozione)
                 val bannerText = view.findViewById<TextView>(R.id.textBannerPromozione)
                 when {
-                    promosso != null -> { bannerText.text = "🔔 Nuovo intervento avviato"; banner.visibility = View.VISIBLE }
+                    promosso != null -> { bannerText.text = "Nuovo intervento avviato"; banner.visibility = View.VISIBLE }
                     list.none { it.teamId == teamId && it.statoLavoro != "COMPLETATO" } ->
-                        { bannerText.text = "✅ Team libero — nessun intervento in coda"; banner.visibility = View.VISIBLE }
+                        { bannerText.text = "Team libero — nessun intervento in coda"; banner.visibility = View.VISIBLE }
                     else -> banner.visibility = View.GONE
                 }
             }

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F8F1">
+    android:background="@color/background">
 
     <!-- ══════════ HEADER VERDE ══════════ -->
     <LinearLayout
@@ -44,7 +44,7 @@
                     android:text="T"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:fontFamily="sans-serif-medium" />
             </FrameLayout>
 
@@ -62,7 +62,7 @@
                     android:text="Tecnico"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:fontFamily="sans-serif-medium" />
 
                 <TextView
@@ -71,7 +71,7 @@
                     android:layout_marginTop="3dp"
                     android:text="Tocca il profilo per i dettagli"
                     android:textSize="12sp"
-                    android:textColor="#A5D6A7" />
+                    android:textColor="@color/primary_light_text" />
             </LinearLayout>
 
             <!-- Logout -->
@@ -92,7 +92,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_logout"
-                    app:tint="#C62828" />
+                    app:tint="@color/error" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                     android:text="Esci"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="#C62828"
+                    android:textColor="@color/error"
                     android:fontFamily="sans-serif-medium" />
             </LinearLayout>
         </LinearLayout>
@@ -132,7 +132,7 @@
                     android:text="—"
                     android:textSize="30sp"
                     android:textStyle="bold"
-                    android:textColor="#2E7D32"
+                    android:textColor="@color/primary"
                     android:fontFamily="sans-serif-black" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -140,7 +140,7 @@
                     android:layout_marginTop="2dp"
                     android:text="Da gestire"
                     android:textSize="12sp"
-                    android:textColor="#4E6B4E" />
+                    android:textColor="@color/text_secondary" />
             </LinearLayout>
 
             <LinearLayout
@@ -160,7 +160,7 @@
                     android:text="—"
                     android:textSize="30sp"
                     android:textStyle="bold"
-                    android:textColor="#1565C0"
+                    android:textColor="@color/stato_completato"
                     android:fontFamily="sans-serif-black" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -168,7 +168,7 @@
                     android:layout_marginTop="2dp"
                     android:text="Completati"
                     android:textSize="12sp"
-                    android:textColor="#4E6B4E" />
+                    android:textColor="@color/text_secondary" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -196,7 +196,7 @@
                 android:text="I tuoi interventi"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#1A2E1A"
+                android:textColor="@color/text_primary"
                 android:fontFamily="sans-serif-medium" />
             <TextView
                 android:id="@+id/textSubtitle"
@@ -205,7 +205,7 @@
                 android:layout_marginTop="2dp"
                 android:text="Caricamento in corso…"
                 android:textSize="13sp"
-                android:textColor="#4E6B4E" />
+                android:textColor="@color/text_secondary" />
         </LinearLayout>
     </LinearLayout>
 
@@ -274,7 +274,7 @@
             android:text="Nessun intervento assegnato"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:textColor="#1A2E1A"
+            android:textColor="@color/text_primary"
             android:gravity="center" />
         <TextView
             android:layout_width="wrap_content"
@@ -283,7 +283,7 @@
             android:gravity="center"
             android:text="Quando ti verrà assegnato un intervento,\napparirà qui."
             android:textSize="14sp"
-            android:textColor="#4E6B4E" />
+            android:textColor="@color/text_secondary" />
     </LinearLayout>
 
     <!-- Stato ERRORE -->
@@ -310,14 +310,14 @@
             android:gravity="center"
             android:text="Impossibile caricare gli interventi"
             android:textSize="15sp"
-            android:textColor="#C62828" />
+            android:textColor="@color/error" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRiprova"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:text="Riprova"
-            android:textColor="#2E7D32"
+            android:textColor="@color/primary"
             android:textAllCaps="false"
             android:textSize="15sp"
             android:paddingStart="32dp"
@@ -333,7 +333,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="#2E7D32"
+        android:indeterminateTint="@color/primary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/layoutTitoloLista"
         app:layout_constraintBottom_toBottomOf="parent"
