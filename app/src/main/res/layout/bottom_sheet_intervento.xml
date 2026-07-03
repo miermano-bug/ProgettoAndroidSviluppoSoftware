@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/bg_bottom_sheet">
+    android:background="@android:color/white">
 
-    <!-- Handle -->
     <View
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="12dp"
-        android:background="@drawable/bg_handle" />
+        android:background="#D3D3D3" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -29,7 +28,6 @@
             android:paddingTop="16dp"
             android:paddingBottom="32dp">
 
-            <!-- Titolo + badge stato -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,49 +47,42 @@
                         android:text="Intervento"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:fontFamily="sans-serif-medium" />
+                        android:textColor="@android:color/black" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Dettaglio intervento"
                         android:textSize="13sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textColor="@android:color/darker_gray" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/detailStatoBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_status_pianificato"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:paddingTop="7dp"
                     android:paddingBottom="7dp"
                     android:text="PIANIFICATO"
                     android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.04" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Sezione info -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="INFORMAZIONI"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="@color/primary"
-                android:letterSpacing="0.1"
+                android:textColor="@android:color/holo_green_dark"
                 android:layout_marginBottom="10dp" />
 
-            <!-- Ticket ID -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:layout_marginBottom="8dp">
 
@@ -99,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ticket ID"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@android:color/darker_gray"
                     android:textSize="11sp" />
                 <TextView
                     android:id="@+id/detailTicketId"
@@ -108,16 +99,14 @@
                     android:layout_marginTop="4dp"
                     android:text="—"
                     android:textSize="13sp"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@android:color/black"
                     android:fontFamily="monospace" />
             </LinearLayout>
 
-            <!-- Team ID -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:layout_marginBottom="8dp">
 
@@ -125,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Team"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@android:color/darker_gray"
                     android:textSize="11sp" />
                 <TextView
                     android:id="@+id/detailTeamId"
@@ -134,10 +123,9 @@
                     android:layout_marginTop="4dp"
                     android:text="—"
                     android:textSize="13sp"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
-            <!-- Date riga -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -149,7 +137,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:background="@drawable/bg_chip_info"
                     android:padding="14dp"
                     android:layout_marginEnd="6dp">
 
@@ -157,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Inizio"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@android:color/darker_gray"
                         android:textSize="11sp" />
                     <TextView
                         android:id="@+id/detailDataInizio"
@@ -166,7 +153,7 @@
                         android:layout_marginTop="4dp"
                         android:text="—"
                         android:textSize="12sp"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="@android:color/black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -174,7 +161,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:background="@drawable/bg_chip_info"
                     android:padding="14dp"
                     android:layout_marginStart="6dp">
 
@@ -182,7 +168,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fine"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@android:color/darker_gray"
                         android:textSize="11sp" />
                     <TextView
                         android:id="@+id/detailDataFine"
@@ -191,16 +177,14 @@
                         android:layout_marginTop="4dp"
                         android:text="In corso"
                         android:textSize="12sp"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="@android:color/black" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Creato il -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:layout_marginBottom="16dp">
 
@@ -208,7 +192,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Creato il"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@android:color/darker_gray"
                     android:textSize="11sp" />
                 <TextView
                     android:id="@+id/detailDataCreazione"
@@ -217,32 +201,28 @@
                     android:layout_marginTop="4dp"
                     android:text="—"
                     android:textSize="12sp"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
-            <!-- Note operatore -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="NOTE OPERATIVE"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="@color/primary"
-                android:letterSpacing="0.1"
+                android:textColor="@android:color/holo_green_dark"
                 android:layout_marginBottom="10dp" />
 
             <TextView
                 android:id="@+id/detailNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_chip_info"
                 android:padding="14dp"
                 android:text="Nessuna nota"
                 android:textSize="13sp"
-                android:textColor="@color/text_primary"
+                android:textColor="@android:color/black"
                 android:layout_marginBottom="20dp" />
 
-            <!-- Separatore azioni -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -255,11 +235,9 @@
                 android:text="AZIONI RAPIDE"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="@color/primary"
-                android:letterSpacing="0.1"
+                android:textColor="@android:color/holo_green_dark"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Campo nota -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutNotaDetail"
                 android:layout_width="match_parent"
@@ -270,11 +248,7 @@
                 app:boxCornerRadiusTopStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="@color/primary"
-                app:hintTextColor="@color/primary"
-                android:textColorHint="#9E9E9E"
-                android:visibility="gone">
+                app:boxCornerRadiusBottomEnd="10dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editNotaDetail"
                     android:layout_width="match_parent"
@@ -285,13 +259,11 @@
                     android:textSize="13sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Bottoni -->
             <LinearLayout
                 android:id="@+id/layoutAzioniDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAvviaDetail"
@@ -300,14 +272,11 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     android:text="▶  Avvia"
-                    android:textColor="@color/primary"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:backgroundTint="#E8F5E9"
                     app:cornerRadius="12dp"
-                    app:elevation="0dp"
-                    android:visibility="gone" />
+                    app:elevation="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCompletaDetail"
@@ -315,21 +284,18 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:text="✓  Completa"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:backgroundTint="@color/primary"
                     app:cornerRadius="12dp"
                     app:elevation="0dp" />
             </LinearLayout>
 
-            <!-- Messaggio completato -->
             <TextView
                 android:id="@+id/detailCompletato"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_status_in_corso"
                 android:gravity="center"
                 android:padding="12dp"
                 android:text="Intervento completato"

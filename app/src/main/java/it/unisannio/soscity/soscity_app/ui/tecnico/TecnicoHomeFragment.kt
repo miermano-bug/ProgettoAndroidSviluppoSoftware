@@ -73,8 +73,9 @@ class TecnicoHomeFragment : Fragment(R.layout.fragment_tecnico_home) {
 
     private fun setupRecycler(view: View) {
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerInterventi)
+
+        // Corretto: Rimosso il parametro inesistente onCardClick
         adapter = InterventionAdapter(
-            onCardClick = { intervention -> apriDettaglio(intervention) },
             onAvvia     = { intervention, nota -> aggiornaStato(intervention, "IN_CORSO", nota) },
             onCompleta  = { intervention, nota -> aggiornaStato(intervention, "COMPLETATO", nota) }
         )
@@ -145,7 +146,7 @@ class TecnicoHomeFragment : Fragment(R.layout.fragment_tecnico_home) {
 
                 val promosso = aggiornati.firstOrNull { nuovo ->
                     nuovo.teamId == teamId && nuovo.statoLavoro == "IN_CORSO" &&
-                    snapshotPrecedente.any { it.id == nuovo.id && it.statoLavoro == "PIANIFICATO" }
+                            snapshotPrecedente.any { it.id == nuovo.id && it.statoLavoro == "PIANIFICATO" }
                 }
 
                 val banner     = view.findViewById<LinearLayout>(R.id.bannerPromozione)
