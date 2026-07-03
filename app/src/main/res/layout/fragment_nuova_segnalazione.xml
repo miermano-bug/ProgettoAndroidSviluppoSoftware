@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nuova Segnalazione"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginBottom="24dp"/>
+
+        <EditText
+            android:id="@+id/editTitolo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Titolo"/>
+
+        <EditText
+            android:id="@+id/editDescrizione"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="Descrizione"
+            android:gravity="top"
+            android:layout_marginTop="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Priorità"
+            android:layout_marginTop="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerPriorita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnPosizione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Usa posizione attuale"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/textPosizione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Posizione non acquisita"
+            android:layout_marginTop="8dp"/>
+        <Button
+            android:id="@+id/btnFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aggiungi Foto"
+            android:layout_marginTop="24dp"/>
+
+        <Button
+            android:id="@+id/btnInvia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Invia Segnalazione"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

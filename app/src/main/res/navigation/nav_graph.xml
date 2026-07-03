@@ -14,7 +14,18 @@
     <fragment
         android:id="@+id/citizenHomeFragment"
         android:name="it.unisannio.soscity.soscity_app.ui.cittadino.CitizenHomeFragment"
-        android:label="Citizen Home" />
+        android:label="Citizen Home">
+
+        <action
+            android:id="@+id/action_citizenHome_to_nuovaSegnalazione"
+            app:destination="@id/nuovaSegnalazioneFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nuovaSegnalazioneFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.NuovaSegnalazioneFragment"
+        android:label="Nuova Segnalazione"/>
 
     <fragment
         android:id="@+id/technicianHomeFragment"
