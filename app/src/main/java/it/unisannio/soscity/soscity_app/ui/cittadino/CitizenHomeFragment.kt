@@ -17,7 +17,7 @@ class CitizenHomeFragment : Fragment(R.layout.fragment_citizen_home) {
         val btnMieSegnalazioni = view.findViewById<View>(R.id.btnMieSegnalazioni)
         val btnNotifiche = view.findViewById<View>(R.id.btnNotifiche)
 
-        // Navigazione corretta usando l'ID esatto presente in nav_graph.xml
+        // Navigazione nativa pulita basata sul Navigation Architecture Component
         btnNuovaSegnalazione.setOnClickListener {
             findNavController().navigate(R.id.action_citizenHome_to_nuovaSegnalazione)
         }
