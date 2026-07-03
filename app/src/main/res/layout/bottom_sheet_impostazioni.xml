@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_handle" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="32dp">
+
+            <!-- Titolo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
+
+                <FrameLayout
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_button_outline">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_settings"
+                        app:tint="@color/primary" />
+                </FrameLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:text="Impostazioni"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- ══ APP ══ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="APP"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chip_info"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Versione" android:textSize="11sp" android:textColor="@color/text_secondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="SOS City 1.0" android:textSize="14sp" android:textColor="@color/text_primary" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chip_info"
+                android:padding="16dp"
+                android:layout_marginBottom="28dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sviluppato da" android:textColor="@color/text_secondary" android:textSize="11sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Marialucia Iermano, Angel Gigante, Simone Cocca, Giuseppe Borrelli" android:textColor="@color/text_primary" android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ══ DATI ══ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATI"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="10dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSincronizza"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginBottom="28dp"
+                android:text="Sincronizza dati"
+                android:textAllCaps="false"
+                android:textColor="@color/primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/primary_light"
+                app:cornerRadius="14dp"
+                app:elevation="0dp" />
+
+            <!-- ══ NUMERI DI EMERGENZA ══ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NUMERI DI EMERGENZA"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:id="@+id/btnChiama112"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chip_info"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Numero Unico di Emergenza" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="112" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/error" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnChiama115"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chip_info"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vigili del Fuoco" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="115" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/error" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnChiama118"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chip_info"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Emergenza Sanitaria" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="118" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/error" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnChiama113"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chip_info"
+                android:padding="16dp"
+                android:layout_marginBottom="28dp"
+                android:clickable="true"
+                android:focusable="true">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Polizia di Stato" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="113" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/error" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ══ LOGOUT ══ -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogoutImpostazioni"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="Esci dall'app"
+                android:textColor="@color/error"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="#FDECEA"
+                app:cornerRadius="14dp"
+                app:elevation="0dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
