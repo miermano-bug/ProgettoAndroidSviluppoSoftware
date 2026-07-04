@@ -5,7 +5,15 @@
     <!-- Permesso per chiamate HTTP verso la VM -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--
+        Permesso per mostrare notifiche di sistema su Android 13+ (API 33+).
+        Ignorato automaticamente su versioni precedenti (non causa errori su minSdk 26).
+        Necessario se in futuro si vorra' mostrare notifiche locali.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
+        android:name=".SosCityApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+        Categoria Notifiche.
+        Il toggle persiste in SharedPreferences ma non attiva polling reale verso il
+        backend: le notifiche push per il tecnico non sono supportate in questa versione.
+        Il Notification Channel e' comunque registrato in SosCityApplication.onCreate()
+        come da requisiti di sistema (minSdk 26 = Android 8.0).
+    -->
+    <PreferenceCategory android:title="Notifiche">
+
+        <SwitchPreferenceCompat
+            android:key="pref_notifiche"
+            android:title="@string/impostazioni_notifiche_titolo"
+            android:summary="@string/impostazioni_notifiche_sommario"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <!-- Categoria Aspetto: selezione tema chiaro/scuro/sistema -->
+    <PreferenceCategory android:title="Aspetto">
+
+        <ListPreference
+            android:key="pref_tema"
+            android:title="@string/impostazioni_tema_titolo"
+            android:entries="@array/temi_labels"
+            android:entryValues="@array/temi_values"
+            android:defaultValue="system"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <!-- Categoria Dati: sincronizzazione manuale -->
+    <PreferenceCategory android:title="Dati">
+
+        <Preference
+            android:key="pref_sincronizza"
+            android:title="@string/impostazioni_sincronizza"
+            android:summary="Scarica gli ultimi aggiornamenti dal server" />
+
+    </PreferenceCategory>
+
+    <!-- Categoria Emergenze: link al bottom sheet numeri di emergenza -->
+    <PreferenceCategory android:title="Emergenze">
+
+        <Preference
+            android:key="pref_numeri_emergenza"
+            android:title="@string/impostazioni_numeri_emergenza"
+            android:summary="112, 113, 115, 118" />
+
+    </PreferenceCategory>
+
+    <!-- Categoria App: informazioni sull'applicazione -->
+    <PreferenceCategory android:title="Informazioni">
+
+        <Preference
+            android:key="pref_versione"
+            android:title="@string/impostazioni_versione_label"
+            android:summary="@string/impostazioni_versione_valore"
+            android:enabled="false"
+            android:selectable="false" />
+
+        <Preference
+            android:key="pref_sviluppatori"
+            android:title="@string/impostazioni_sviluppato_da_label"
+            android:summary="@string/impostazioni_sviluppato_da_valore"
+            android:enabled="false"
+            android:selectable="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -6,7 +6,7 @@ import it.unisannio.soscity.soscity_app.data.repository.Repository
 
 object RepositoryProvider {
 
-    // 🔥 CAMBIA QUESTO A false PER USARE IL BACKEND REALE
+    // CAMBIA QUESTO A false PER USARE IL BACKEND REALE
     private const val USE_FAKE_REPOSITORY = false
 
     fun provideRepository(): Repository {

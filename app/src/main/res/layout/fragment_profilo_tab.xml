@@ -68,10 +68,11 @@
                 android:paddingTop="6dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="6dp"
-                android:text="TECNICO"
+                android:text="@string/profilo_ruolo_tecnico"
                 android:textColor="@color/primary_light_text"
                 android:textSize="11sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:importantForAccessibility="no" />
 
             <View android:layout_width="match_parent" android:layout_height="8dp" />
         </LinearLayout>
@@ -109,7 +110,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:importantForAccessibility="no"
+                    android:text="" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -134,7 +137,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:importantForAccessibility="no"
+                    android:text="" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -169,7 +174,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:importantForAccessibility="no"
+                    android:text="" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -194,7 +201,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:importantForAccessibility="no"
+                    android:text="" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -211,7 +220,8 @@
                 android:id="@+id/btnLogoutProfilo"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:text="Esci dall'app"
+                android:text="@string/logout_titolo"
+                android:contentDescription="@string/cd_pulsante_logout"
                 android:textColor="@color/error"
                 android:textAllCaps="false"
                 android:textSize="16sp"

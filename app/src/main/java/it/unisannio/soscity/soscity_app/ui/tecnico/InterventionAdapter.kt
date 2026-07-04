@@ -1,26 +1,27 @@
 package it.unisannio.soscity.soscity_app.ui.tecnico
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import it.unisannio.soscity.soscity_app.R
 import it.unisannio.soscity.soscity_app.data.model.Intervention
+import it.unisannio.soscity.soscity_app.data.model.StatoLavoro
+import it.unisannio.soscity.soscity_app.data.model.applicaBadge
+import it.unisannio.soscity.soscity_app.data.model.toStripColorRes
+import it.unisannio.soscity.soscity_app.databinding.ItemInterventionBinding
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class InterventionAdapter(
     private val onCardClick: (Intervention) -> Unit,
-    private val onAvvia:    (Intervention, note: String?) -> Unit,
-    private val onCompleta: (Intervention, note: String?) -> Unit
+    private val onAvvia:     (Intervention, note: String?) -> Unit,
+    private val onCompleta:  (Intervention, note: String?) -> Unit
 ) : RecyclerView.Adapter<InterventionAdapter.ViewHolder>() {
 
-    private val items = mutableListOf<Intervention>()
-    private val esitoPerCardId = mutableMapOf<String, String>()
+    private val items           = mutableListOf<Intervention>()
+    private val esitoPerCardId  = mutableMapOf<String, String>()
 
     fun submitList(nuovaLista: List<Intervention>) {
         val diff = DiffUtil.calculateDiff(DiffCallback(items, nuovaLista))
@@ -29,77 +30,84 @@ class InterventionAdapter(
         diff.dispatchUpdatesTo(this)
     }
 
+    /**
+     * Mostra un messaggio di esito nella card corrispondente.
+     * I messaggi non usano emoji: testo semplice.
+     */
     fun mostraEsito(interventionId: String, messaggio: String) {
         esitoPerCardId[interventionId] = messaggio
         val idx = items.indexOfFirst { it.id == interventionId }
         if (idx >= 0) notifyItemChanged(idx)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_intervention, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemInterventionBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return ViewHolder(binding)
+    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position], esitoPerCardId[items[position].id])
+    }
 
     override fun getItemCount() = items.size
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val cardView:        View       = itemView.findViewById(R.id.cardIntervento)
-        private val viewStatusStrip: View       = itemView.findViewById(R.id.viewStatusStrip)
-        private val textTicketRef:   TextView   = itemView.findViewById(R.id.textTicketRef)
-        private val textStatoBadge:  TextView   = itemView.findViewById(R.id.textStatoBadge)
-        private val textTeamInfo:    TextView   = itemView.findViewById(R.id.textTeamInfo)
-        private val layoutAzioni:    View       = itemView.findViewById(R.id.layoutAzioni)
-        private val btnAvvia:        MaterialButton = itemView.findViewById(R.id.btnAvvia)
-        private val btnCompleta:     MaterialButton = itemView.findViewById(R.id.btnCompleta)
-        private val textEsitoAzione: TextView   = itemView.findViewById(R.id.textEsitoAzione)
-        private val separatore:      View       = itemView.findViewById(R.id.separatoreAzioni)
+    inner class ViewHolder(
+        private val binding: ItemInterventionBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(intervention: Intervention, esito: String?) {
+            val ctx = itemView.context
+
             // Ticket ref abbreviata
-            val ref = intervention.ticketId.takeLast(8).uppercase().ifBlank { intervention.id.takeLast(8).uppercase() }
-            textTicketRef.text = "Ticket #$ref"
+            val ref = intervention.ticketId.takeLast(8).uppercase()
+                .ifBlank { intervention.id.takeLast(8).uppercase() }
+            binding.textTicketRef.text = "Ticket #$ref"
 
             // Team + data
             val dataFormattata = formattaData(intervention.dataInizio)
-            textTeamInfo.text = "Team ${intervention.teamId.takeLast(6)} · dal $dataFormattata"
+            binding.textTeamInfo.text =
+                "Team ${intervention.teamId.takeLast(6)} · dal $dataFormattata"
 
-            // Stile badge + striscia
-            applicaStile(intervention.statoLavoro)
-
-            // Bottoni azione rapida (senza campo nota — quello è nel bottom sheet)
-            val azionabile = intervention.statoLavoro == "PIANIFICATO" || intervention.statoLavoro == "IN_CORSO"
-            layoutAzioni.visibility  = if (azionabile) View.VISIBLE else View.GONE
-            separatore.visibility    = if (azionabile) View.VISIBLE else View.GONE
-            btnAvvia.visibility      = if (intervention.statoLavoro == "PIANIFICATO") View.VISIBLE else View.GONE
-
-            btnAvvia.setOnClickListener    { onAvvia(intervention, null) }
-            btnCompleta.setOnClickListener { onCompleta(intervention, null) }
-
-            // Tutta la card apre il dettaglio
-            cardView.setOnClickListener { onCardClick(intervention) }
-
-            // Esito
-            if (esito != null) {
-                textEsitoAzione.visibility = View.VISIBLE
-                textEsitoAzione.text = esito
-                textEsitoAzione.setTextColor(
-                    if (esito.startsWith("❌")) 0xFFC62828.toInt() else 0xFF1B5E20.toInt()
+            // Badge + striscia laterale tramite enum (nessun literal esadecimale)
+            val statoEnum = StatoLavoro.fromString(intervention.statoLavoro)
+            if (statoEnum != null) {
+                statoEnum.applicaBadge(binding.textStatoBadge, ctx)
+                binding.viewStatusStrip.setBackgroundColor(
+                    ContextCompat.getColor(ctx, statoEnum.toStripColorRes())
                 )
             } else {
-                textEsitoAzione.visibility = View.GONE
+                binding.textStatoBadge.text = intervention.statoLavoro.ifBlank { "—" }
             }
-        }
 
-        private fun applicaStile(stato: String) {
-            textStatoBadge.text = stato.ifBlank { "—" }
-            when (stato) {
-                "IN_CORSO"    -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_in_corso);    textStatoBadge.setTextColor(0xFF1B5E20.toInt()); viewStatusStrip.setBackgroundColor(0xFF2E7D32.toInt()) }
-                "PIANIFICATO" -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_pianificato); textStatoBadge.setTextColor(0xFFE65100.toInt()); viewStatusStrip.setBackgroundColor(0xFFE65100.toInt()) }
-                "COMPLETATO"  -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_completato);  textStatoBadge.setTextColor(0xFF1565C0.toInt()); viewStatusStrip.setBackgroundColor(0xFF1565C0.toInt()) }
-                "SOSPESO"     -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_sospeso);     textStatoBadge.setTextColor(0xFFBF360C.toInt()); viewStatusStrip.setBackgroundColor(0xFFBF360C.toInt()) }
-                else          -> { textStatoBadge.setBackgroundResource(R.drawable.bg_status_completato);  textStatoBadge.setTextColor(0xFF757575.toInt()); viewStatusStrip.setBackgroundColor(0xFF9E9E9E.toInt()) }
+            // Bottoni azione rapida
+            val azionabile = intervention.statoLavoro == StatoLavoro.PIANIFICATO.name
+                    || intervention.statoLavoro == StatoLavoro.IN_CORSO.name
+            binding.layoutAzioni.visibility = if (azionabile) android.view.View.VISIBLE else android.view.View.GONE
+            binding.separatoreAzioni.visibility = binding.layoutAzioni.visibility
+            binding.btnAvvia.visibility =
+                if (intervention.statoLavoro == StatoLavoro.PIANIFICATO.name)
+                    android.view.View.VISIBLE else android.view.View.GONE
+
+            binding.btnAvvia.setOnClickListener    { onAvvia(intervention, null) }
+            binding.btnCompleta.setOnClickListener { onCompleta(intervention, null) }
+
+            // Tutta la card apre il dettaglio
+            binding.cardIntervento.setOnClickListener { onCardClick(intervention) }
+
+            // Esito (senza emoji)
+            if (esito != null) {
+                binding.textEsitoAzione.visibility = android.view.View.VISIBLE
+                binding.textEsitoAzione.text       = esito
+                // Errori contengono "non riuscito", successi contengono "aggiornato"
+                val coloreEsito = if (esito.contains("non riuscito", ignoreCase = true))
+                    ContextCompat.getColor(ctx, it.unisannio.soscity.soscity_app.R.color.error)
+                else
+                    ContextCompat.getColor(ctx, it.unisannio.soscity.soscity_app.R.color.success)
+                binding.textEsitoAzione.setTextColor(coloreEsito)
+            } else {
+                binding.textEsitoAzione.visibility = android.view.View.GONE
             }
         }
 
@@ -114,7 +122,10 @@ class InterventionAdapter(
         }
     }
 
-    private class DiffCallback(private val old: List<Intervention>, private val new: List<Intervention>) : DiffUtil.Callback() {
+    private class DiffCallback(
+        private val old: List<Intervention>,
+        private val new: List<Intervention>
+    ) : DiffUtil.Callback() {
         override fun getOldListSize() = old.size
         override fun getNewListSize() = new.size
         override fun areItemsTheSame(o: Int, n: Int) = old[o].id == new[n].id

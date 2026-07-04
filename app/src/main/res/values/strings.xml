@@ -1,3 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SOScity_app</string>
+    <string name="app_name">SOS City</string>
+
+    <!-- Saluti -->
+    <string name="saluto_mattina">Buongiorno</string>
+    <string name="saluto_pomeriggio">Buon pomeriggio</string>
+    <string name="saluto_sera">Buona sera</string>
+    <string name="saluto_notte">Buona notte</string>
+
+    <!-- Logout -->
+    <string name="logout_titolo">Esci dall\'app</string>
+    <string name="logout_messaggio">Sei sicuro di voler effettuare il logout?</string>
+    <string name="logout_conferma">Esci</string>
+    <string name="logout_annulla">Annulla</string>
+
+    <!-- Stati intervento -->
+    <string name="stato_pianificato">PIANIFICATO</string>
+    <string name="stato_in_corso">IN_CORSO</string>
+    <string name="stato_completato">COMPLETATO</string>
+    <string name="stato_sospeso">SOSPESO</string>
+
+    <!-- Lista interventi -->
+    <string name="interventi_da_gestire">%1$d da gestire · %2$d totali</string>
+    <string name="interventi_tutto_completato">Tutto completato · %1$d totali</string>
+    <string name="interventi_nessuno">Nessun intervento assegnato oggi</string>
+    <string name="interventi_tutti_completati">Tutti gli interventi completati!</string>
+    <string name="interventi_in_programma">Oggi hai %1$d interventi in programma</string>
+    <string name="interventi_caricamento_errore">Impossibile caricare i dati</string>
+    <string name="errore_rete">Errore di rete</string>
+    <string name="errore_interventi">Errore nel recupero degli interventi</string>
+    <string name="errore_aggiornamento">Aggiornamento non riuscito</string>
+    <string name="stato_aggiornato">Stato aggiornato a %1$s</string>
+
+    <!-- Card prossimo intervento -->
+    <string name="ticket_ref">Ticket #%1$s</string>
+    <string name="categoria_nd">Categoria: n.d.</string>
+    <string name="categoria_formato">Categoria: %1$s</string>
+    <string name="dato_nd">n.d.</string>
+    <string name="nessun_prossimo_intervento">Nessun intervento in programma</string>
+
+    <!-- Banner promozione -->
+    <string name="banner_nuovo_avviato">Nuovo intervento avviato per il team</string>
+    <string name="banner_team_libero">Nessun altro intervento in coda — team libero</string>
+    <string name="banner_team_libero_interventi">Team libero — nessun intervento in coda</string>
+
+    <!-- Profilo -->
+    <string name="profilo_nessun_team">Nessun team assegnato</string>
+    <string name="profilo_nessuna_competenza">Nessuna competenza registrata</string>
+    <string name="profilo_disponibile">Disponibile</string>
+    <string name="profilo_non_disponibile">Non disponibile</string>
+    <string name="profilo_ruolo_tecnico">TECNICO</string>
+
+    <!-- Impostazioni -->
+    <string name="impostazioni_titolo">Impostazioni</string>
+    <string name="impostazioni_versione_label">Versione</string>
+    <string name="impostazioni_versione_valore">SOS City 1.0</string>
+    <string name="impostazioni_sviluppato_da_label">Sviluppato da</string>
+    <string name="impostazioni_sviluppato_da_valore">Marialucia Iermano, Angel Gigante, Simone Cocca, Giuseppe Borrelli</string>
+    <string name="impostazioni_notifiche_titolo">Notifiche interventi</string>
+    <string name="impostazioni_notifiche_sommario">Ricevi un avviso quando cambia lo stato di un intervento</string>
+    <string name="impostazioni_tema_titolo">Tema</string>
+    <string name="impostazioni_sincronizza">Sincronizza dati</string>
+    <string name="impostazioni_sincronizzazione_in_corso">Sincronizzazione in corso</string>
+    <string name="impostazioni_dati_aggiornati">Dati aggiornati</string>
+    <string name="impostazioni_sincronizzazione_ok">Dati sincronizzati con successo</string>
+    <string name="impostazioni_numeri_emergenza">Numeri di emergenza</string>
+    <string name="impostazioni_app_titolo">APP</string>
+    <string name="impostazioni_dati_titolo">DATI</string>
+
+    <!-- Numeri di emergenza -->
+    <string name="emergenza_112_label">Numero Unico di Emergenza</string>
+    <string name="emergenza_115_label">Vigili del Fuoco</string>
+    <string name="emergenza_118_label">Emergenza Sanitaria</string>
+    <string name="emergenza_113_label">Polizia di Stato</string>
+    <string name="emergenza_chiama_titolo">Chiama %1$s</string>
+    <string name="emergenza_chiama_messaggio">Vuoi chiamare il numero di emergenza %1$s?</string>
+    <string name="emergenza_chiama_conferma">Chiama</string>
+
+    <!-- Intervento bottom sheet -->
+    <string name="dettaglio_titolo">Intervento</string>
+    <string name="dettaglio_sottotitolo">Dettaglio intervento</string>
+    <string name="dettaglio_sezione_info">INFORMAZIONI</string>
+    <string name="dettaglio_sezione_note">NOTE OPERATIVE</string>
+    <string name="dettaglio_sezione_azioni">AZIONI RAPIDE</string>
+    <string name="dettaglio_ticket_id_label">Ticket ID</string>
+    <string name="dettaglio_team_label">Team</string>
+    <string name="dettaglio_inizio_label">Inizio</string>
+    <string name="dettaglio_fine_label">Fine</string>
+    <string name="dettaglio_fine_in_corso">In corso</string>
+    <string name="dettaglio_creazione_label">Creato il</string>
+    <string name="dettaglio_nessuna_nota">Nessuna nota dell\'operatore</string>
+    <string name="dettaglio_nota_hint">Aggiungi nota (opzionale)</string>
+    <string name="dettaglio_avvia">Avvia</string>
+    <string name="dettaglio_completa">Completa</string>
+    <string name="dettaglio_completato_messaggio">Intervento completato</string>
+    <string name="dettaglio_valore_vuoto">—</string>
+
+    <!-- Accessibility -->
+    <string name="cd_pulsante_impostazioni">Impostazioni</string>
+    <string name="cd_pulsante_logout">Esci dall\'app</string>
+    <string name="cd_avatar_profilo">Apri profilo</string>
+    <string name="cd_icona_impostazioni">Icona impostazioni</string>
+
+    <!-- Priorita ticket -->
+    <string name="priorita_urgente">URGENTE</string>
+    <string name="priorita_alta">ALTA</string>
+    <string name="priorita_media">MEDIA</string>
+    <string name="priorita_bassa">BASSA</string>
+    <string name="priorita_nd">n.d.</string>
 </resources>

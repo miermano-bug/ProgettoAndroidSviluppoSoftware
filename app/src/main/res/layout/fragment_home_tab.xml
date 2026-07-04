@@ -35,12 +35,14 @@
                 android:background="@drawable/bg_stat_card"
                 android:clickable="true"
                 android:focusable="true"
+                android:contentDescription="@string/cd_pulsante_impostazioni"
                 android:foreground="?attr/selectableItemBackgroundBorderless">
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_settings"
+                    android:importantForAccessibility="no"
                     app:tint="@color/primary" />
             </FrameLayout>
 
@@ -59,11 +61,13 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:contentDescription="@string/cd_pulsante_logout">
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_logout"
+                    android:importantForAccessibility="no"
                     app:tint="@color/error" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -72,6 +76,7 @@
                     android:text="Esci"
                     android:textSize="13sp"
                     android:textStyle="bold"
+                    android:importantForAccessibility="no"
                     android:textColor="@color/error" />
             </LinearLayout>
         </LinearLayout>

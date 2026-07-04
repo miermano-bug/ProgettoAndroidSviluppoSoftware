@@ -26,4 +26,14 @@
         android:name="it.unisannio.soscity.soscity_app.ui.auth.RegisterFragment"
         android:label="Register" />
 
+    <!--
+        Destinazione Impostazioni: PreferenceFragmentCompat con la schermata
+        preferences_tecnico.xml. Raggiungibile dal bottone impostazioni in HomeTabFragment.
+        Il back stack viene gestito automaticamente dal Navigation Component.
+    -->
+    <fragment
+        android:id="@+id/impostazioniFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.tecnico.ImpostazioniFragment"
+        android:label="@string/impostazioni_titolo" />
+
 </navigation>

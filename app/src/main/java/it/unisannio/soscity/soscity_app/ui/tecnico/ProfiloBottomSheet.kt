@@ -5,60 +5,63 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.navigation.NavOptions
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
-import com.google.firebase.auth.FirebaseAuth
 import it.unisannio.soscity.soscity_app.R
+import it.unisannio.soscity.soscity_app.databinding.BottomSheetProfiloBinding
+import it.unisannio.soscity.soscity_app.util.performLogout
 import it.unisannio.soscity.soscity_app.util.SessionManager
 
 class ProfiloBottomSheet : BottomSheetDialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        inflater.inflate(R.layout.bottom_sheet_profilo, container, false)
+    private var _binding: BottomSheetProfiloBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = BottomSheetProfiloBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val user = SessionManager.getUser()
-
         val nome = user?.nome ?: "Tecnico"
-        val iniziale = nome.firstOrNull()?.uppercase() ?: "T"
 
-        view.findViewById<TextView>(R.id.profiloInitials).text = iniziale
-        view.findViewById<TextView>(R.id.profiloNome).text = nome
-        view.findViewById<TextView>(R.id.profiloUsername).text =
-            user?.username?.let { "@$it" } ?: "@—"
-        view.findViewById<TextView>(R.id.profiloEmail).text =
-            user?.email ?: "—"
-        view.findViewById<TextView>(R.id.profiloDisponibilita).text =
-            when (user?.disponibile) {
-                true  -> "Disponibile"
-                false -> "Non disponibile"
-                null  -> "—"
-            }
-        view.findViewById<TextView>(R.id.profiloTeam).text =
-            user?.idTeam ?: "Nessun team assegnato"
-        view.findViewById<TextView>(R.id.profiloCompetenze).text =
-            user?.competenze?.joinToString(", ") ?: "Nessuna competenza registrata"
+        binding.profiloInitials.text   = nome.firstOrNull()?.uppercase() ?: "T"
+        binding.profiloNome.text       = nome
+        binding.profiloUsername.text   = user?.username?.let { "@$it" } ?: "@—"
+        binding.profiloEmail.text      = user?.email ?: getString(R.string.dettaglio_valore_vuoto)
+        binding.profiloDisponibilita.text = when (user?.disponibile) {
+            true  -> getString(R.string.profilo_disponibile)
+            false -> getString(R.string.profilo_non_disponibile)
+            null  -> getString(R.string.dettaglio_valore_vuoto)
+        }
+        binding.profiloTeam.text       = user?.idTeam
+            ?: getString(R.string.profilo_nessun_team)
+        binding.profiloCompetenze.text = user?.competenze?.joinToString(", ")
+            ?: getString(R.string.profilo_nessuna_competenza)
 
-        view.findViewById<MaterialButton>(R.id.btnLogoutProfilo).setOnClickListener {
+        binding.btnLogoutProfilo.setOnClickListener {
             dismiss()
             AlertDialog.Builder(requireContext())
-                .setTitle("Esci dall'app")
-                .setMessage("Sei sicuro di voler effettuare il logout?")
-                .setPositiveButton("Esci") { _, _ ->
-                    FirebaseAuth.getInstance().signOut()
-                    SessionManager.clearSession()
-                    val navOptions = NavOptions.Builder()
-                        .setPopUpTo(R.id.nav_graph, true)
-                        .build()
-                    findNavController().navigate(R.id.loginFragment, null, navOptions)
+                .setTitle(R.string.logout_titolo)
+                .setMessage(R.string.logout_messaggio)
+                .setPositiveButton(R.string.logout_conferma) { _, _ ->
+                    findNavController().performLogout()
                 }
-                .setNegativeButton("Annulla", null)
+                .setNegativeButton(R.string.logout_annulla, null)
                 .show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
