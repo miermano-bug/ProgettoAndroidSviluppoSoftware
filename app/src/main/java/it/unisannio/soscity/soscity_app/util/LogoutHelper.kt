@@ -1,5 +1,7 @@
 package it.unisannio.soscity.soscity_app.util
 
+import android.app.AlertDialog
+import android.content.Context
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -17,4 +19,18 @@ fun NavController.performLogout() {
         .setPopUpTo(R.id.nav_graph, true)
         .build()
     navigate(R.id.loginFragment, null, opts)
+}
+
+/**
+ * Dialogo di conferma logout, unico anche questo (era duplicato identico in
+ * ogni schermata Impostazioni/Profilo). [onConferma] viene eseguito solo se
+ * l'utente conferma l'uscita.
+ */
+fun mostraDialogoLogout(context: Context, onConferma: () -> Unit) {
+    AlertDialog.Builder(context)
+        .setTitle(R.string.logout_titolo)
+        .setMessage(R.string.logout_messaggio)
+        .setPositiveButton(R.string.logout_conferma) { _, _ -> onConferma() }
+        .setNegativeButton(R.string.logout_annulla, null)
+        .show()
 }

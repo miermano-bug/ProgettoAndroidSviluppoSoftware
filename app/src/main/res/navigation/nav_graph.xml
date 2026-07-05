@@ -48,13 +48,24 @@
         android:label="Register" />
 
     <!--
-        Destinazione Impostazioni: PreferenceFragmentCompat con la schermata
-        preferences_tecnico.xml. Raggiungibile dal bottone impostazioni in HomeTabFragment.
-        Il back stack viene gestito automaticamente dal Navigation Component.
+        Destinazione Impostazioni (Tecnico): schermo intero con card in stile
+        coerente col resto dell'app. Raggiungibile dal bottone impostazioni in
+        HomeTabFragment. Il back stack viene gestito automaticamente dal
+        Navigation Component.
     -->
     <fragment
         android:id="@+id/impostazioniFragment"
         android:name="it.unisannio.soscity.soscity_app.ui.tecnico.ImpostazioniFragment"
+        android:label="@string/impostazioni_titolo" />
+
+    <!--
+        Destinazione Impostazioni (Cittadino): stesso pattern grafico e di
+        navigazione di impostazioniFragment lato tecnico. Raggiungibile dal
+        bottone impostazioni nell'header della Home Cittadino.
+    -->
+    <fragment
+        android:id="@+id/impostazioniCittadinoFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.ImpostazioniCittadinoFragment"
         android:label="@string/impostazioni_titolo" />
 
 </navigation>

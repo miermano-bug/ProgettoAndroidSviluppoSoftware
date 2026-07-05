@@ -26,6 +26,24 @@
             android:paddingStart="20dp"
             android:paddingEnd="16dp">
 
+            <FrameLayout
+                android:id="@+id/btnImpostazioni"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_stat_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/cd_pulsante_impostazioni"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_settings"
+                    android:importantForAccessibility="no"
+                    app:tint="@color/primary" />
+            </FrameLayout>
+
             <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
 
             <LinearLayout

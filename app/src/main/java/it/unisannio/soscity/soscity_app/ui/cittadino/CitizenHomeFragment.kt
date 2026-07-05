@@ -55,6 +55,7 @@ class CitizenHomeFragment : Fragment(R.layout.fragment_citizen_home) {
 
         val textSaluto = view.findViewById<TextView>(R.id.textSaluto)
         val btnLogout = view.findViewById<View>(R.id.btnLogout)
+        val btnImpostazioni = view.findViewById<View>(R.id.btnImpostazioni)
 
         recyclerNotifiche = view.findViewById(R.id.recyclerNotificheHome)
         swipeRefresh = view.findViewById(R.id.swipeRefreshNotificheHome)
@@ -62,6 +63,10 @@ class CitizenHomeFragment : Fragment(R.layout.fragment_citizen_home) {
         emptyState = view.findViewById(R.id.emptyStateNotificheHome)
 
         impostaHeader(textSaluto)
+
+        btnImpostazioni.setOnClickListener {
+            findNavController().navigate(R.id.impostazioniCittadinoFragment)
+        }
 
         btnLogout.setOnClickListener {
             AlertDialog.Builder(requireContext())

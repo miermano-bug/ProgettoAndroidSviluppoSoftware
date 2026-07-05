@@ -1,4 +1,4 @@
-package it.unisannio.soscity.soscity_app.ui.tecnico
+package it.unisannio.soscity.soscity_app.ui.cittadino
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,41 +9,31 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import it.unisannio.soscity.soscity_app.R
-import it.unisannio.soscity.soscity_app.databinding.FragmentImpostazioniBinding
-import it.unisannio.soscity.soscity_app.ui.common.UiState
-import it.unisannio.soscity.soscity_app.util.RepositoryProvider
+import it.unisannio.soscity.soscity_app.databinding.FragmentImpostazioniCittadinoBinding
+import it.unisannio.soscity.soscity_app.ui.tecnico.NumeriEmergenzaBottomSheet
 import it.unisannio.soscity.soscity_app.util.mostraDialogoLogout
 import it.unisannio.soscity.soscity_app.util.performLogout
-import kotlinx.coroutines.launch
 
 /**
- * Schermata Impostazioni del Tecnico.
+ * Schermata Impostazioni del Cittadino.
  *
- * Riscritta con un layout custom (card arrotondate, header blu, stessa
- * palette del resto dell'app) al posto del vecchio PreferenceFragmentCompat,
- * per uniformare graficamente questa schermata con tutte le altre e con la
- * versione gemella lato Cittadino (ImpostazioniCittadinoFragment).
+ * Stesso identico pattern grafico e funzionale della schermata Impostazioni
+ * del Tecnico (ImpostazioniFragment): header blu con card arrotondate,
+ * preferenze persistite in SharedPreferences (pref_notifiche / pref_tema).
  *
- * La logica resta la stessa di prima:
- * - pref_notifiche / pref_tema restano persistite nelle SharedPreferences di
- *   default (stesse chiavi usate in precedenza da preferences_tecnico.xml),
- *   quindi il comportamento non cambia, solo l'aspetto.
- * - la sincronizzazione dati passa dal ImpostazioniViewModel (MVVM), non dal
- *   click listener direttamente.
+ * L'unica differenza rispetto alla versione Tecnico e' l'assenza della
+ * sezione "Sincronizza dati", che ha senso solo per il flusso di lavoro del
+ * tecnico (aggiornamento della lista interventi).
+ *
+ * Raggiunta dal bottone impostazioni nell'header della Home Cittadino.
  */
-class ImpostazioniFragment : Fragment() {
+class ImpostazioniCittadinoFragment : Fragment() {
 
-    private var _binding: FragmentImpostazioniBinding? = null
+    private var _binding: FragmentImpostazioniCittadinoBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: ImpostazioniViewModel by viewModels {
-        ImpostazioniViewModel.Factory(RepositoryProvider.provideRepository())
-    }
 
     private val prefs by lazy { PreferenceManager.getDefaultSharedPreferences(requireContext()) }
 
@@ -52,7 +42,7 @@ class ImpostazioniFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentImpostazioniBinding.inflate(inflater, container, false)
+        _binding = FragmentImpostazioniCittadinoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -63,10 +53,8 @@ class ImpostazioniFragment : Fragment() {
 
         setupNotifiche()
         setupTema()
-        setupSincronizza()
         setupNumeriEmergenza()
         setupLogout()
-        osservaStatoSincronizzazione()
     }
 
     // ─── Toggle notifiche ────────────────────────────────────────────────────
@@ -113,41 +101,6 @@ class ImpostazioniFragment : Fragment() {
         } else {
             chip.background = null
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_secondary))
-        }
-    }
-
-    // ─── Sincronizza dati ─────────────────────────────────────────────────────
-
-    private fun setupSincronizza() {
-        binding.btnSincronizza.setOnClickListener {
-            viewModel.sincronizzaDati()
-        }
-    }
-
-    private fun osservaStatoSincronizzazione() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect { stato ->
-                when (stato) {
-                    is UiState.Idle -> Unit
-
-                    is UiState.Loading -> {
-                        binding.btnSincronizza.isEnabled = false
-                        binding.textStatoSincronizzazione.text =
-                            getString(R.string.impostazioni_sincronizzazione_in_corso)
-                    }
-
-                    is UiState.Success -> {
-                        binding.btnSincronizza.isEnabled = true
-                        binding.textStatoSincronizzazione.text =
-                            getString(R.string.impostazioni_dati_aggiornati)
-                    }
-
-                    is UiState.Error -> {
-                        binding.btnSincronizza.isEnabled = true
-                        binding.textStatoSincronizzazione.text = stato.message
-                    }
-                }
-            }
         }
     }
 

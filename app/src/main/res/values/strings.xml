@@ -68,6 +68,20 @@
     <string name="impostazioni_numeri_emergenza">Numeri di emergenza</string>
     <string name="impostazioni_app_titolo">APP</string>
     <string name="impostazioni_dati_titolo">DATI</string>
+    <string name="impostazioni_sottotitolo">Gestisci le preferenze e il tuo account</string>
+    <string name="impostazioni_sezione_notifiche">Notifiche</string>
+    <string name="impostazioni_notifiche_sommario_cittadino">Ricevi un avviso quando una tua segnalazione viene chiusa</string>
+    <string name="impostazioni_sezione_aspetto">Aspetto</string>
+    <string name="impostazioni_aspetto_sommario">Scegli il tema dell\'app</string>
+    <string name="impostazioni_tema_sistema">Sistema</string>
+    <string name="impostazioni_tema_chiaro">Chiaro</string>
+    <string name="impostazioni_tema_scuro">Scuro</string>
+    <string name="impostazioni_sezione_dati">Dati</string>
+    <string name="impostazioni_sincronizza_sommario">Scarica gli ultimi aggiornamenti dal server</string>
+    <string name="impostazioni_sezione_emergenze">Emergenze</string>
+    <string name="impostazioni_numeri_emergenza_sommario">112, 113, 115, 118</string>
+    <string name="impostazioni_sezione_info">Informazioni</string>
+    <string name="cd_pulsante_indietro">Torna indietro</string>
 
     <!-- Numeri di emergenza -->
     <string name="emergenza_112_label">Numero Unico di Emergenza</string>
