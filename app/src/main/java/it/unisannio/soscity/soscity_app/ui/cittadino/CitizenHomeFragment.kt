@@ -3,13 +3,24 @@ package it.unisannio.soscity.soscity_app.ui.cittadino
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import it.unisannio.soscity.soscity_app.R
+import it.unisannio.soscity.soscity_app.data.model.Notification
+import it.unisannio.soscity.soscity_app.ui.adapter.NotificationAdapter
+import it.unisannio.soscity.soscity_app.ui.common.UiState
+import it.unisannio.soscity.soscity_app.util.RepositoryProvider
 import it.unisannio.soscity.soscity_app.util.SessionManager
 import it.unisannio.soscity.soscity_app.util.performLogout
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 
 /**
@@ -18,16 +29,37 @@ import java.time.LocalTime
  * bottom navigation (vedi CittadinoContainerFragment). "Nuova segnalazione"
  * non e' piu' una card qui: l'unico punto di accesso e' il FAB "+" del
  * container, per evitare due modi diversi di fare la stessa azione.
- * "Notifiche" resta un placeholder in attesa del prossimo step del piano.
+ *
+ * "Notifiche" non e' piu' una card che rimanda a un'altra schermata: la
+ * sezione un tempo intitolata "Seleziona un'operazione" e' stata sostituita
+ * da "Notifiche" e la lista delle notifiche del cittadino (recuperata dal
+ * notification-service, stesso ViewModel/adapter di NotificheFragment) e'
+ * mostrata direttamente qui in Home, con pull-to-refresh e polling ogni 15
+ * secondi mentre la schermata e' visibile.
  */
 class CitizenHomeFragment : Fragment(R.layout.fragment_citizen_home) {
+
+    private val viewModel: NotificationsViewModel by viewModels {
+        NotificationsViewModel.Factory(RepositoryProvider.provideRepository())
+    }
+
+    private lateinit var adapter: NotificationAdapter
+
+    private lateinit var recyclerNotifiche: RecyclerView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var progress: ProgressBar
+    private lateinit var emptyState: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val textSaluto = view.findViewById<TextView>(R.id.textSaluto)
         val btnLogout = view.findViewById<View>(R.id.btnLogout)
-        val btnNotifiche = view.findViewById<View>(R.id.btnNotifiche)
+
+        recyclerNotifiche = view.findViewById(R.id.recyclerNotificheHome)
+        swipeRefresh = view.findViewById(R.id.swipeRefreshNotificheHome)
+        progress = view.findViewById(R.id.progressNotificheHome)
+        emptyState = view.findViewById(R.id.emptyStateNotificheHome)
 
         impostaHeader(textSaluto)
 
@@ -42,9 +74,61 @@ class CitizenHomeFragment : Fragment(R.layout.fragment_citizen_home) {
                 .show()
         }
 
-        btnNotifiche.setOnClickListener {
-            Toast.makeText(requireContext(), "Notifiche (Sezione in sviluppo)", Toast.LENGTH_SHORT).show()
+        adapter = NotificationAdapter()
+        recyclerNotifiche.layoutManager = LinearLayoutManager(requireContext())
+        recyclerNotifiche.adapter = adapter
+
+        swipeRefresh.setOnRefreshListener {
+            viewModel.refresh()
         }
+
+        osservaStato()
+
+        if (viewModel.uiState.value is UiState.Idle) {
+            viewModel.caricaNotifiche()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.avviaPolling()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.fermaPolling()
+    }
+
+    private fun osservaStato() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collect { stato ->
+                when (stato) {
+                    is UiState.Idle -> Unit
+
+                    is UiState.Loading -> {
+                        progress.visibility = View.VISIBLE
+                        emptyState.visibility = View.GONE
+                    }
+
+                    is UiState.Success -> {
+                        progress.visibility = View.GONE
+                        swipeRefresh.isRefreshing = false
+                        mostraRisultato(stato.data)
+                    }
+
+                    is UiState.Error -> {
+                        progress.visibility = View.GONE
+                        swipeRefresh.isRefreshing = false
+                        Toast.makeText(requireContext(), "Errore: ${stato.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun mostraRisultato(notifiche: List<Notification>) {
+        adapter.updateData(notifiche)
+        emptyState.visibility = if (notifiche.isEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun impostaHeader(textSaluto: TextView) {

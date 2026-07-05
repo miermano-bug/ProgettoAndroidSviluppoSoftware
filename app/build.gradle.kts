@@ -74,8 +74,14 @@ dependencies {
     // Preference (PreferenceFragmentCompat per la schermata Impostazioni)
     implementation("androidx.preference:preference-ktx:1.2.1")
 
-    // Swipe-to-refresh (usato in LeMieSegnalazioniFragment)
+    // Swipe-to-refresh (usato in LeMieSegnalazioniFragment e in Home Cittadino)
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // WorkManager: usato da TicketClosedNotificationWorker per il controllo
+    // periodico in background delle notifiche di chiusura ticket (vera
+    // notifica di sistema Android, senza bisogno di un canale push FCM lato
+    // server, che il backend attuale non implementa).
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
 
     // Test
     testImplementation("junit:junit:4.13.2")

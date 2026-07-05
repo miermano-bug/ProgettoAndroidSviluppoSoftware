@@ -22,9 +22,13 @@ import java.time.format.DateTimeFormatter
  * Adapter per la lista "Le mie segnalazioni" del Cittadino.
  * Usa ViewBinding (ItemTicketBinding) e le enum Categoria/StatoTicket per
  * evitare literal di stringa sparsi nel bind (stesso pattern di InterventionAdapter).
+ *
+ * onItemClick viene invocato al tap su una card, per mostrare il dettaglio
+ * della segnalazione (vedi SegnalazioneDettaglioBottomSheet).
  */
 class TicketAdapter(
-    private var tickets: List<Ticket> = emptyList()
+    private var tickets: List<Ticket> = emptyList(),
+    private val onItemClick: (Ticket) -> Unit = {}
 ) : RecyclerView.Adapter<TicketAdapter.TicketViewHolder>() {
 
     fun updateData(newTickets: List<Ticket>) {
@@ -72,6 +76,10 @@ class TicketAdapter(
                 binding.textStato.setTextColor(ContextCompat.getColor(ctx, stato.toBadgeTextColorRes()))
             } else {
                 binding.textStato.text = ticket.stato.ifBlank { "—" }
+            }
+
+            itemView.setOnClickListener {
+                onItemClick(ticket)
             }
         }
 

@@ -20,6 +20,9 @@ import kotlinx.coroutines.launch
  * Tab "Segnalazioni" dell'area Cittadino: elenco dei ticket creati dall'utente,
  * con pull-to-refresh, stato di caricamento iniziale ed empty state.
  *
+ * Al tap su una segnalazione si apre SegnalazioneDettaglioBottomSheet con
+ * tutte le informazioni del ticket (tranne la foto allegata).
+ *
  * La Fragment non parla piu' col Repository: osserva solo LeMieSegnalazioniViewModel
  * (violazione MVVM corretta: la logica di caricamento vive nel ViewModel).
  */
@@ -46,7 +49,10 @@ class LeMieSegnalazioniFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = TicketAdapter()
+        adapter = TicketAdapter(onItemClick = { ticket ->
+            SegnalazioneDettaglioBottomSheet.newInstance(ticket)
+                .show(childFragmentManager, "dettaglio_segnalazione")
+        })
         binding.recyclerTickets.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerTickets.adapter = adapter
 
