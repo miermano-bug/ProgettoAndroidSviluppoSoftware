@@ -52,13 +52,13 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
 
     private fun impostaHeader(view: View) {
         val nome = SessionManager.getUser()?.nome?.split(" ")?.firstOrNull() ?: "Tecnico"
-        val salutoText = when (LocalTime.now().hour) {
+        val saluto = when (LocalTime.now().hour) {
             in 6..11  -> "Buongiorno"
             in 12..17 -> "Buon pomeriggio"
             in 18..21 -> "Buona sera"
             else      -> "Buona notte"
         }
-        view.findViewById<TextView>(R.id.textSaluto).text = "$salutoText, $nome!"
+        view.findViewById<TextView>(R.id.textSaluto).text = "$saluto, $nome!"
     }
 
     private fun caricaDashboard(view: View) {
@@ -87,7 +87,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
 
         view.findViewById<TextView>(R.id.textDescrizioneGiornata).text =
             when {
-                totale == 0 -> "Nessun intervento assigned oggi"
+                totale == 0 -> "Nessun intervento assegnato oggi"
                 mancanti == 0 -> "Tutti gli interventi completati!"
                 else -> "Oggi hai $mancanti interventi in programma"
             }
@@ -98,6 +98,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
     }
 
     private fun mostraProssimoIntervento(view: View, interventi: List<Intervention>) {
+        // Priorità: IN_CORSO > PIANIFICATO
         val prossimo = interventi.firstOrNull { it.statoLavoro == "IN_CORSO" }
             ?: interventi.firstOrNull { it.statoLavoro == "PIANIFICATO" }
 
@@ -117,6 +118,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
         view.findViewById<TextView>(R.id.cardTicketRef).text = "Ticket #$refCorta"
         view.findViewById<TextView>(R.id.cardDataInizio).text = formattaData(prossimo.dataInizio)
 
+        // Badge stato
         val badge = view.findViewById<TextView>(R.id.cardStatoBadge)
         badge.text = prossimo.statoLavoro
         when (prossimo.statoLavoro) {
@@ -125,21 +127,23 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
             else          -> { badge.setBackgroundResource(R.drawable.bg_status_completato);  badge.setTextColor(0xFF757575.toInt()) }
         }
 
+        // Note
         val noteView = view.findViewById<TextView>(R.id.cardNote)
         if (prossimo.noteIntervento.isNotBlank()) {
             noteView.visibility = View.VISIBLE
             noteView.text = "${prossimo.noteIntervento}"
         }
 
+        // Bottone dettaglio → apre InterventiTab già filtrato (per ora apre bottom sheet)
         view.findViewById<MaterialButton>(R.id.btnApriDettaglio).setOnClickListener {
             val sheet = InterventoBottomSheet.newInstance(prossimo)
-            sheet.onAvvia = { nota: String? ->
+            sheet.onAvvia    = { nota ->
                 lifecycleScope.launch {
                     repository.updateInterventionStatus(prossimo.id, "IN_CORSO", nota)
                         .onSuccess { caricaDashboard(view) }
                 }
             }
-            sheet.onCompleta = { nota: String? ->
+            sheet.onCompleta = { nota ->
                 lifecycleScope.launch {
                     repository.updateInterventionStatus(prossimo.id, "COMPLETATO", nota)
                         .onSuccess { caricaDashboard(view) }
@@ -148,6 +152,7 @@ class HomeTabFragment : Fragment(R.layout.fragment_home_tab) {
             sheet.show(parentFragmentManager, "dettaglio_home")
         }
 
+        // Carica ticket per categoria + priorità
         lifecycleScope.launch {
             repository.getTicketById(prossimo.ticketId)
                 .onSuccess { ticket ->

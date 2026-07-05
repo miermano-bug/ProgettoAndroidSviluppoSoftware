@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/technicianHomeFragment"
-        android:name="it.unisannio.soscity.soscity_app.ui.tecnico.TecnicoHomeFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.tecnico.TecnicoContainerFragment"
         android:label="Technician Home" />
 
     <fragment

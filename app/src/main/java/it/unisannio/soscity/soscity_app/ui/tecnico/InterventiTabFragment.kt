@@ -26,9 +26,8 @@ class InterventiTabFragment : Fragment(R.layout.fragment_interventi_tab) {
         super.onViewCreated(view, savedInstanceState)
 
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerInterventi)
-
-        // Corretto: Rimosso il parametro inesistente onCardClick
         adapter = InterventionAdapter(
+            onCardClick = { iv -> apriDettaglio(iv) },
             onAvvia     = { iv, nota -> aggiornaStato(iv, "IN_CORSO", nota) },
             onCompleta  = { iv, nota -> aggiornaStato(iv, "COMPLETATO", nota) }
         )
@@ -67,6 +66,13 @@ class InterventiTabFragment : Fragment(R.layout.fragment_interventi_tab) {
         }
     }
 
+    private fun apriDettaglio(iv: Intervention) {
+        val sheet = InterventoBottomSheet.newInstance(iv)
+        sheet.onAvvia    = { nota -> aggiornaStato(iv, "IN_CORSO", nota) }
+        sheet.onCompleta = { nota -> aggiornaStato(iv, "COMPLETATO", nota) }
+        sheet.show(parentFragmentManager, "dettaglio")
+    }
+
     private fun aggiornaStato(iv: Intervention, stato: String, nota: String?) {
         val v = view ?: return
         lifecycleScope.launch {
@@ -92,14 +98,14 @@ class InterventiTabFragment : Fragment(R.layout.fragment_interventi_tab) {
 
                 val promosso = list.firstOrNull { n ->
                     n.teamId == teamId && n.statoLavoro == "IN_CORSO" &&
-                            snap.any { it.id == n.id && it.statoLavoro == "PIANIFICATO" }
+                    snap.any { it.id == n.id && it.statoLavoro == "PIANIFICATO" }
                 }
                 val banner = view.findViewById<LinearLayout>(R.id.bannerPromozione)
                 val bannerText = view.findViewById<TextView>(R.id.textBannerPromozione)
                 when {
                     promosso != null -> { bannerText.text = "Nuovo intervento avviato"; banner.visibility = View.VISIBLE }
                     list.none { it.teamId == teamId && it.statoLavoro != "COMPLETATO" } ->
-                    { bannerText.text = "Team libero — nessun intervento in coda"; banner.visibility = View.VISIBLE }
+                        { bannerText.text = "Team libero — nessun intervento in coda"; banner.visibility = View.VISIBLE }
                     else -> banner.visibility = View.GONE
                 }
             }

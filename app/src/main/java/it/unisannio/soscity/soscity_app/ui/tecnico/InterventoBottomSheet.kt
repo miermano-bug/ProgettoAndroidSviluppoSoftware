@@ -11,100 +11,107 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import it.unisannio.soscity.soscity_app.R
 import it.unisannio.soscity.soscity_app.data.model.Intervention
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class InterventoBottomSheet : BottomSheetDialogFragment() {
 
-    var onAvvia: ((String?) -> Unit)? = null
-    var onCompleta: ((String?) -> Unit)? = null
+    // callback invocati quando il tecnico preme Avvia/Completa nel bottom sheet
+    var onAvvia:   ((note: String?) -> Unit)? = null
+    var onCompleta: ((note: String?) -> Unit)? = null
+
     private var intervention: Intervention? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            // Safe cast per recuperare l'intervento dai parametri del fragment
-            intervention = it.getSerializable(ARG_INTERVENTION) as? Intervention
+    companion object {
+        fun newInstance(intervention: Intervention): InterventoBottomSheet {
+            return InterventoBottomSheet().apply {
+                this.intervention = intervention
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.bottom_sheet_intervento, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        inflater.inflate(R.layout.bottom_sheet_intervento, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val iv = intervention ?: return
 
-        val textRef = view.findViewById<TextView>(R.id.detailTicketRef)
-        val textId = view.findViewById<TextView>(R.id.detailTicketId)
-        val textTeam = view.findViewById<TextView>(R.id.detailTeamId)
-        val textInizio = view.findViewById<TextView>(R.id.detailDataInizio)
-        val textFine = view.findViewById<TextView>(R.id.detailDataFine)
-        val textNote = view.findViewById<TextView>(R.id.detailNote)
-        val textBadge = view.findViewById<TextView>(R.id.detailStatoBadge)
+        // Riferimento ticket
+        val refCorta = iv.ticketId.takeLast(8).uppercase().ifBlank { iv.id.takeLast(8).uppercase() }
+        view.findViewById<TextView>(R.id.detailTicketRef).text = "Ticket #$refCorta"
 
-        val layoutNota = view.findViewById<TextInputLayout>(R.id.layoutNotaDetail)
-        val editNota = view.findViewById<TextInputEditText>(R.id.editNotaDetail)
-        val layoutAzioni = view.findViewById<View>(R.id.layoutAzioniDetail)
-        val btnAvvia = view.findViewById<MaterialButton>(R.id.btnAvviaDetail)
-        val btnCompleta = view.findViewById<MaterialButton>(R.id.btnCompletaDetail)
-        val textCompletato = view.findViewById<TextView>(R.id.detailCompletato)
+        // Badge stato
+        val badge = view.findViewById<TextView>(R.id.detailStatoBadge)
+        badge.text = iv.statoLavoro
+        applicaStileBadge(badge, iv.statoLavoro)
 
-        intervention?.let { iv ->
-            // CORREZIONE 1: Gestione sicura del ticketId se nullable usando il safe call (?.) o un fallback
-            val safeTicketId = iv.ticketId ?: iv.id ?: ""
-            val visualId = if (safeTicketId.length >= 8) safeTicketId.takeLast(8).uppercase() else safeTicketId.uppercase()
+        // Campi info
+        view.findViewById<TextView>(R.id.detailTicketId).text =
+            iv.ticketId.ifBlank { "—" }
+        view.findViewById<TextView>(R.id.detailTeamId).text =
+            iv.teamId.ifBlank { "—" }
+        view.findViewById<TextView>(R.id.detailDataInizio).text =
+            formattaData(iv.dataInizio)
+        view.findViewById<TextView>(R.id.detailDataFine).text =
+            if (iv.dataFine.isNullOrBlank()) "In corso" else formattaData(iv.dataFine)
+        view.findViewById<TextView>(R.id.detailDataCreazione).text =
+            formattaData(iv.dataCreazione)
+        view.findViewById<TextView>(R.id.detailNote).text =
+            iv.noteIntervento.ifBlank { "Nessuna nota dell'operatore" }
 
-            textRef?.text = "Intervento #$visualId"
-            textId?.text = safeTicketId
-            textTeam?.text = iv.teamId
-            textInizio?.text = iv.dataInizio
-            textFine?.text = if (iv.dataFine.isNullOrBlank()) "In corso" else iv.dataFine
-            textNote?.text = if (iv.noteIntervento.isNullOrBlank()) "Nessuna nota" else iv.noteIntervento
-            textBadge?.text = iv.statoLavoro
+        // Bottoni azioni
+        val azionabile = iv.statoLavoro == "PIANIFICATO" || iv.statoLavoro == "IN_CORSO"
+        val layoutAzioni  = view.findViewById<View>(R.id.layoutAzioniDetail)
+        val layoutNota    = view.findViewById<TextInputLayout>(R.id.layoutNotaDetail)
+        val completato    = view.findViewById<TextView>(R.id.detailCompletato)
+        val btnAvvia      = view.findViewById<MaterialButton>(R.id.btnAvviaDetail)
+        val btnCompleta   = view.findViewById<MaterialButton>(R.id.btnCompletaDetail)
+        val editNota      = view.findViewById<TextInputEditText>(R.id.editNotaDetail)
 
-            if (iv.statoLavoro == "COMPLETATO") {
-                layoutNota?.visibility = View.GONE
-                layoutAzioni?.visibility = View.GONE
-                textCompletato?.visibility = View.VISIBLE
-            } else {
-                layoutNota?.visibility = View.VISIBLE
-                layoutAzioni?.visibility = View.VISIBLE
-                textCompletato?.visibility = View.GONE
+        if (azionabile) {
+            layoutAzioni.visibility = View.VISIBLE
+            layoutNota.visibility   = View.VISIBLE
+            completato.visibility   = View.GONE
+            btnAvvia.visibility = if (iv.statoLavoro == "PIANIFICATO") View.VISIBLE else View.GONE
 
-                if (iv.statoLavoro == "IN_CORSO") {
-                    btnAvvia?.visibility = View.GONE
-                } else {
-                    btnAvvia?.visibility = View.VISIBLE
-                }
+            btnAvvia.setOnClickListener {
+                val nota = editNota.text?.toString()?.trim()?.ifEmpty { null }
+                onAvvia?.invoke(nota)
+                dismiss()
             }
-        }
-
-        btnAvvia?.setOnClickListener {
-            val nota = editNota?.text?.toString()?.trim()?.ifEmpty { null }
-            onAvvia?.invoke(nota)
-            dismiss()
-        }
-
-        btnCompleta?.setOnClickListener {
-            val nota = editNota?.text?.toString()?.trim()?.ifEmpty { null }
-            onCompleta?.invoke(nota)
-            dismiss()
+            btnCompleta.setOnClickListener {
+                val nota = editNota.text?.toString()?.trim()?.ifEmpty { null }
+                onCompleta?.invoke(nota)
+                dismiss()
+            }
+        } else {
+            layoutAzioni.visibility = View.GONE
+            layoutNota.visibility   = View.GONE
+            completato.visibility   = if (iv.statoLavoro == "COMPLETATO") View.VISIBLE else View.GONE
         }
     }
 
-    companion object {
-        private const val ARG_INTERVENTION = "intervention"
+    private fun applicaStileBadge(badge: TextView, stato: String) {
+        when (stato) {
+            "IN_CORSO"    -> { badge.setBackgroundResource(R.drawable.bg_status_in_corso);    badge.setTextColor(0xFF1B5E20.toInt()) }
+            "PIANIFICATO" -> { badge.setBackgroundResource(R.drawable.bg_status_pianificato); badge.setTextColor(0xFFE65100.toInt()) }
+            "COMPLETATO"  -> { badge.setBackgroundResource(R.drawable.bg_status_completato);  badge.setTextColor(0xFF1565C0.toInt()) }
+            "SOSPESO"     -> { badge.setBackgroundResource(R.drawable.bg_status_sospeso);     badge.setTextColor(0xFFBF360C.toInt()) }
+            else          -> { badge.setBackgroundResource(R.drawable.bg_status_completato);  badge.setTextColor(0xFF757575.toInt()) }
+        }
+    }
 
-        fun newInstance(intervention: Intervention): InterventoBottomSheet {
-            val fragment = InterventoBottomSheet()
-            val args = Bundle()
-            // CORREZIONE 2: Cast esplicito a java.io.Serializable richiesto da putSerializable
-            args.putSerializable(ARG_INTERVENTION, intervention as java.io.Serializable)
-            fragment.arguments = args
-            return fragment
+    private fun formattaData(isoDate: String?): String {
+        if (isoDate.isNullOrBlank()) return "—"
+        return try {
+            val src = if (isoDate.endsWith("Z")) isoDate else "${isoDate}Z"
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                .withZone(ZoneId.systemDefault())
+                .format(Instant.parse(src))
+        } catch (e: Exception) {
+            isoDate
         }
     }
 }
