@@ -47,4 +47,13 @@
     <color name="success_bg">#E8F5E9</color>
     <color name="error">#D32F2F</color>
     <color name="error_bg">#FFEBEE</color>
+
+    <!-- Switch impostazioni: grigio quando spento -->
+    <color name="switch_track_off">#BDBDBD</color>
+
+    <!-- Colori fissi usati SOLO dalla schermata di login: qui non vogliamo che
+         il tema scuro cambi nulla (nessuna variante in values-night), quindi
+         il login resta sempre uguale a se stesso. -->
+    <color name="login_text_primary">#212121</color>
+    <color name="login_text_secondary">#757575</color>
 </resources>

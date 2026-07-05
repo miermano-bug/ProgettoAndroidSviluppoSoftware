@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Palette per il tema scuro.
+
+        Il blu (primary / primary_dark / primary_medium) resta identico al
+        tema chiaro: e' il colore "brand" dell'app e non deve cambiare.
+        Qui sovrascriviamo solo cio' che nel tema chiaro era bianco/chiaro,
+        trasformandolo in nero/grigio scuro, e i testi scuri li rendiamo
+        chiari per restare leggibili sui nuovi sfondi scuri.
+    -->
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Sfondi principali: da bianco/grigio chiaro a nero/grigio scuro -->
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+    <color name="border">#33475B</color>
+
+    <!-- Testi: da scuro a chiaro -->
+    <color name="text_primary">#ECECEC</color>
+    <color name="text_secondary">#B0B0B0</color>
+    <color name="text_hint">#8A8A8A</color>
+
+    <!-- Azzurrino chiaro usato come sfondo (chip tema, pulsante sincronizza):
+         in dark mode diventa un blu scuro desaturato invece che quasi-bianco -->
+    <color name="primary_light">#1B2A3D</color>
+
+    <!-- Sfondi pastello dei badge di stato: scuriti per non restare bianchi,
+         i colori "pieni" (stato_xxx) restano invariati come il resto del blu -->
+    <color name="stato_in_corso_bg">#16232F</color>
+    <color name="stato_pianificato_bg">#2E2110</color>
+    <color name="stato_completato_bg">#15251A</color>
+    <color name="stato_sospeso_bg">#2A1414</color>
+
+    <color name="stato_aperto_bg">#16232F</color>
+    <color name="stato_in_valutazione_bg">#2E2510</color>
+    <color name="stato_assegnato_bg">#211A33</color>
+    <color name="stato_in_lavorazione_bg">#0F2622</color>
+    <color name="stato_risolto_bg">#15251A</color>
+    <color name="stato_respinto_bg">#2A1414</color>
+    <color name="stato_chiuso_bg">#2A2A2A</color>
+
+    <color name="success_bg">#15251A</color>
+    <color name="error_bg">#2A1414</color>
+
+    <!-- Switch impostazioni spento: grigio piu' scuro per restare leggibile -->
+    <color name="switch_track_off">#5A5A5A</color>
+</resources>
