@@ -11,30 +11,21 @@
         android:name="it.unisannio.soscity.soscity_app.ui.auth.LoginFragment"
         android:label="Login" />
 
+    <!--
+        Container con bottom navigation per il Cittadino (tab Home + Segnalazioni).
+        Sostituisce il vecchio citizenHomeFragment "singolo": Nuova Segnalazione
+        resta una destinazione separata a schermo intero, raggiunta per id da
+        dentro la tab Home (stesso pattern di impostazioniFragment lato tecnico).
+    -->
     <fragment
-        android:id="@+id/citizenHomeFragment"
-        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.CitizenHomeFragment"
-        android:label="Citizen Home">
-
-        <action
-            android:id="@+id/action_citizenHome_to_nuovaSegnalazione"
-            app:destination="@id/nuovaSegnalazioneFragment"/>
-
-        <action
-            android:id="@+id/action_citizenHome_to_mieSegnalazioni"
-            app:destination="@id/leMieSegnalazioniFragment"/>
-
-    </fragment>
+        android:id="@+id/cittadinoContainerFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.CittadinoContainerFragment"
+        android:label="Area Cittadino" />
 
     <fragment
         android:id="@+id/nuovaSegnalazioneFragment"
         android:name="it.unisannio.soscity.soscity_app.ui.cittadino.NuovaSegnalazioneFragment"
         android:label="Nuova Segnalazione"/>
-
-    <fragment
-        android:id="@+id/leMieSegnalazioniFragment"
-        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.LeMieSegnalazioniFragment"
-        android:label="Le mie segnalazioni"/>
 
     <fragment
         android:id="@+id/technicianHomeFragment"

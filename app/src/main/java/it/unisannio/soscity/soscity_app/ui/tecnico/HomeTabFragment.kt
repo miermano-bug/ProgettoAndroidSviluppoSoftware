@@ -53,6 +53,7 @@ class HomeTabFragment : Fragment() {
         impostaHeader()
         setupBottoni()
         osservaStato()
+        osservaDettaglioTicket()
 
         if (viewModel.uiState.value is UiState.Idle) {
             viewModel.caricaInterventi()
@@ -113,13 +114,46 @@ class HomeTabFragment : Fragment() {
         }
     }
 
+    private fun osservaDettaglioTicket() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.dettaglioTicketState.collectLatest { stato ->
+                if (_binding == null) return@collectLatest
+                when (stato) {
+                    is UiState.Idle, is UiState.Loading -> Unit
+
+                    is UiState.Success -> {
+                        val ticket = stato.data
+                        val cat = ticket.categoria.ifBlank { null }
+                        if (cat != null) {
+                            binding.cardCategoria.visibility = View.VISIBLE
+                            binding.cardCategoria.text = getString(R.string.categoria_formato, cat)
+                        }
+
+                        val prioritaEnum = PrioritaTicket.fromString(ticket.priorita)
+                        if (prioritaEnum != null) {
+                            binding.cardPriorita.visibility = View.VISIBLE
+                            binding.cardPriorita.text = ticket.priorita
+                            binding.cardPriorita.setTextColor(
+                                ContextCompat.getColor(requireContext(), prioritaEnum.toColorRes())
+                            )
+                        }
+                    }
+
+                    is UiState.Error -> {
+                        binding.cardCategoria.text = getString(R.string.categoria_nd)
+                    }
+                }
+            }
+        }
+    }
+
     // ─── UI helpers ──────────────────────────────────────────────────────────
 
     private fun aggiornaRiepilogo(interventi: List<Intervention>) {
         val completati = interventi.count { it.statoLavoro == StatoLavoro.COMPLETATO.name }
         val mancanti   = interventi.count {
             it.statoLavoro == StatoLavoro.IN_CORSO.name
-                || it.statoLavoro == StatoLavoro.PIANIFICATO.name
+                    || it.statoLavoro == StatoLavoro.PIANIFICATO.name
         }
         val sospesi = interventi.count { it.statoLavoro == StatoLavoro.SOSPESO.name }
         val totale  = interventi.size
@@ -177,31 +211,8 @@ class HomeTabFragment : Fragment() {
             sheet.show(parentFragmentManager, "dettaglio_home")
         }
 
-        // Carica ticket per categoria + priorita'
-        viewLifecycleOwner.lifecycleScope.launch {
-            RepositoryProvider.provideRepository().getTicketById(prossimo.ticketId)
-                .onSuccess { ticket ->
-                    if (_binding == null) return@onSuccess
-                    val cat = ticket.categoria.ifBlank { null }
-                    if (cat != null) {
-                        binding.cardCategoria.visibility = View.VISIBLE
-                        binding.cardCategoria.text = getString(R.string.categoria_formato, cat)
-                    }
-
-                    val prioritaEnum = PrioritaTicket.fromString(ticket.priorita)
-                    if (prioritaEnum != null) {
-                        binding.cardPriorita.visibility = View.VISIBLE
-                        binding.cardPriorita.text = ticket.priorita
-                        binding.cardPriorita.setTextColor(
-                            ContextCompat.getColor(requireContext(), prioritaEnum.toColorRes())
-                        )
-                    }
-                }
-                .onFailure {
-                    if (_binding == null) return@onFailure
-                    binding.cardCategoria.text = getString(R.string.categoria_nd)
-                }
-        }
+        // Carica ticket per categoria + priorita' tramite il ViewModel
+        viewModel.caricaDettaglioTicket(prossimo.ticketId)
     }
 
     private fun formattaData(isoDate: String): String {

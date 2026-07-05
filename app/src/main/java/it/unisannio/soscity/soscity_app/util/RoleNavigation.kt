@@ -14,7 +14,7 @@ import it.unisannio.soscity.soscity_app.R
  * e non una home in questa app (vedi OVERVIEW.md).
  */
 fun roleHomeDestination(ruolo: String): Int? = when (ruolo) {
-    "CITTADINO" -> R.id.citizenHomeFragment
+    "CITTADINO" -> R.id.cittadinoContainerFragment
     "TECNICO" -> R.id.technicianHomeFragment
     else -> null
 }

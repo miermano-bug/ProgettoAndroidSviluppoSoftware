@@ -16,10 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import it.unisannio.soscity.soscity_app.R
-import it.unisannio.soscity.soscity_app.data.model.Coordinate
-import it.unisannio.soscity.soscity_app.data.model.Ticket
+import it.unisannio.soscity.soscity_app.ui.common.UiState
 import it.unisannio.soscity.soscity_app.util.RepositoryProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,14 +27,29 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 
+/**
+ * La Fragment gestisce solo permessi, fotocamera e posizione (API legate ad
+ * Activity/Context). La validazione dei dati e la creazione del ticket sono
+ * delegate a NuovaSegnalazioneViewModel (violazione MVVM corretta).
+ */
 class NuovaSegnalazioneFragment : Fragment(R.layout.fragment_nuova_segnalazione) {
 
-    private val repository = RepositoryProvider.provideRepository()
+    private val viewModel: NuovaSegnalazioneViewModel by viewModels {
+        NuovaSegnalazioneViewModel.Factory(RepositoryProvider.provideRepository())
+    }
+
     private var latitudine: Double? = null
     private var longitudine: Double? = null
     private var fotoFile: File? = null
     private var fotoBase64Str: String? = null
     private var imageAnteprima: ImageView? = null
+
+    private lateinit var editTitolo: EditText
+    private lateinit var editDescrizione: EditText
+    private lateinit var spinnerCategoria: Spinner
+    private lateinit var spinnerPriorita: Spinner
+    private lateinit var btnInvia: Button
+    private lateinit var textPosizione: TextView
 
     private val locationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -42,6 +57,7 @@ class NuovaSegnalazioneFragment : Fragment(R.layout.fragment_nuova_segnalazione)
         if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
             permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
             ottieniPosizione()
+            textPosizione.text = "Lat: $latitudine, Lng: $longitudine"
         }
     }
 
@@ -78,18 +94,24 @@ class NuovaSegnalazioneFragment : Fragment(R.layout.fragment_nuova_segnalazione)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val titolo = view.findViewById<EditText>(R.id.editTitolo)
-        val descrizione = view.findViewById<EditText>(R.id.editDescrizione)
-        val categoria = view.findViewById<Spinner>(R.id.spinnerCategoria)
-        val priorita = view.findViewById<Spinner>(R.id.spinnerPriorita)
+        editTitolo = view.findViewById(R.id.editTitolo)
+        editDescrizione = view.findViewById(R.id.editDescrizione)
+        spinnerCategoria = view.findViewById(R.id.spinnerCategoria)
+        spinnerPriorita = view.findViewById(R.id.spinnerPriorita)
         val btnFoto = view.findViewById<Button>(R.id.btnFoto)
-        val btnInvia = view.findViewById<Button>(R.id.btnInvia)
+        btnInvia = view.findViewById(R.id.btnInvia)
         val btnPosizione = view.findViewById<Button>(R.id.btnPosizione)
-        val textPosizione = view.findViewById<TextView>(R.id.textPosizione)
+        textPosizione = view.findViewById(R.id.textPosizione)
         imageAnteprima = view.findViewById(R.id.imageAnteprima)
 
-        categoria.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("ILLUMINAZIONE", "VERDE_URBANO", "ARREDO_URBANO", "EDIFICI", "EMERGENZA"))
-        priorita.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("BASSA", "MEDIA", "ALTA", "URGENTE"))
+        spinnerCategoria.adapter = ArrayAdapter(
+            requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            listOf("ILLUMINAZIONE", "VERDE_URBANO", "ARREDO_URBANO", "EDIFICI", "EMERGENZA")
+        )
+        spinnerPriorita.adapter = ArrayAdapter(
+            requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            listOf("BASSA", "MEDIA", "ALTA", "URGENTE")
+        )
 
         btnPosizione.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -109,33 +131,40 @@ class NuovaSegnalazioneFragment : Fragment(R.layout.fragment_nuova_segnalazione)
         }
 
         btnInvia.setOnClickListener {
-            val titoloStr = titolo.text.toString().trim()
-            val descrizioneStr = descrizione.text.toString().trim()
-
-            if (titoloStr.isEmpty() || descrizioneStr.isEmpty()) {
-                Toast.makeText(requireContext(), "Compila i campi", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
             btnInvia.isEnabled = false
-            val ticket = Ticket(
-                titolo = titoloStr,
-                descrizione = descrizioneStr,
-                categoria = categoria.selectedItem.toString(),
-                priorita = priorita.selectedItem.toString(),
-                fotoAllegata = fotoBase64Str,
-                coordinate = Coordinate(latitudine ?: 41.1279, longitudine ?: 14.7811)
+            viewModel.inviaSegnalazione(
+                titolo = editTitolo.text.toString().trim(),
+                descrizione = editDescrizione.text.toString().trim(),
+                categoria = spinnerCategoria.selectedItem.toString(),
+                priorita = spinnerPriorita.selectedItem.toString(),
+                fotoBase64 = fotoBase64Str,
+                latitudine = latitudine,
+                longitudine = longitudine
             )
+        }
 
-            lifecycleScope.launch {
-                // Aggiungi questo log appena prima di repository.createTicket(ticket)
-                android.util.Log.d("API_DEBUG", "Invio Ticket: $ticket")
-                repository.createTicket(ticket).onSuccess {
-                    Toast.makeText(requireContext(), "Inviato!", Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.popBackStack()
-                }.onFailure {
-                    Toast.makeText(requireContext(), "Errore: ${it.message}", Toast.LENGTH_SHORT).show()
-                    btnInvia.isEnabled = true
+        osservaStato()
+    }
+
+    private fun osservaStato() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collect { stato ->
+                when (stato) {
+                    is UiState.Idle -> Unit
+
+                    is UiState.Loading -> {
+                        btnInvia.isEnabled = false
+                    }
+
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "Inviato!", Toast.LENGTH_SHORT).show()
+                        parentFragmentManager.popBackStack()
+                    }
+
+                    is UiState.Error -> {
+                        btnInvia.isEnabled = true
+                        Toast.makeText(requireContext(), "Errore: ${stato.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

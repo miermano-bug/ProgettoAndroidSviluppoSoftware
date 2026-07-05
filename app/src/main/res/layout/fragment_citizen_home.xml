@@ -4,37 +4,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F4F6F9">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Banner di Benvenuto Superiore -->
+        <!-- ══════════ HEADER blu arrotondato con saluto (stesso stile del tecnico) ══════════ -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="@color/primary"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp"
-            android:gravity="bottom">
+            android:background="@drawable/bg_greeting_section"
+            android:elevation="6dp"
+            android:paddingBottom="24dp">
+
+            <View android:layout_width="match_parent" android:layout_height="20dp" />
+
+            <!-- Riga logout, allineata a destra -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="16dp">
+
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/btnLogout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_logout_button"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="@string/cd_pulsante_logout">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_logout"
+                        android:importantForAccessibility="no"
+                        app:tint="@color/error" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Esci"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:importantForAccessibility="no"
+                        android:textColor="@color/error" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/textSaluto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Benvenuto in SOSCity"
+                android:layout_marginTop="12dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:text="Benvenuto!"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textSize="28sp" />
+                android:textSize="26sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rendi la tua città un posto migliore"
                 android:textColor="#E0F2F1"
-                android:textSize="15sp"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp" />
         </LinearLayout>
 
         <!-- Corpo principale contenente le opzioni -->
@@ -55,117 +107,9 @@
                 android:letterSpacing="0.08"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- CARD 1: NUOVA SEGNALAZIONE -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/btnNuovaSegnalazione"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="18dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:src="@android:drawable/ic_menu_add"
-                        app:tint="@color/primary"
-                        android:background="#E0F2F1"
-                        android:padding="8dp"
-                        android:importantForAccessibility="no" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_marginStart="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nuova segnalazione"
-                            android:textStyle="bold"
-                            android:textColor="#263238"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Invia un guasto o un problema stradale"
-                            android:textColor="#78909C"
-                            android:textSize="13sp"
-                            android:layout_marginTop="2dp"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- CARD 2: LE MIE SEGNALAZIONI -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/btnMieSegnalazioni"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="18dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:src="@android:drawable/ic_menu_agenda"
-                        app:tint="#1565C0"
-                        android:background="#E3F2FD"
-                        android:padding="8dp"
-                        android:importantForAccessibility="no" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_marginStart="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Le mie segnalazioni"
-                            android:textStyle="bold"
-                            android:textColor="#263238"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Controlla lo stato dei tuoi ticket inviati"
-                            android:textColor="#78909C"
-                            android:textSize="13sp"
-                            android:layout_marginTop="2dp"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- CARD 3: LE MIE NOTIFICHE -->
+            <!-- CARD: LE MIE NOTIFICHE (la card "Nuova segnalazione" è stata rimossa:
+                 la stessa azione è ora raggiungibile solo dal FAB "+" nel container,
+                 per evitare due punti di accesso ridondanti alla stessa funzione) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnNotifiche"
                 android:layout_width="match_parent"

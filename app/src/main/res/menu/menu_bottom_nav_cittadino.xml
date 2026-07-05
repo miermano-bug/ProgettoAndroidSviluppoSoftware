@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_home_citt"
+        android:icon="@drawable/ic_nav_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/tab_segnalazioni_citt"
+        android:icon="@drawable/ic_nav_segnalazioni"
+        android:title="Segnalazioni" />
+    <item
+        android:id="@+id/tab_profilo_citt"
+        android:icon="@drawable/ic_nav_profilo"
+        android:title="Profilo" />
+</menu>

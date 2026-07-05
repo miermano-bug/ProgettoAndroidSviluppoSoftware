@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import it.unisannio.soscity.soscity_app.data.model.Intervention
 import it.unisannio.soscity.soscity_app.data.model.StatoLavoro
+import it.unisannio.soscity.soscity_app.data.model.Ticket
 import it.unisannio.soscity.soscity_app.data.model.ordinePriorita
 import it.unisannio.soscity.soscity_app.data.repository.Repository
 import it.unisannio.soscity.soscity_app.ui.common.BaseViewModel
@@ -42,6 +43,15 @@ class InterventionsViewModel(
     private val _azioneState = MutableStateFlow<AzioneUiState>(AzioneUiState.Inattivo)
     val azioneState: StateFlow<AzioneUiState> = _azioneState
 
+    /**
+     * Stato del dettaglio ticket (categoria/priorita') associato al prossimo
+     * intervento mostrato in HomeTabFragment. Prima questa chiamata veniva
+     * fatta direttamente dalla Fragment tramite RepositoryProvider
+     * (violazione MVVM segnalata nell'analisi); ora passa dal ViewModel.
+     */
+    private val _dettaglioTicketState = MutableStateFlow<UiState<Ticket>>(UiState.Idle)
+    val dettaglioTicketState: StateFlow<UiState<Ticket>> = _dettaglioTicketState
+
     /** Snapshot dell'ultima lista caricata, usato per rilevare la promozione automatica. */
     private var ultimoSnapshot: List<Intervention> = emptyList()
 
@@ -60,6 +70,25 @@ class InterventionsViewModel(
                 .onFailure { e ->
                     _uiState.value = UiState.Error(
                         e.message ?: "Errore nel recupero degli interventi"
+                    )
+                }
+        }
+    }
+
+    /**
+     * Carica il ticket associato a un intervento, per mostrare categoria e
+     * priorita' nella card "prossimo intervento" della Home.
+     */
+    fun caricaDettaglioTicket(ticketId: String) {
+        _dettaglioTicketState.value = UiState.Loading
+        viewModelScope.launch {
+            repository.getTicketById(ticketId)
+                .onSuccess { ticket ->
+                    _dettaglioTicketState.value = UiState.Success(ticket)
+                }
+                .onFailure { e ->
+                    _dettaglioTicketState.value = UiState.Error(
+                        e.message ?: "Errore nel recupero del ticket"
                     )
                 }
         }
@@ -102,8 +131,8 @@ class InterventionsViewModel(
 
             val promosso = aggiornati.firstOrNull { nuovo ->
                 nuovo.teamId == teamId
-                    && nuovo.statoLavoro == StatoLavoro.IN_CORSO.name
-                    && snapshotPrecedente.any { it.id == nuovo.id && it.statoLavoro == StatoLavoro.PIANIFICATO.name }
+                        && nuovo.statoLavoro == StatoLavoro.IN_CORSO.name
+                        && snapshotPrecedente.any { it.id == nuovo.id && it.statoLavoro == StatoLavoro.PIANIFICATO.name }
             }
 
             _bannerPromozioneState.value = when {

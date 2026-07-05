@@ -50,6 +50,7 @@
     <string name="profilo_disponibile">Disponibile</string>
     <string name="profilo_non_disponibile">Non disponibile</string>
     <string name="profilo_ruolo_tecnico">TECNICO</string>
+    <string name="profilo_ruolo_cittadino">CITTADINO</string>
 
     <!-- Impostazioni -->
     <string name="impostazioni_titolo">Impostazioni</string>
@@ -101,6 +102,7 @@
     <string name="cd_pulsante_logout">Esci dall\'app</string>
     <string name="cd_avatar_profilo">Apri profilo</string>
     <string name="cd_icona_impostazioni">Icona impostazioni</string>
+    <string name="cd_fab_nuova_segnalazione">Nuova segnalazione</string>
 
     <!-- Priorita ticket -->
     <string name="priorita_urgente">URGENTE</string>
@@ -108,4 +110,7 @@
     <string name="priorita_media">MEDIA</string>
     <string name="priorita_bassa">BASSA</string>
     <string name="priorita_nd">n.d.</string>
+
+    <!-- Segnalazioni (Cittadino) -->
+    <string name="segnalazioni_vuoto">Non hai ancora inviato nessuna segnalazione</string>
 </resources>

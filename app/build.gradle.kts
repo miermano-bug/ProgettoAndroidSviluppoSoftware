@@ -74,6 +74,9 @@ dependencies {
     // Preference (PreferenceFragmentCompat per la schermata Impostazioni)
     implementation("androidx.preference:preference-ktx:1.2.1")
 
+    // Swipe-to-refresh (usato in LeMieSegnalazioniFragment)
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     // Test
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")

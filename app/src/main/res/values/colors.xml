@@ -17,7 +17,7 @@
     <color name="text_hint">#9E9E9E</color>
     <color name="primary_light_text">#64B5F6</color>
 
-    <!-- Semantici - usati per i badge di stato -->
+    <!-- Semantici - usati per i badge di stato intervento (StatoLavoro) -->
     <color name="stato_in_corso">#1565C0</color>
     <color name="stato_in_corso_bg">#E3F2FD</color>
     <color name="stato_pianificato">#F57C00</color>
@@ -26,6 +26,22 @@
     <color name="stato_completato_bg">#E8F5E9</color>
     <color name="stato_sospeso">#D32F2F</color>
     <color name="stato_sospeso_bg">#FFEBEE</color>
+
+    <!-- Semantici - usati per i badge di stato ticket (StatoTicket) -->
+    <color name="stato_aperto">#1976D2</color>
+    <color name="stato_aperto_bg">#E3F2FD</color>
+    <color name="stato_in_valutazione">#F9A825</color>
+    <color name="stato_in_valutazione_bg">#FFF8E1</color>
+    <color name="stato_assegnato">#5E35B1</color>
+    <color name="stato_assegnato_bg">#EDE7F6</color>
+    <color name="stato_in_lavorazione">#00897B</color>
+    <color name="stato_in_lavorazione_bg">#E0F2F1</color>
+    <color name="stato_risolto">#388E3C</color>
+    <color name="stato_risolto_bg">#E8F5E9</color>
+    <color name="stato_respinto">#D32F2F</color>
+    <color name="stato_respinto_bg">#FFEBEE</color>
+    <color name="stato_chiuso">#616161</color>
+    <color name="stato_chiuso_bg">#EEEEEE</color>
 
     <color name="success">#388E3C</color>
     <color name="success_bg">#E8F5E9</color>

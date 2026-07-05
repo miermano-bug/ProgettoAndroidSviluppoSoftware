@@ -1,24 +1,26 @@
 package it.unisannio.soscity.soscity_app.ui.tecnico
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import it.unisannio.soscity.soscity_app.R
+import it.unisannio.soscity.soscity_app.ui.common.UiState
 import it.unisannio.soscity.soscity_app.util.RepositoryProvider
 import kotlinx.coroutines.launch
 
 /**
  * Schermata Impostazioni reale, implementata con PreferenceFragmentCompat.
  *
- * Sostituisce l'ex ImpostazioniBottomSheet che era un menu di azioni veloci
- * mascherato da "impostazioni". Questa implementazione rispetta il pattern
- * PreferenceFragmentCompat + PreferenceScreen XML (res/xml/preferences_tecnico.xml)
- * con persistenza automatica in SharedPreferences gestita dal framework Android.
+ * La logica di sincronizzazione ora passa da ImpostazioniViewModel invece di
+ * chiamare il Repository direttamente dal click listener (violazione MVVM
+ * corretta).
  *
  * Preferenze reali persistite:
  * - pref_notifiche (SwitchPreferenceCompat): toggle notifiche (fittizio lato backend)
@@ -30,7 +32,9 @@ import kotlinx.coroutines.launch
  */
 class ImpostazioniFragment : PreferenceFragmentCompat() {
 
-    private val repository by lazy { RepositoryProvider.provideRepository() }
+    private val viewModel: ImpostazioniViewModel by viewModels {
+        ImpostazioniViewModel.Factory(RepositoryProvider.provideRepository())
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences_tecnico, rootKey)
@@ -41,17 +45,53 @@ class ImpostazioniFragment : PreferenceFragmentCompat() {
         setupNumeriEmergenza()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        osservaStato()
+    }
+
+    private fun osservaStato() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collect { stato ->
+                val prefSincronizza = findPreference<Preference>("pref_sincronizza") ?: return@collect
+                when (stato) {
+                    is UiState.Idle -> Unit
+
+                    is UiState.Loading -> {
+                        prefSincronizza.summary = getString(R.string.impostazioni_sincronizzazione_in_corso)
+                        prefSincronizza.isEnabled = false
+                    }
+
+                    is UiState.Success -> {
+                        prefSincronizza.summary = getString(R.string.impostazioni_dati_aggiornati)
+                        prefSincronizza.isEnabled = true
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.impostazioni_sincronizzazione_ok),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is UiState.Error -> {
+                        prefSincronizza.summary = getString(R.string.impostazioni_sincronizza)
+                        prefSincronizza.isEnabled = true
+                        Toast.makeText(
+                            requireContext(),
+                            stato.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
     // ─── Toggle notifiche ────────────────────────────────────────────────────
 
     private fun setupToggleNotifiche() {
         findPreference<SwitchPreferenceCompat>("pref_notifiche")?.apply {
             // Il valore viene letto e scritto automaticamente da SharedPreferences.
-            // Quando l'utente cambia il toggle, onPreferenceChangeListener viene
-            // invocato con il nuovo valore prima che venga effettivamente salvato.
             setOnPreferenceChangeListener { _, _ ->
-                // Nessuna azione reale: le notifiche push non sono supportate dal backend.
-                // Il valore viene comunque persistito per mostrare lo stato coerente
-                // all'utente tra sessioni.
                 true
             }
         }
@@ -82,28 +122,7 @@ class ImpostazioniFragment : PreferenceFragmentCompat() {
     private fun setupSincronizza() {
         findPreference<Preference>("pref_sincronizza")?.apply {
             setOnPreferenceClickListener {
-                summary = getString(R.string.impostazioni_sincronizzazione_in_corso)
-                isEnabled = false
-                lifecycleScope.launch {
-                    repository.getMyInterventions()
-                        .onSuccess {
-                            summary = getString(R.string.impostazioni_dati_aggiornati)
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.impostazioni_sincronizzazione_ok),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        .onFailure { e ->
-                            summary = getString(R.string.impostazioni_sincronizza)
-                            Toast.makeText(
-                                requireContext(),
-                                e.message ?: getString(R.string.errore_rete),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    isEnabled = true
-                }
+                viewModel.sincronizzaDati()
                 true
             }
         }
