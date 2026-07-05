@@ -200,7 +200,8 @@
                         android:layout_marginBottom="4dp"
                         android:text="Categoria: —"
                         android:textColor="@color/text_secondary"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        android:visibility="gone" />
 
                     <!-- Urgenza / priorità -->
                     <LinearLayout
@@ -211,19 +212,22 @@
                         android:layout_marginBottom="4dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="54dp"
+                            android:layout_height="match_parent"
                             android:text="Urgenza: "
                             android:textColor="@color/text_secondary"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            android:visibility="gone" />
+
                         <TextView
                             android:id="@+id/cardPriorita"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
+                            android:textColor="@color/text_primary"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <!-- Note -->
