@@ -23,7 +23,7 @@ class CitizenHomeFragment : Fragment(R.layout.fragment_citizen_home) {
         }
 
         btnMieSegnalazioni.setOnClickListener {
-            Toast.makeText(requireContext(), "Le mie segnalazioni (Sezione in sviluppo)", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_citizenHome_to_mieSegnalazioni)
         }
 
         btnNotifiche.setOnClickListener {

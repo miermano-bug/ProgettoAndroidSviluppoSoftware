@@ -2,6 +2,7 @@ package it.unisannio.soscity.soscity_app.data.remote
 
 import it.unisannio.soscity.soscity_app.data.model.Intervention
 import it.unisannio.soscity.soscity_app.data.model.Notification
+import it.unisannio.soscity.soscity_app.data.model.NuovoTicketRequest
 import it.unisannio.soscity.soscity_app.data.model.RegisterRequest
 import it.unisannio.soscity.soscity_app.data.model.Ticket
 import it.unisannio.soscity.soscity_app.data.model.User
@@ -72,10 +73,15 @@ interface ApiService {
     /**
      * Crea un nuovo ticket.
      * POST /tickets
+     *
+     * Il body e' NuovoTicketRequest (solo i campi accettati in creazione secondo
+     * API_Contract.md), non Ticket: quest'ultimo contiene anche id/stato/date che
+     * il backend genera lui stesso e la cui deserializzazione fallisce con 400
+     * se arrivano come stringa vuota.
      */
     @POST("tickets")
     suspend fun createTicket(
-        @Body ticket: Ticket
+        @Body request: NuovoTicketRequest
     ): Ticket
 
     /**

@@ -20,12 +20,21 @@
             android:id="@+id/action_citizenHome_to_nuovaSegnalazione"
             app:destination="@id/nuovaSegnalazioneFragment"/>
 
+        <action
+            android:id="@+id/action_citizenHome_to_mieSegnalazioni"
+            app:destination="@id/leMieSegnalazioniFragment"/>
+
     </fragment>
 
     <fragment
         android:id="@+id/nuovaSegnalazioneFragment"
         android:name="it.unisannio.soscity.soscity_app.ui.cittadino.NuovaSegnalazioneFragment"
         android:label="Nuova Segnalazione"/>
+
+    <fragment
+        android:id="@+id/leMieSegnalazioniFragment"
+        android:name="it.unisannio.soscity.soscity_app.ui.cittadino.LeMieSegnalazioniFragment"
+        android:label="Le mie segnalazioni"/>
 
     <fragment
         android:id="@+id/technicianHomeFragment"

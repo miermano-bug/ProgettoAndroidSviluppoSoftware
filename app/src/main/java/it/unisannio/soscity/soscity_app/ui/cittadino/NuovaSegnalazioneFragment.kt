@@ -88,8 +88,8 @@ class NuovaSegnalazioneFragment : Fragment(R.layout.fragment_nuova_segnalazione)
         val textPosizione = view.findViewById<TextView>(R.id.textPosizione)
         imageAnteprima = view.findViewById(R.id.imageAnteprima)
 
-        categoria.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("ILLUMINAZIONE", "STRADA", "RIFIUTI", "VANDALISMO", "ALTRO"))
-        priorita.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("BASSA", "MEDIA", "ALTA"))
+        categoria.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("ILLUMINAZIONE", "VERDE_URBANO", "ARREDO_URBANO", "EDIFICI", "EMERGENZA"))
+        priorita.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("BASSA", "MEDIA", "ALTA", "URGENTE"))
 
         btnPosizione.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

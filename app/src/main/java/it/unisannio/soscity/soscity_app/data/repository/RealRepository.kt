@@ -8,6 +8,7 @@ import it.unisannio.soscity.soscity_app.data.model.RegisterRequest
 import it.unisannio.soscity.soscity_app.data.model.Ticket
 import it.unisannio.soscity.soscity_app.data.model.User
 import it.unisannio.soscity.soscity_app.util.NetworkClient
+import it.unisannio.soscity.soscity_app.data.model.NuovoTicketRequest
 import retrofit2.HttpException
 
 /**
@@ -100,7 +101,18 @@ class RealRepository : Repository {
     // =========================
 
     override suspend fun createTicket(ticket: Ticket): Result<Ticket> =
-        safeApiCall { apiService.createTicket(ticket) }
+        safeApiCall {
+            apiService.createTicket(
+                NuovoTicketRequest(
+                    titolo = ticket.titolo,
+                    descrizione = ticket.descrizione,
+                    categoria = ticket.categoria,
+                    priorita = ticket.priorita,
+                    coordinate = ticket.coordinate,
+                    fotoAllegata = ticket.fotoAllegata
+                )
+            )
+        }
 
     override suspend fun getMyTickets(): Result<List<Ticket>> =
         safeApiCall { apiService.getMyTickets() }
