@@ -20,6 +20,9 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        // Configurazione del motore di test aggiunta qui:
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         buildConfigField("String", "BASE_URL", "\"http://172.31.6.15:9090/\"")
     }
 
@@ -77,14 +80,21 @@ dependencies {
     // Swipe-to-refresh (usato in LeMieSegnalazioniFragment e in Home Cittadino)
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // WorkManager: usato da TicketClosedNotificationWorker per il controllo
-    // periodico in background delle notifiche di chiusura ticket (vera
-    // notifica di sistema Android, senza bisogno di un canale push FCM lato
-    // server, che il backend attuale non implementa).
+    // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.10.0")
 
     // Test
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Strumenti di Testing Android E2E ed Espresso
+    implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 }

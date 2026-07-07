@@ -53,7 +53,7 @@ class NuovaSegnalazioneViewModel(
         )
 
         _uiState.value = UiState.Loading
-        viewModelScope.launch {
+        launchWithIdling {
             repository.createTicket(ticket)
                 .onSuccess { creato ->
                     _uiState.value = UiState.Success(creato)

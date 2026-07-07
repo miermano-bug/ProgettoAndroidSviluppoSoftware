@@ -37,14 +37,14 @@ class NotificationsViewModel(
     /** Caricamento iniziale: mostra la progress bar a schermo intero. */
     fun caricaNotifiche() {
         _uiState.value = UiState.Loading
-        viewModelScope.launch {
+        launchWithIdling {
             eseguiFetch()
         }
     }
 
     /** Usato dal pull-to-refresh: non passa da uno stato Loading "pieno". */
     fun refresh() {
-        viewModelScope.launch {
+        launchWithIdling {
             eseguiFetch()
         }
     }
@@ -53,6 +53,10 @@ class NotificationsViewModel(
      * Avvia il polling periodico. Va richiamato da onResume() della Fragment
      * e fermato in onPause() con fermaPolling(), per non consumare rete/batteria
      * quando la schermata non e' visibile.
+     *
+     * NON avvolgere con launchWithIdling: e' un loop che gira finche' la
+     * schermata e' visibile (while (isActive)), il contatore dell'idling
+     * resource non tornerebbe mai a zero e Espresso andrebbe in timeout.
      */
     fun avviaPolling() {
         if (pollingJob?.isActive == true) return

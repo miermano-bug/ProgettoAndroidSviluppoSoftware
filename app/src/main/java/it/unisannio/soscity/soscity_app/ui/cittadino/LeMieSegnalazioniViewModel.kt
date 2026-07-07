@@ -28,7 +28,7 @@ class LeMieSegnalazioniViewModel(
      */
     fun caricaSegnalazioni() {
         _uiState.value = UiState.Loading
-        viewModelScope.launch {
+        launchWithIdling {
             repository.getMyTickets()
                 .onSuccess { lista ->
                     _uiState.value = UiState.Success(ordinaPerData(lista))
@@ -47,7 +47,7 @@ class LeMieSegnalazioniViewModel(
      * lasciando lo SwipeRefreshLayout mostrare il proprio indicatore.
      */
     fun refresh() {
-        viewModelScope.launch {
+        launchWithIdling {
             repository.getMyTickets()
                 .onSuccess { lista ->
                     _uiState.value = UiState.Success(ordinaPerData(lista))

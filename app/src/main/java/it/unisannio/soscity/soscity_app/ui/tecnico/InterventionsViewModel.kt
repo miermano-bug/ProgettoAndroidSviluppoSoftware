@@ -61,7 +61,7 @@ class InterventionsViewModel(
      */
     fun caricaInterventi() {
         _uiState.value = UiState.Loading
-        viewModelScope.launch {
+        launchWithIdling {
             repository.getMyInterventions()
                 .onSuccess { lista ->
                     ultimoSnapshot = lista
@@ -81,7 +81,7 @@ class InterventionsViewModel(
      */
     fun caricaDettaglioTicket(ticketId: String) {
         _dettaglioTicketState.value = UiState.Loading
-        viewModelScope.launch {
+        launchWithIdling {
             repository.getTicketById(ticketId)
                 .onSuccess { ticket ->
                     _dettaglioTicketState.value = UiState.Success(ticket)
@@ -99,7 +99,7 @@ class InterventionsViewModel(
      * Emette su azioneState per fornire feedback puntuale alla card corrispondente.
      */
     fun aggiornaStato(intervention: Intervention, nuovoStato: StatoLavoro, nota: String?) {
-        viewModelScope.launch {
+        launchWithIdling {
             repository.updateInterventionStatus(intervention.id, nuovoStato.name, nota)
                 .onSuccess {
                     _azioneState.value = AzioneUiState.Successo(

@@ -22,7 +22,7 @@ class LoginViewModel(
     private val auth: FirebaseAuth = Firebase.auth
 
     fun loginWithEmail(email: String, password: String) {
-        viewModelScope.launch {
+        launchWithIdling {
             _uiState.value = UiState.Loading
 
             try {
@@ -32,14 +32,14 @@ class LoginViewModel(
 
                 if (firebaseUser == null) {
                     _uiState.value = UiState.Error("Errore: utente Firebase non trovato")
-                    return@launch
+                    return@launchWithIdling
                 }
 
                 // 2. Ottieni il token Firebase
                 val firebaseToken = firebaseUser.getIdToken(true).await().token
                 if (firebaseToken == null) {
                     _uiState.value = UiState.Error("Impossibile ottenere il token Firebase")
-                    return@launch
+                    return@launchWithIdling
                 }
 
                 // 3. Login nel backend con token e uid
