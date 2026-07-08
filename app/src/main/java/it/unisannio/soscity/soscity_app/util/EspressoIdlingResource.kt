@@ -9,11 +9,19 @@ object EspressoIdlingResource {
     @JvmField
     val countingIdlingResource = CountingIdlingResource(RESOURCE)
 
-    fun increment() = countingIdlingResource.increment()
+    var isTestEnvironment = false
+
+    fun increment() {
+        if (!isTestEnvironment) {
+            countingIdlingResource.increment()
+        }
+    }
 
     fun decrement() {
-        if (!countingIdlingResource.isIdleNow) {
-            countingIdlingResource.decrement()
+        if (!isTestEnvironment) {
+            if (!countingIdlingResource.isIdleNow) {
+                countingIdlingResource.decrement()
+            }
         }
     }
 }

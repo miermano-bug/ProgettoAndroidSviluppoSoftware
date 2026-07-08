@@ -1,5 +1,6 @@
 package it.unisannio.soscity.soscity_app.e2e
 
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
@@ -20,6 +21,8 @@ class AssegnazioneNotificaE2ETest : BaseE2ETest() {
         onView(withId(R.id.editPassword)).perform(typeText("Test1234!"), closeSoftKeyboard())
         onView(withId(R.id.buttonLogin)).perform(click())
         onView(withId(R.id.bottomNav)).check(matches(isDisplayed()))
+        Espresso.closeSoftKeyboard() // Assicura che la tastiera sia chiusa
+        Thread.sleep(500)            // Attendi la chiusura fisica dello schermo per liberare i bottoni in basso
     }
 
     @Test
@@ -57,7 +60,24 @@ class AssegnazioneNotificaE2ETest : BaseE2ETest() {
         // --- 5. Verifica la notifica PUSH nella schermata Notifiche ---
         onView(withId(R.id.tab_home_citt)).perform(click())
         onView(withId(R.id.recyclerNotificheHome)).check(matches(isDisplayed()))
-        onView(withText(containsString("assegnata"))).check(matches(isDisplayed()))
+        onView(first(withText(containsString("assegnat")))).check(matches(isDisplayed()))
+    }
+
+    private fun <T> first(matcher: org.hamcrest.Matcher<T>): org.hamcrest.Matcher<T> {
+        return object : org.hamcrest.BaseMatcher<T>() {
+            var isFirst = true
+            override fun matches(item: Any?): Boolean {
+                if (isFirst && matcher.matches(item)) {
+                    isFirst = false
+                    return true
+                }
+                return false
+            }
+            override fun describeTo(description: org.hamcrest.Description) {
+                description.appendText("first matching: ")
+                matcher.describeTo(description)
+            }
+        }
     }
 
     /**

@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="RegistrazioneELoginE2ETest">
+      <SelectionState runConfigName="AssegnazioneNotificaE2ETest">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-07-07T12:29:43.596735600Z">
           <Target type="DEFAULT_BOOT">
@@ -24,7 +24,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="CittadinoFlussoTicketE2ETest">
+      <SelectionState runConfigName="InterventoTecnicoE2ETest">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-07-07T12:29:43.596735600Z">
           <Target type="DEFAULT_BOOT">
@@ -46,7 +46,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="tap_su_registrati_naviga_a_register_fragment()">
+      <SelectionState runConfigName="NuovaSegnalazioneE2ETest">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-07-07T12:29:43.596735600Z">
           <Target type="DEFAULT_BOOT">

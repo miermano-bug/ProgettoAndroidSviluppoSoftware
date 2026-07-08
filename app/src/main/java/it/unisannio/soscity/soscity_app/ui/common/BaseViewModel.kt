@@ -16,7 +16,6 @@ abstract class BaseViewModel<T> : ViewModel() {
         _uiState
 
     protected fun launchWithIdling(block: suspend () -> Unit) {
-        android.util.Log.d("SOSCITY_DEBUG", "launchWithIdling chiamata, avvio coroutine")
         EspressoIdlingResource.increment()
         viewModelScope.launch {
             try {

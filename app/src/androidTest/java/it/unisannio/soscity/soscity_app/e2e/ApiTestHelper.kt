@@ -52,6 +52,25 @@ object ApiTestHelper {
         }
     }
 
+    data class AuthResult(val idToken: String, val localId: String)
+
+    /** Login Firebase via REST — ritorna sia l'idToken che il localId (UID). */
+    fun firebaseLoginWithUid(email: String, password: String): AuthResult {
+        val body = JSONObject().apply {
+            put("email", email); put("password", password); put("returnSecureToken", true)
+        }.toString().toRequestBody(JSON)
+
+        val req = Request.Builder()
+            .url("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$FIREBASE_API_KEY")
+            .post(body)
+            .build()
+
+        client.newCall(req).execute().use { resp ->
+            val json = JSONObject(resp.body?.string() ?: "{}")
+            return AuthResult(json.getString("idToken"), json.getString("localId"))
+        }
+    }
+
     private fun call(method: String, path: String, token: String, jsonBody: JSONObject? = null): JSONObject {
         val builder = Request.Builder()
             .url("$BASE_URL$path")
@@ -70,33 +89,42 @@ object ApiTestHelper {
         }
     }
 
+    fun getTeamIdDiTecnico(token: String): String {
+        val user = call("GET", "/users/me", token)
+        return user.getString("idTeam")
+    }
+
     /** UC3 di setup: crea un team disponibile e assegna il ticket, come farebbe l'operatore. */
-    fun assegnaTicketATeamDiTest(ticketId: String): String {
+    fun assegnaTicketATeamDiTest(ticketId: String, teamId: String? = null): String {
         val opToken = firebaseLogin(OPERATORE_EMAIL, OPERATORE_PASSWORD)
 
-        val team = call("POST", "/teams", opToken, JSONObject().apply {
-            put("nome", "Team E2E Espresso"); put("area", "Area Test")
-        })
-        val teamId = team.getString("id")
+        val targetTeamId = if (teamId != null) {
+            teamId
+        } else {
+            val team = call("POST", "/teams", opToken, JSONObject().apply {
+                put("nome", "Team E2E Espresso"); put("area", "Area Test")
+            })
+            team.getString("id")
+        }
 
         call("POST", "/assignments", opToken, JSONObject().apply {
             put("ticketId", ticketId)
-            put("teamId", teamId)
+            put("teamId", targetTeamId)
             put("dataInterventoPrevista", "2026-12-01T09:00:00")
             put("noteOperative", "Setup automatico test Espresso")
         })
-        return teamId
+        return targetTeamId
     }
 
     /** UC4 di setup: crea l'intervento per il tecnico di test (l'app non lo fa: lo fa l'operatore). */
-    fun creaInterventoPerTecnicoDiTest(ticketId: String, teamId: String): String {
+    fun creaInterventoPerTecnicoDiTest(ticketId: String, teamId: String, tecnicoUid: String): String {
         val opToken = firebaseLogin(OPERATORE_EMAIL, OPERATORE_PASSWORD)
         val interv = call("POST", "/interventions", opToken, JSONObject().apply {
             put("ticketId", ticketId)
             put("teamId", teamId)
-            put("tecnicoId", TECNICO_UID)
-            put("noteIntervento", "Intervento di test Espresso")
-            put("dataInizio", "2026-12-01T09:00:00")
+            put("technicianId", tecnicoUid)
+            put("interventionNotes", "Intervento di test Espresso")
+            put("startDate", "2026-12-01T09:00:00")
         })
         return interv.getString("id")
     }

@@ -9,6 +9,7 @@ import it.unisannio.soscity.soscity_app.data.model.Ticket
 import it.unisannio.soscity.soscity_app.data.model.User
 import it.unisannio.soscity.soscity_app.data.repository.Repository
 import it.unisannio.soscity.soscity_app.ui.common.UiState
+import it.unisannio.soscity.soscity_app.util.EspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -37,6 +38,7 @@ class InterventionsViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        EspressoIdlingResource.isTestEnvironment = true
     }
 
     @After

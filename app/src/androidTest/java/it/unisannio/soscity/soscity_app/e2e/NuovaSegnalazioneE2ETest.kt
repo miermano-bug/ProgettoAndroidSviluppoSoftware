@@ -1,5 +1,6 @@
 package it.unisannio.soscity.soscity_app.e2e
 
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -19,6 +20,8 @@ class NuovaSegnalazioneE2ETest : BaseE2ETest() {
         onView(withId(R.id.editPassword)).perform(typeText("Test1234!"), closeSoftKeyboard())
         onView(withId(R.id.buttonLogin)).perform(click())
         onView(withId(R.id.bottomNav)).check(matches(isDisplayed()))
+        Espresso.closeSoftKeyboard() // Assicura che la tastiera sia chiusa
+        Thread.sleep(500)            // Attendi la chiusura fisica dello schermo per liberare i bottoni in basso
     }
 
     @Test

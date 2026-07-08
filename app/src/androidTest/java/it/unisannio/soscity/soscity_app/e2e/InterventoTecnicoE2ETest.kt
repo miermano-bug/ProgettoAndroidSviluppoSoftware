@@ -2,6 +2,7 @@ package it.unisannio.soscity.soscity_app.e2e
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -37,19 +38,34 @@ class InterventoTecnicoE2ETest : BaseE2ETest() {
         val ticketId = creaTicketViaApi(cittadinoToken, "E2E UC4 ${System.currentTimeMillis()}")
 
         // --- 2. Setup: operatore assegna il ticket e crea l'intervento
-        //        per il tecnico di test (l'app non ha una UI operatore) ---
-        val teamId = ApiTestHelper.assegnaTicketATeamDiTest(ticketId)
-        ApiTestHelper.creaInterventoPerTecnicoDiTest(ticketId, teamId)
+        //        per il tecnico di test (recuperiamo dinamicamente il suo UID e il suo Team ID) ---
+        val authTecnico = ApiTestHelper.firebaseLoginWithUid("tecnicoY@test.com", "Test1234!")
+        val tecnicoTeamId = ApiTestHelper.getTeamIdDiTecnico(authTecnico.idToken)
+        val teamId = ApiTestHelper.assegnaTicketATeamDiTest(ticketId, tecnicoTeamId)
+        ApiTestHelper.creaInterventoPerTecnicoDiTest(ticketId, teamId, authTecnico.localId)
+
+        // Attendi che il backend propaghi la creazione dell'intervento prima del login
+        Thread.sleep(2000)
 
         // --- 3. Login come tecnico nell'app ---
-        onView(withId(R.id.editEmail)).perform(typeText("tecnico@test.com"), closeSoftKeyboard())
+        onView(withId(R.id.editEmail)).perform(typeText("tecnicoY@test.com"), closeSoftKeyboard())
         onView(withId(R.id.editPassword)).perform(typeText("Test1234!"), closeSoftKeyboard())
         onView(withId(R.id.buttonLogin)).perform(click())
         onView(withId(R.id.bottomNav)).check(matches(isDisplayed()))
 
         // --- 4. Vai alla tab Interventi e completa il primo intervento in lista ---
+        Espresso.closeSoftKeyboard() // Assicura che la tastiera sia chiusa e non copra la bottomNav
+        Thread.sleep(500)            // Attendi che la tastiera si chiuda fisicamente dallo schermo
         onView(withId(R.id.tab_interventi)).perform(click())
         onView(withId(R.id.recyclerInterventi)).check(matches(isDisplayed()))
+
+        // L'intervento e' inizialmente PIANIFICATO, quindi dobbiamo prima avviarlo (IN_CORSO)
+        // e poi completarlo (COMPLETATO).
+        onView(withId(R.id.recyclerInterventi)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0, clickChildViewWithId(R.id.btnAvvia)
+            )
+        )
 
         // Il bottone "Completa" e' dentro item_intervention.xml (id btnCompleta):
         // RecyclerViewActions permette di agire su una view interna all'item.

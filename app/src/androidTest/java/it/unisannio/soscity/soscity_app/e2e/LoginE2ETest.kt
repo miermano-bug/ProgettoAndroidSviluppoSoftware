@@ -32,7 +32,7 @@ class LoginE2ETest : BaseE2ETest() {
     fun login_tecnico_con_credenziali_valide_naviga_alla_home_tecnico() {
         activityRule.scenario.recreate()
 
-        onView(withId(R.id.editEmail)).perform(typeText("tecnico@test.com"), closeSoftKeyboard())
+        onView(withId(R.id.editEmail)).perform(typeText("tecnicoY@test.com"), closeSoftKeyboard())
         onView(withId(R.id.editPassword)).perform(typeText("Test1234!"), closeSoftKeyboard())
         onView(withId(R.id.buttonLogin)).perform(click())
 
