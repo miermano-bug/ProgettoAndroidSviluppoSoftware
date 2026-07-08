@@ -6,6 +6,7 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import it.unisannio.soscity.soscity_app.BuildConfig
 import it.unisannio.soscity.soscity_app.R
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Test
@@ -91,7 +92,7 @@ class AssegnazioneNotificaE2ETest : BaseE2ETest() {
     private fun trovaTicketIdPerTitolo(token: String, titolo: String): String {
         val client = okhttp3.OkHttpClient()
         val req = okhttp3.Request.Builder()
-            .url("http://172.31.6.15/tickets/my")
+            .url("${BuildConfig.BASE_URL}tickets/my")
             .header("Authorization", "Bearer $token")
             .get()
             .build()

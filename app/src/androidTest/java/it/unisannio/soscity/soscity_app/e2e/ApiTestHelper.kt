@@ -20,12 +20,13 @@ import java.util.concurrent.TimeUnit
  */
 object ApiTestHelper {
 
-    private const val BASE_URL = "http://<172.31.6.15>"
-    private const val FIREBASE_API_KEY = "<AIzaSyC5_eCF_hN55io-6BohgdzXNISyDwKGARU>"
+    private const val BASE_URL = "http://172.31.6.15:9090"
+    private const val FIREBASE_API_KEY = "AIzaSyC5_eCF_hN55io-6BohgdzXNISyDwKGARU"
+
 
     const val OPERATORE_EMAIL = "operatore@test.com"
     const val OPERATORE_PASSWORD = "Test1234!"
-    const val TECNICO_UID = "<BFO9oebrmfUpkptOGO5mwkQoRkt2>"
+    const val TECNICO_UID = "BFO9oebrmfUpkptOGO5mwkQoRkt2"
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)

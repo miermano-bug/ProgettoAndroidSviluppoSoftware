@@ -1,6 +1,9 @@
 package it.unisannio.soscity.soscity_app.ui.common
-import it.unisannio.soscity.soscity_app.util.EspressoIdlingResource
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import it.unisannio.soscity.soscity_app.util.EspressoIdlingResource
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,8 +16,9 @@ abstract class BaseViewModel<T> : ViewModel() {
         _uiState
 
     protected fun launchWithIdling(block: suspend () -> Unit) {
+        android.util.Log.d("SOSCITY_DEBUG", "launchWithIdling chiamata, avvio coroutine")
         EspressoIdlingResource.increment()
-        launchWithIdling {
+        viewModelScope.launch {
             try {
                 block()
             } finally {
@@ -22,6 +26,4 @@ abstract class BaseViewModel<T> : ViewModel() {
             }
         }
     }
-
-
 }

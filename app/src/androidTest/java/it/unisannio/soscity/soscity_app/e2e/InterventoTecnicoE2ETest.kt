@@ -10,6 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import it.unisannio.soscity.soscity_app.BuildConfig
 import it.unisannio.soscity.soscity_app.R
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -101,7 +102,7 @@ class InterventoTecnicoE2ETest : BaseE2ETest() {
         }.toString().toRequestBody(JSON)
 
         val req = Request.Builder()
-            .url("http://172.31.6.15/tickets")
+            .url("${BuildConfig.BASE_URL}tickets")
             .header("Authorization", "Bearer $token")
             .post(body)
             .build()
@@ -112,7 +113,7 @@ class InterventoTecnicoE2ETest : BaseE2ETest() {
 
     private fun leggiStatoTicket(token: String, ticketId: String): String {
         val req = Request.Builder()
-            .url("http://172.31.6.15/tickets/$ticketId")
+            .url("${BuildConfig.BASE_URL}tickets/$ticketId")
             .header("Authorization", "Bearer $token")
             .get().build()
         client.newCall(req).execute().use { resp ->
